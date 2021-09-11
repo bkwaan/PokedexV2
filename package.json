@@ -1,0 +1,31 @@
+{
+  "name": "pokedexv2",
+  "version": "1.0.0",
+  "description": "Pokedex project created using the MERN stack",
+  "main": "server.js",
+  "dependencies": {
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.5"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "nodemon": "^2.0.12"
+  },
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bkwaan/PokedexV2.git"
+  },
+  "author": "Bosco Kwan Tiffany Tang Nicholas Corcoran",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bkwaan/PokedexV2/issues"
+  },
+  "homepage": "https://github.com/bkwaan/PokedexV2#readme"
+}

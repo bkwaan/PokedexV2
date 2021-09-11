@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap');
+
+$noto-sans: 'Noto Sans', sans-serif;
+$open-sans: 'Open Sans', sans-serif;
+
+
+// colors:
+$green: #5EF2AF;
+$dark-blue: #132131;
+$slate-blue: #283543;
+$light-grey: #3D4B59;
+
+// Media Query Breakpoints
+@function em($px,$bc: 16){
+    @return #{$px/$bc}em;
+}
+$mobileScreen: em(320);
+$smallTabletScreen: em(560);
+$tabletScreen: em(768);
+$desktopScreen: em(1080);
+$bp-d-screen: em(1334);
+$largeDesktopScreen: em(1400);

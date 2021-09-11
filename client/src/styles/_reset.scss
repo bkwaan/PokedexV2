@@ -1,0 +1,41 @@
+// Resets
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+}
+
+h1,h2,h3,ul,li {
+  margin: 0;
+  font-family: $noto-sans;
+  color: white;
+}
+
+p {
+    margin: 0;
+    font-family: $open-sans;
+    font-size: 14px;
+    color: white;
+    
+  &::selection {
+    background-color: $green;
+  }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
