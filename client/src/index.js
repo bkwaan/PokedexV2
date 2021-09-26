@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/styles.scss';
 import App from './App';
+import Profile from './component/pokemodal/profile';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -9,7 +10,7 @@ import store from './store';
 ReactDOM.render(
   <Provider store={store}>
   <React.StrictMode>
-    <App />
+    <Profile />
   </React.StrictMode>,
   </Provider>,
   document.getElementById('root')

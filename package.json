@@ -6,7 +6,8 @@
   "dependencies": {
     "config": "^3.3.6",
     "express": "^4.17.1",
-    "mongoose": "^6.0.5"
+    "mongoose": "^6.0.5",
+    "react-bootstrap": "^1.6.3"
   },
   "devDependencies": {
     "concurrently": "^6.2.1",

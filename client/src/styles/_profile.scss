@@ -1,0 +1,174 @@
+.mainContainer{
+    max-width: 970px;
+    .profileContainer{
+        margin: 10% 2% 0% 2%;
+        background-color: #C19FFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        .profileRow{
+            padding: 10px 0px 10px 0px;
+            position: relative;
+            .profileUsername{
+                color: white;
+                text-align: center;
+                font-size: x-large;
+            }
+
+            .profileColor{
+                text-align: end;
+                padding-top: 5px;
+                >button{
+                    width: 15px;
+                    height: 15px;
+                    background: #C19FFF;
+                    border: 1px solid #FFFFFF;
+                    box-sizing: border-box;
+                    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                }
+            }
+            .profileImageBackground{
+                @media (min-width: 993px){
+                    padding:10px;
+                    border-radius: 50%;
+                    background-color:  #C19FFF;
+                    position:absolute;
+                    top:-40px;
+                    left:-50px;
+                }
+
+                .profileImage{
+                    border-radius: 50%;
+                    width:50px;
+                    height: 50px;
+                    @media  (min-width: 993px){
+                        border-radius: 50%;
+                        width:150px;
+                        height: 150px
+                    }
+                }
+
+            }
+
+        }
+        .profileInputGroup{
+            background-color: white;
+            border-radius: 0px 50px 0px 0px;
+            padding: 30px 0px 30px 0px;
+            .inputGroupCol{
+                padding-bottom: 10px;
+                >label{
+                    display: block;
+                    color: #2C73B8;
+                }
+                >input{
+                    border: grey 1px solid;
+                    border-radius: 5px;
+                    width: 100%;
+                }
+            }
+            .buttonCol{
+                padding-top: 10px;
+                text-align: end;
+                >button{
+                    background-color: #2C73B8;
+                    color: white;
+                    border:none;
+                    width: 100%;
+                    padding: 5px;
+                    
+                }
+            }
+        }
+    }
+
+
+    .favoritesContainer{
+        margin: 10% 2% 0% 2%;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        .favoritesContainerHeader{
+            background-color: #9DBFE1;
+            padding-top: 15px;
+            text-align: center;
+            color: white;
+            font-size: x-large;
+            line-height: 80%;
+        }
+        .favoritesScrollBar{
+            overflow: auto;
+            white-space: nowrap;
+            padding: 50px 0px;
+            .pokemonTile{
+                width: 100px;
+                height: 120px;
+                display: inline-block;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: plum;
+                text-align: center;
+                margin:10px 25px;
+                position: relative;
+                .pokemonImage{
+                    display: block;
+                    border-radius: 50%;
+                    background-color: white;
+                }
+                .heartIcon{
+                    position: absolute;
+                    width:20px;
+                    height:20px;
+                    top:-5px;
+                    left:-5px;
+                    z-index: 10;
+                }
+                >label{
+                    color: white;
+                    font-size: small;
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+
+    .activityContainer{
+        margin: 10% 2% 0% 2%;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        .activityContainerHeader{
+            margin-bottom: 20px;
+            background-color: #9DBFE1;
+            padding-top: 15px;
+            text-align: center;
+            color: white;
+            font-size: x-large;
+            line-height: 80%;
+        }
+        .activityCell{
+            margin: 10px 5px;
+            border: 1px solid #DFDFDF;
+            box-sizing: border-box;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+            .activityCellInfoRow{
+                padding: 5px 10px;
+                .activityCellFollowData{
+                    text-align: end;
+                    >img{
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+                .activityCellTitle{
+                    color:#ABC1EB;
+                    font-size: x-large;
+                }
+                .activityCellDescription{
+                    color: black;
+                   
+                }
+                .activityDate{
+                    width: 100%;
+                    text-align: end;
+                }
+            }
+        }
+    }
+}
