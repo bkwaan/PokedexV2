@@ -1,0 +1,78 @@
+.infoCont {
+  background-color: #abebba;
+  position: relative;
+
+  .modalTitleCont {
+    // position: absolute;
+    top: 0;
+    // left: -3%;
+
+    .modalTitle {
+      font-weight: bold;
+      font-size: 60px;
+      color: white;
+      text-align: center;
+    }
+  }
+
+  .pokeName {
+    font-weight: bold;
+    font-size: 40px;
+    text-align: center;
+  }
+
+  .pokeTypeCont {
+    display: flex;
+    justify-content: center;
+
+    .pokeType {
+      background-color: blue;
+      border-radius: 12px;
+      text-align: center;
+      width: 38%;
+      padding: 2px;
+      margin-left: 3px;
+      margin-right: 3px;
+    }
+  }
+  .justifyContentMid {
+    text-align: center;
+
+    p {
+      font-size: 18px;
+    }
+
+    .progressBar {
+      margin-top: 6px;
+      margin-left: 8%;
+    }
+  }
+
+  .likeCont {
+    text-align: right;
+  }
+  .pokeImg {
+    width: 60%;
+  }
+}
+
+.descCont {
+  .descTab {
+  }
+
+  .abilityCont {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+  
+
+    .ability {
+      font-size: 20px;
+      color: black;
+      border-radius: 12px;
+      background-color: green;
+      width: 40%;
+      margin: 10px;
+    }
+  }
+}
