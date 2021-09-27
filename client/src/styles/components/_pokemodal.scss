@@ -61,17 +61,16 @@
   }
 
   .abilityCont {
-    text-align: center;
-    justify-content: center;
     display: flex;
-  
-
+    flex-wrap: wrap;
+    justify-content: center;
     .ability {
-      font-size: 20px;
-      color: black;
+      font-size: 15px;
+      text-align: center;
+      color: white;
       border-radius: 12px;
-      background-color: green;
-      width: 40%;
+      background-color: black;
+      width: 130px;
       margin: 10px;
     }
   }

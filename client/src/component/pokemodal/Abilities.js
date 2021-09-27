@@ -3,7 +3,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Abilities = () => {
   return (
-    <div className="abilityCont">
+    <div>
       <OverlayTrigger
         placement="top"
         overlay={

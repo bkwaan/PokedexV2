@@ -85,9 +85,12 @@ const PokeModal = () => {
               </Tab>
               <Tab eventKey="evolution" title="Evolution"></Tab>
               <Tab eventKey="ability" title="Abilities">
-                <Abilities/>
-                <Abilities/>
-                <Abilities/>
+                <div className="abilityCont">
+                  <Abilities />
+                  <Abilities />
+                  <Abilities />
+                  <Abilities/>
+                </div>
               </Tab>
             </Tabs>
           </div>
