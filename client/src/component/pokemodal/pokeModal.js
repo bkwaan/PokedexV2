@@ -1,11 +1,15 @@
 import { Modal, Row, Col, ProgressBar, Tabs, Tab } from "react-bootstrap";
 import Bulbasaur from "../../images/bulbasaur.png";
 import Abilities from "./Abilities";
+import PokeComment from "./PokeComment";
+import CommentHeader from "./CommentHeader";
+import { AiOutlineHeart } from "react-icons/ai";
+import PokeEvol from "./PokeEvol";
 
 const PokeModal = () => {
   return (
     <div>
-      <Modal size="xl" show={true}>
+      <Modal className="pokeModal" size="xl" show={true}>
         <div className="infoCont">
           <Row>
             <Col xs={{ span: 8, offset: 2 }}>
@@ -15,7 +19,7 @@ const PokeModal = () => {
             </Col>
             <Col xs={2}>
               <div className="likeCont">
-                <p>Heart</p>
+                <AiOutlineHeart />
               </div>
             </Col>
           </Row>
@@ -83,16 +87,26 @@ const PokeModal = () => {
                 neque nisl, malesuada non cursus a, volutpat ut orci. Fusce vel
                 lectus neque.
               </Tab>
-              <Tab eventKey="evolution" title="Evolution"></Tab>
+              <Tab eventKey="evolution" title="Evolution">
+                <PokeEvol/>
+              </Tab>
               <Tab eventKey="ability" title="Abilities">
                 <div className="abilityCont">
                   <Abilities />
                   <Abilities />
                   <Abilities />
-                  <Abilities/>
+                  <Abilities />
                 </div>
               </Tab>
             </Tabs>
+          </div>
+          <span class="customBr"></span>
+          <CommentHeader />
+          <div>
+            <PokeComment />
+            <PokeComment />
+            <PokeComment />
+
           </div>
         </div>
       </Modal>

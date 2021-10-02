@@ -1,77 +1,188 @@
-.infoCont {
-  background-color: #abebba;
-  position: relative;
+.pokeModal {
+  border-radius: 12px;
 
-  .modalTitleCont {
-    // position: absolute;
-    top: 0;
-    // left: -3%;
+  .customBr {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 95%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 2px;
+    background-color: #d5dede;
+  }
+  .infoCont {
+    background-color: #abebba;
+    position: relative;
 
-    .modalTitle {
+    .modalTitleCont {
+      // position: absolute;
+      top: 0;
+      // left: -3%;
+
+      .modalTitle {
+        font-weight: bold;
+        font-size: 60px;
+        color: white;
+        text-align: center;
+      }
+    }
+
+    .pokeName {
       font-weight: bold;
-      font-size: 60px;
-      color: white;
+      font-size: 40px;
       text-align: center;
+    }
+
+    .pokeTypeCont {
+      display: flex;
+      justify-content: center;
+
+      .pokeType {
+        background-color: blue;
+        border-radius: 12px;
+        text-align: center;
+        width: 38%;
+        padding: 2px;
+        margin-left: 3px;
+        margin-right: 3px;
+      }
+    }
+    .justifyContentMid {
+      text-align: center;
+
+      p {
+        font-size: 18px;
+      }
+
+      .progressBar {
+        margin-top: 6px;
+        margin-left: 8%;
+      }
+    }
+
+    .likeCont {
+      text-align: right;
+      padding: 10px;
+    }
+    .pokeImg {
+      width: 60%;
     }
   }
 
-  .pokeName {
-    font-weight: bold;
-    font-size: 40px;
-    text-align: center;
-  }
+  .descCont {
+    .descTab {
+    }
 
-  .pokeTypeCont {
-    display: flex;
-    justify-content: center;
+    .abilityCont {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
 
-    .pokeType {
-      background-color: blue;
-      border-radius: 12px;
-      text-align: center;
-      width: 38%;
-      padding: 2px;
-      margin-left: 3px;
-      margin-right: 3px;
+      .ability {
+        font-size: 15px;
+        text-align: center;
+        color: white;
+        border-radius: 12px;
+        background-color: black;
+        width: 130px;
+        margin: 10px;
+      }
     }
   }
-  .justifyContentMid {
-    text-align: center;
 
+   .pokeComment {
+    padding: 10px;
     p {
-      font-size: 18px;
+      color: black;
+    }
+    .commDate{
+      text-align: right;
+      margin: 0px;
+      padding: 0px;
     }
 
-    .progressBar {
-      margin-top: 6px;
-      margin-left: 8%;
+    .userComment {
+      padding: 0px;
+      margin: 0px;
+    }
+    
+    .commInfo {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .iconPadding {
+        margin-right: 3px;
+        margin-left: 3px;
+      }
+    
+    }
+
+
+  }
+
+  .commentSection {
+    p {
+      color: black;
+    }
+
+    .commentHeader {
+      .commTitle {
+        font-size: 25px;
+        font-weight: bold;
+        text-align: center;
+      }
+    }
+
+    .commFilter {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+
+      label {
+        font-size: 14px;
+        margin-right: 5px;
+      }
+
+      select {
+        font-size: 14px;
+        border: 0px;
+      }
+    }
+
+    .commText {
+      padding: 10px;
+
+      .commSubmit {
+        display: flex;
+        justify-content: end;
+        padding-top: 5px;
+
+        button {
+          border-radius: 8px;
+          background-color: #2c73b8;
+          color: white;
+        }
+      }
     }
   }
-
-  .likeCont {
-    text-align: right;
-  }
-  .pokeImg {
-    width: 60%;
-  }
-}
-
-.descCont {
-  .descTab {
-  }
-
-  .abilityCont {
+  .pokeEvolution{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    .ability {
-      font-size: 15px;
-      text-align: center;
-      color: white;
-      border-radius: 12px;
-      background-color: black;
-      width: 130px;
-      margin: 10px;
+    justify-content: space-between;
+
+    .pokeLvlInfo{
+      display: flex;
+      flex-direction: column;
     }
+    .pokeEvolLvl {
+      color: black;
+      vertical-align: middle;
+    }
+
+    .pokeEvolImg {
+      width: 35%;
+    }
+
   }
 }
