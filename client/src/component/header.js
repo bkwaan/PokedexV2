@@ -1,4 +1,5 @@
 import React from 'react';
+import ProfilePic from '../images/BrockObama.jpg';
 
 function Header() {
   return (
@@ -10,7 +11,7 @@ function Header() {
         </div>
         <h1>POKEDEX</h1>
         <div className="profile-pic">
-           {/* Insert profile pic here */}
+           <img src={ProfilePic}/>
         </div>
     </header>
   );
