@@ -5,7 +5,7 @@ const Abilities = () => {
   return (
     <div>
       <OverlayTrigger
-        placement="top"
+        placement="bottom"
         overlay={
           <Tooltip id="button-tooltip-2">
             When this Pokémon has 1/3 or less of its HP remaining, its

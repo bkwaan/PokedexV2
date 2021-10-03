@@ -1,5 +1,9 @@
 .pokeModal {
-  border-radius: 12px;
+  @include mq($desktopScreen) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
 
   .customBr {
     margin-left: auto;
@@ -13,12 +17,18 @@
   }
   .infoCont {
     background-color: #abebba;
-    position: relative;
+    @include mq($desktopScreen) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
     .modalTitleCont {
-      // position: absolute;
-      top: 0;
-      // left: -3%;
+      @include mq($desktopScreen) {
+        position: absolute;
+        top: 0;
+        left: -3%;
+      }
 
       .modalTitle {
         font-weight: bold;
@@ -63,15 +73,34 @@
 
     .likeCont {
       text-align: right;
-      padding: 10px;
+      padding-right: 15px;
+      padding-top: 5px;
+
+      @include mq($desktopScreen) {
+        position: absolute;
+        top: 0;
+        margin-top: 2%;
+      }
     }
     .pokeImg {
+      @include mq($desktopScreen) {
+        width: 70%;
+      }
       width: 60%;
     }
   }
 
   .descCont {
+    width: 100%;
+    border-radius: 25px;
+
+
     .descTab {
+      @include mq($desktopScreen) {
+        padding-top: 25px;
+        padding-right: 5px;
+        padding-left: 5px;
+      }
     }
 
     .abilityCont {
@@ -91,35 +120,39 @@
     }
   }
 
-   .pokeComment {
-    padding: 10px;
-    p {
-      color: black;
+  .pokeCommCont {
+    overflow-y: scroll;
+    height: 200px;
+    @include mq($desktopScreen) {
+      height: 250px;
     }
-    .commDate{
-      text-align: right;
-      margin: 0px;
-      padding: 0px;
-    }
-
-    .userComment {
-      padding: 0px;
-      margin: 0px;
-    }
-    
-    .commInfo {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-
-      .iconPadding {
-        margin-right: 3px;
-        margin-left: 3px;
+    .pokeComment {
+      padding: 10px;
+      p {
+        color: black;
       }
-    
+      .commDate {
+        text-align: right;
+        margin: 0px;
+        padding: 0px;
+      }
+
+      .userComment {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      .commInfo {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .iconPadding {
+          margin-right: 3px;
+          margin-left: 3px;
+        }
+      }
     }
-
-
   }
 
   .commentSection {
@@ -167,11 +200,11 @@
       }
     }
   }
-  .pokeEvolution{
+  .pokeEvolution {
     display: flex;
     justify-content: space-between;
 
-    .pokeLvlInfo{
+    .pokeLvlInfo {
       display: flex;
       flex-direction: column;
     }
@@ -183,6 +216,5 @@
     .pokeEvolImg {
       width: 35%;
     }
-
   }
 }
