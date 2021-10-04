@@ -109,10 +109,6 @@ const PokeModal = () => {
               <PokeComment />
               <PokeComment />
               <PokeComment />
-              <PokeComment />
-              <PokeComment />
-              <PokeComment />
-              <PokeComment />
             </div>
           </div>
         </div>

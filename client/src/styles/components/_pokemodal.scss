@@ -83,7 +83,7 @@
       }
     }
     .pokeImg {
-      @include mq($desktopScreen) {
+      @include mq($tabletScreen) {
         width: 70%;
       }
       width: 60%;
@@ -107,6 +107,9 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      @include mq($desktopScreen) {
+        padding-top: 20px;
+      }
 
       .ability {
         font-size: 15px;
@@ -196,6 +199,7 @@
           border-radius: 8px;
           background-color: #2c73b8;
           color: white;
+          
         }
       }
     }
@@ -203,6 +207,11 @@
   .pokeEvolution {
     display: flex;
     justify-content: space-between;
+    @include mq ($desktopScreen) {
+      justify-content: space-around;
+      padding-top: 20px;
+    }
+
 
     .pokeLvlInfo {
       display: flex;
@@ -215,6 +224,9 @@
 
     .pokeEvolImg {
       width: 35%;
+      @include mq($desktopScreen) {
+        width: 18%;  
+      }
     }
   }
 }
