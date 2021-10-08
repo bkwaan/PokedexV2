@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import PokeModal from "./component/pokemodal/PokeModal";
 import Modal from "react-bootstrap/esm/Modal";
+import ForgetPassword from "./component/forgetPassword/ForgetPassword";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           Learn React
         </a> */}
       {/* </header> */}
-        <PokeModal/>
+      <ForgetPassword/>
     </div>
   );
 }
