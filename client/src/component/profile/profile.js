@@ -8,7 +8,7 @@ function Profile() {
           <Row className="profileRow">
             <Col>
             <div className='profileImageBackground'>
-              <img className='profileImage' src="https://s3-alpha-sig.figma.com/img/18d1/6a06/441227475defc1c636f9addc2e30ab09?Expires=1633305600&Signature=fgm~8GoHV3FRsW92wSvNoA5E2nDX3sn843EPAqQIEwLmGRz6ZeTEH176gBydZYFwSMgm3FHrkuJTKqvFhFDi81DtgFwqNh4mOYIJ4SmMXaGirWHg2YbCdmwnR7diAaVLnvt2IaCGKzd00WDx6iYQyhd6VU9HFJSnx6cjuukUDYNXDms7lVkLhFif3TctdCa4lWMDghE9s9fwYzrus4zDAHGVmsrb-30DnfoLM8XaoRn8xyWJ11cb~Mlvx5Hk33eq6Ofl3m0aszEdqQBTOQEhW7il~~uSFOYDm5056addi0kf-USd3ATow4SWrHkjcNIVfWpi8mG9iMP6GYFYWHLNQA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"></img>
+              <img className='profileImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
             </div>
             </Col>
             <Col className='profileUsername' >
