@@ -25,6 +25,88 @@ function PokeList() {
 					</div>
 				</div>
 			</div>
+			{/* Repeated cardsx */}
+			<div className="pokecard">
+				<div className="pokeheader">
+					<img src={Bulbasaur}/>
+					<span className="pokenumber">#001</span>
+				</div>
+			
+				<p className="pokename">Bulbasaur</p>
+				<div className="typetags">
+					<div className="tag">
+						<p>Grass</p>
+					</div>
+					<div className="tag">
+						<p>Poison</p>
+					</div>
+				</div>
+			</div>
+			<div className="pokecard">
+				<div className="pokeheader">
+					<img src={Bulbasaur}/>
+					<span className="pokenumber">#001</span>
+				</div>
+			
+				<p className="pokename">Bulbasaur</p>
+				<div className="typetags">
+					<div className="tag">
+						<p>Grass</p>
+					</div>
+					<div className="tag">
+						<p>Poison</p>
+					</div>
+				</div>
+			</div>
+			<div className="pokecard">
+				<div className="pokeheader">
+					<img src={Bulbasaur}/>
+					<span className="pokenumber">#001</span>
+				</div>
+			
+				<p className="pokename">Bulbasaur</p>
+				<div className="typetags">
+					<div className="tag">
+						<p>Grass</p>
+					</div>
+					<div className="tag">
+						<p>Poison</p>
+					</div>
+				</div>
+			</div>
+			<div className="pokecard">
+				<div className="pokeheader">
+					<img src={Bulbasaur}/>
+					<span className="pokenumber">#001</span>
+				</div>
+			
+				<p className="pokename">Bulbasaur</p>
+				<div className="typetags">
+					<div className="tag">
+						<p>Grass</p>
+					</div>
+					<div className="tag">
+						<p>Poison</p>
+					</div>
+				</div>
+			</div>
+			<div className="pokecard">
+				<div className="pokeheader">
+					<img src={Bulbasaur}/>
+					<span className="pokenumber">#001</span>
+				</div>
+			
+				<p className="pokename">Bulbasaur</p>
+				<div className="typetags">
+					<div className="tag">
+						<p>Grass</p>
+					</div>
+					<div className="tag">
+						<p>Poison</p>
+					</div>
+				</div>
+			</div>
+			{/* End of repeated cards */}
 		</div>
     </div>
   );

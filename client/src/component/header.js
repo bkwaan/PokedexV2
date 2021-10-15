@@ -10,6 +10,7 @@ function Header() {
             <span></span>
         </div>
         <h1>POKEDEX</h1>
+        <input type="texxt" placeholder="Search"></input>
         <div className="profile-pic">
            <img src={ProfilePic}/>
         </div>
