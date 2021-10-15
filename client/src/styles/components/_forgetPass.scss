@@ -50,8 +50,10 @@
     padding: 3px;
     border-radius: 8px;
 
+
     @include mq($desktopScreen) {
-      width: 35%;
+      width: 40%;
+      font-size: 20px;
     }
   }
 

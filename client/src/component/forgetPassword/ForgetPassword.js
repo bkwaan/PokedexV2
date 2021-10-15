@@ -27,8 +27,8 @@ const ForgetPassword = () => {
             recovering your account.
           </p>
           <form>
-            <input className="emailInput" />
-            <button className="resetBtn" placeholder="Email">
+            <input className="emailInput" placeholder="Email" />
+            <button className="resetBtn">
               Submit
             </button>
           </form>
