@@ -15,7 +15,7 @@ const PokemonSchema = new Schema({
   Comment: [
     {
       UserNameID: {
-        type: String,
+        type: String, 
         required: true,
       },
     },
@@ -38,4 +38,4 @@ const PokemonSchema = new Schema({
   ],
 });
 
-module.exports = Pokemon = mongoose.model('Pokemon', PokemonSchema);
+module.exports = Pokemon = mongoose.model("Pokemon", PokemonSchema);
