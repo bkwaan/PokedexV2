@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    background-color: #abebba;
   }
 
   .customBr {
@@ -21,6 +22,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding-right: 45px;
     }
 
     .modalTitleCont {
@@ -94,6 +96,12 @@
     width: 100%;
     border-radius: 25px;
 
+    @include mq($desktopScreen) {
+      padding: 0 20px 20px 50px;
+      border-radius: 25px 0 0 25px;
+      margin-left: -20px;
+      background-color: white;
+    }
 
     .descTab {
       @include mq($desktopScreen) {
