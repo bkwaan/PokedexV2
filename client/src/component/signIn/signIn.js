@@ -83,7 +83,7 @@ function SignIn() {
                     {(pageType=='Login')? renderLogin():renderSignUp()}
                     {renderForgotPassword()}
                     <Col xs='12' className='textCenter'>
-                        <button className='signInButton' signInButton>{{pageType}}</button>
+                        <button className='signInButton' signInButton>{pageType}</button>
                     </Col>
                     {renderHelpText()}
 
