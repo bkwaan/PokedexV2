@@ -31,4 +31,24 @@ router.post("/SignUp", async (req, res) => {
   }
 });
 
+
+router.get("/Login", async (req, res) => {
+  var { UserName, Password } = req.body;
+  console.log(UserName + Password);
+  try {
+    let user = await Users.findOne({Password: Password }).exec();
+    console.log(user);
+    if (user==null) {
+      res.status(409).send("UserName or Password is incorrect");
+    }
+
+    else {
+      res.status(201).send('Login Sucess');
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;

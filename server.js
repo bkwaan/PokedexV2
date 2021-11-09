@@ -9,11 +9,14 @@ const api = require('./api');
 // Connecting Database
 connectDB();
 
+
+
+// parse application/json
+app.use(express.json({ extended: false }));
+
 // Using api folder
 app.use('/api',api);
 
-// parse application/json
-app.use(express.json())
 
 const PORT = process.env.PORT || 5000;
  
