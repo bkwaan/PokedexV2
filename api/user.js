@@ -1,7 +1,7 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
 const router = express.Router();
 const Users = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const saltRounds = 10;
 
@@ -11,21 +11,18 @@ router.post("/SignUp", async (req, res) => {
     let user = await Users.find({
       $or: [{ Email: Email }, { UserName: UserName }],
     }).exec();
-    if (!user) {
+    if (user) {
       res.status(409).send("Username or Email already exists");
     }
-
     let user1 = new Users({
-      UserName: UserName,
-      Email: Email,
-      Password: Password,
-      FirstName: FirstName,
-      LastName: LastName,
+      UserName,
+      Email,
+      Password,
+      FirstName,
+      LastName,
     });
-
-    let user2 = await user1.save();
-    res.status(201).send(user2);
-
+    await user1.save();
+    res.status(201).send(user1);
   } catch (err) {
     console.log(err);
   }
