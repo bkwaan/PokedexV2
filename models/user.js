@@ -21,7 +21,12 @@ const UserSchema = new Schema({
   LastName: {
     type: String,
     required: true,
-  }
+  },
+  FavouritePokemon: [
+    {
+      PokeID: { type: String }
+    },
+  ],
 });
 
 module.exports = User = mongoose.model("User", UserSchema);
