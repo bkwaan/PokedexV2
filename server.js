@@ -3,12 +3,17 @@ const app = express();
 const connectDB = require('./config/db');
 const api = require('./api');
 
+     
+
+
 // Connecting Database
 connectDB();
 
 // Using api folder
 app.use('/api',api);
 
+// parse application/json
+app.use(express.json())
 
 const PORT = process.env.PORT || 5000;
  
