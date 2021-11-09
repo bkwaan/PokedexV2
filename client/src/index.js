@@ -5,13 +5,16 @@ import App from './App';
 import Profile from './component/profile/profile';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
+
 import store from './store';
 import SignIn from './component/signIn/signIn'
 
 
 ReactDOM.render(
   <Provider store={store}>
-    <SignIn/>
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
   </Provider>,
   document.getElementById('root')
 );

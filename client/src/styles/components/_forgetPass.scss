@@ -1,0 +1,79 @@
+.forgetPassCont {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  .pokeImgCont {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    .pokeBallImg {
+      width: 40%;
+
+      @include mq($desktopScreen) {
+        width: 20%;
+      }
+    }
+  }
+
+  .closeIcon {
+    text-align: right;
+    padding-right: 10px;
+    padding-top: 3px;
+  }
+  .forgotPassText {
+    color: #ffcb04;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .forgetPassDialog {
+    color: black;
+    @include mq($desktopScreen) {
+      font-size: 20px;
+    }
+
+    font-size: 15px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .emailInput {
+    width: 60%;
+    text-align: center;
+    padding: 3px;
+    border-radius: 8px;
+
+
+    @include mq($desktopScreen) {
+      width: 40%;
+      font-size: 20px;
+    }
+  }
+
+  .resetBtn {
+    background-color: #2c73b8;
+    color: white;
+    font-size: 25px;
+    border-radius: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: none;
+
+    @include mq($desktopScreen) {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      font-size: 30px;
+      padding-right: 25px;
+      padding-left: 25px;
+    }
+  }
+}
