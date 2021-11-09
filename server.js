@@ -9,9 +9,7 @@ const api = require('./api');
 // Connecting Database
 connectDB();
 
-
-
-// parse application/json
+//MiddleWare
 app.use(express.json({ extended: false }));
 
 // Using api folder
