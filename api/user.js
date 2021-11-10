@@ -12,7 +12,9 @@ router.post("/SignUp", async (req, res) => {
       $or: [{ Email: Email }, { UserName: UserName }],
     }).exec();
     if (user.length) {
-      res.status(409).json({ Msg: "Username or Email already exists" });
+      res
+        .status(409)
+        .json({ Msg: "Username or Email already exists", Success: false });
     } else {
       Password = await bcrypt.hash(Password, saltRounds);
       let user1 = new Users({
@@ -23,11 +25,15 @@ router.post("/SignUp", async (req, res) => {
         LastName,
       });
       await user1.save();
-      res.status(201).json({ Msg: "User has successfully been saved" });
+      res
+        .status(201)
+        .json({ Msg: "User has successfully been saved", Success: true });
     }
   } catch (err) {
     console.log(err);
   }
 });
+
+router.post("/");
 
 module.exports = router;
