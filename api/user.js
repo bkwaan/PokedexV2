@@ -6,23 +6,25 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 router.post("/SignUp", async (req, res) => {
-  var { FirstName, LastName, UserName, Email, Password } = req.body;
+  let { FirstName, LastName, UserName, Email, Password } = req.body;
   try {
     let user = await Users.find({
       $or: [{ Email: Email }, { UserName: UserName }],
     }).exec();
-    if (user) {
-      res.status(409).send("Username or Email already exists");
+    if (user.length) {
+      res.status(409).json({ Msg: "Username or Email already exists" });
+    } else {
+      Password = await bcrypt.hash(Password, saltRounds);
+      let user1 = new Users({
+        UserName,
+        Email,
+        Password,
+        FirstName,
+        LastName,
+      });
+      await user1.save();
+      res.status(201).json({ Msg: "User has successfully been saved" });
     }
-    let user1 = new Users({
-      UserName,
-      Email,
-      Password,
-      FirstName,
-      LastName,
-    });
-    await user1.save();
-    res.status(201).send(user1);
   } catch (err) {
     console.log(err);
   }
