@@ -1,10 +1,13 @@
 const nodemailer = require('nodemailer');
+const config = require("config");
+const nodeEmail = config.get("nodeEmail");
+const nodeEmailPassword = config.get("nodeEmailPassword");
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'PokedexV2Mailer@gmail.com',
-      pass: 'Lebronnash33!'
+      user: nodeEmail,
+      pass: nodeEmailPassword
     }
   });
 
