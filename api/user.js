@@ -34,6 +34,10 @@ router.post("/SignUp", async (req, res) => {
   }
 });
 
-router.post("/");
+//Authenticate 2 facotr
+router.get("/AuthTwoFactor:Token/:ExpiryTime", async (req,res) => {
+  let {Token} = req.params;
+  
+})
 
 module.exports = router;
