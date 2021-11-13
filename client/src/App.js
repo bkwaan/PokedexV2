@@ -1,7 +1,9 @@
-import logo from "./logo.svg";
-import PokeModal from "./component/pokemodal/PokeModal";
+import logo from './logo.svg';
+import Profile from './component/profile/profile';
+import PokeModal from "./component/pokemodal/pokeModal";
 import Modal from "react-bootstrap/esm/Modal";
 import ForgetPassword from "./component/forgetPassword/ForgetPassword";
+import SignIn from './component/signIn/signIn';
 
 function App() {
   return (
@@ -20,7 +22,7 @@ function App() {
           Learn React
         </a> */}
       {/* </header> */}
-      <PokeModal/>
+      <SignIn/>
     </div>
   );
 }

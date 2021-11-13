@@ -8,5 +8,8 @@
 
 
 // Components
+@import "~bootstrap/scss/bootstrap";
+@import './profile';
+@import './signin';
 @import './components/pokemodal';
 @import './components/forgetPass'
