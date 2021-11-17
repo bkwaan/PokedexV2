@@ -54,14 +54,14 @@ router.get("/Login", async (req, res) => {
         });
 
         mailer('PokedexV2Mailer@gmail.com',user.Email, 'OTP Code', "Your OTP Code: " + token);
-        res.status(201).send('Login Sucess, please enter the one time code we sent to your email');
+        res.status(201).json({Msg: 'OTP Code sent', Success:true});
       }
       else {
-        res.status(409).send("UserName or Password is incorrect");
+        res.status(409).json({Msg:'Failed username or login is incorrect', Success:failed});
       }
     }
     else {
-      res.status(409).send("Account does not exist");
+      res.status(409).json({Msg:'Account does not exist', Success:failed});
     }
 
   } catch (err) {
