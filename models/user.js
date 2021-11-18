@@ -30,8 +30,8 @@ const UserSchema = new Schema(
         PokeID: { type: String },
       },
     ],
-    TwoFactorAuthentication: [
-      { ExpiryTime: { type: String }, Code: { type: String } },
+    Authentication: [
+      { ResetAuth: { type: String }, TwoFactCode: { type: String } },
     ],
   },
   { collection: "Users" }
