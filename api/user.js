@@ -42,7 +42,7 @@ router.post("/SignUp", async (req, res) => {
   }
 });
 
-
+//Login
 router.get("/Login", async (req, res) => {
   const { UserName, Password } = req.body;
   try {
@@ -53,9 +53,8 @@ router.get("/Login", async (req, res) => {
         const secret = speakeasy.generateSecret({ length: 20 });
         const token = speakeasy.totp({
           secret: secret.base32,
-          encoding: 'base32'
+          encoding: "base32",
         });
-
         mailer('PokedexV2Mailer@gmail.com', user.Email, 'OTP Code', '<p>Your OTP Code: ' + token + '</p>');
         res.status(201).json({ Msg: 'OTP Code sent', Success: true });
       }
@@ -97,24 +96,23 @@ router.post("/UpdatePassword", async (req, res) => {
   }
 });
 
-
+// Forget Password
 router.get("/ForgotPassword", async (req, res) => {
   const { UserName } = req.body;
   try {
-    const user = await Users.findOne({ UserName: UserName }).exec();
+    const user = await Users.findOne({ UserName: UserName });
     if (user != null) {
-      const token = (await promiseCrypto(12)).toString('hex')
+      const token = (await promiseCrypto(12)).toString('hex');
+      Users.updateOne({ UserName: UserName }, {}).set('Authentication.0.ResetAuth', token);
       const html = await promiseFs('./api/temp.html', 'utf-8');
       let template = handleBars.compile(html);
       template = template({ token: 'http://localhost:3000/ResetPassword' + token, firstname: user.FirstName });
-      user.findOneAndUpdate({UserName: UserName}, {})
       mailer('PokedexV2Mailer@gmail.com', user.Email, 'Pasword Reset', template);
       res.status(201).json({ Msg: 'Email Sent', Success: true });
     }
     else {
       res.status(409).json({ Msg: 'Account does not exist', Success: false });
     }
-
   } catch (err) {
     console.log(err);
   }
