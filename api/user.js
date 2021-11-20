@@ -47,10 +47,9 @@ router.post("/SignUp", async (req, res) => {
 
 
 router.get("/Login", async (req, res) => {
-  var { UserName, Password } = req.body;
-
+  const { UserName, Password } = req.body;
   try {
-    let user = await Users.findOne({ UserName: UserName }).exec();
+    const user = await Users.findOne({ UserName: UserName }).exec();
 
     if (user != null) {
       if (await bcrypt.compare(Password, user.Password)) {
@@ -60,7 +59,7 @@ router.get("/Login", async (req, res) => {
           encoding: 'base32'
         });
 
-        mailer('PokedexV2Mailer@gmail.com', user.Email, 'OTP Code', '<p>Your OTP Code: ' + token +'</p>');
+        mailer('PokedexV2Mailer@gmail.com', user.Email, 'OTP Code', '<p>Your OTP Code: ' + token + '</p>');
         res.status(201).json({ Msg: 'OTP Code sent', Success: true });
       }
       else {
@@ -78,15 +77,14 @@ router.get("/Login", async (req, res) => {
 
 
 router.get("/ForgotPassword", async (req, res) => {
-  var { UserName } = req.body;
-
+  const { UserName } = req.body;
   try {
     let user = await Users.findOne({ UserName: UserName }).exec();
     if (user != null) {
       const token = (await promiseCrypto(12)).toString('hex')
       const html = await promiseFs('./api/temp.html', 'utf-8');
       let template = handleBars.compile(html);
-      template = template({token: 'http://localhost:3000/ResetPassword' + token, firstname: user.FirstName});
+      template = template({ token: 'http://localhost:3000/ResetPassword' + token, firstname: user.FirstName });
       console.log(token);
       mailer('PokedexV2Mailer@gmail.com', user.Email, 'Pasword Reset', template);
       res.status(201).json({ Msg: 'Email Sent', Success: true });
