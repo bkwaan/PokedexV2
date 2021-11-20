@@ -12,9 +12,6 @@ const promiseFs = util.promisify(fs.readFile);
 const promiseCrypto = util.promisify(crypto.randomBytes);
 const handleBars = require('handlebars');
 
-
-
-
 router.post("/SignUp", async (req, res) => {
   let { FirstName, LastName, UserName, Email, Password } = req.body;
   try {
@@ -76,16 +73,41 @@ router.get("/Login", async (req, res) => {
 });
 
 
+// Update password
+router.post("/UpdatePassword", async (req, res) => {
+  let { UserName, Password } = req.body;
+  try {
+    let user = await Users.findOneAndUpdate({
+      UserName,
+      Password: Password,
+    });
+    if (user) {
+      console.log(user);
+      res
+        .status(209)
+        .json({
+          Msg: "Password has been successfully updated!",
+          Success: true,
+        });
+    } else {
+      res.status(409).json({ Msg: "User does not exist", Success: false });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 router.get("/ForgotPassword", async (req, res) => {
   const { UserName } = req.body;
   try {
-    let user = await Users.findOne({ UserName: UserName }).exec();
+    const user = await Users.findOne({ UserName: UserName }).exec();
     if (user != null) {
       const token = (await promiseCrypto(12)).toString('hex')
       const html = await promiseFs('./api/temp.html', 'utf-8');
       let template = handleBars.compile(html);
       template = template({ token: 'http://localhost:3000/ResetPassword' + token, firstname: user.FirstName });
-      console.log(token);
+      user.findOneAndUpdate({UserName: UserName}, {})
       mailer('PokedexV2Mailer@gmail.com', user.Email, 'Pasword Reset', template);
       res.status(201).json({ Msg: 'Email Sent', Success: true });
     }
