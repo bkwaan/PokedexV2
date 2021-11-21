@@ -4,7 +4,7 @@ const Users = require("../models/user");
 const bcrypt = require("bcrypt");
 const speakeasy = require("speakeasy");
 const saltRounds = 10;
-// const mailer = require("../Util/mailer");
+const mailer = require("../Util/mailer");
 
 router.post("/SignUp", async (req, res) => {
   let { FirstName, LastName, UserName, Email, Password } = req.body;
@@ -74,22 +74,40 @@ router.get("/Login", async (req, res) => {
 
 // Update password
 router.post("/UpdatePassword", async (req, res) => {
-  let { UserName, Password } = req.body;
+  let { UserName, OldPassword, Password } = req.body;
+
   try {
-    let user = await Users.findOneAndUpdate({
-      UserName,
-      Password: Password,
-    });
-    if (user) {
-      console.log(user);
-      res
-        .status(209)
-        .json({
+    let user1 = await Users.findOne({ UserName: UserName }).exec();
+    let comparePass = await bcrypt.compare(OldPassword, user1.Password);
+    if (comparePass) {
+      let user = await Users.findOneAndUpdate(
+        {
+          UserName: UserName,
+        },
+        { Password: Password }
+      );
+      if (user) {
+        console.log(user);
+
+        mailer(
+          "PokedexV2Mailer@gmail.com",
+          user.Email,
+          "Password Updated",
+          "Your password has been updated"
+        );
+        res.status(209).json({
           Msg: "Password has been successfully updated!",
           Success: true,
         });
+      } else {
+        res
+          .status(409)
+          .json({ Msg: "Password has not been updated", Success: false });
+      }
     } else {
-      res.status(409).json({ Msg: "User does not exist", Success: false });
+      res
+        .status(409)
+        .json({ Msg: "Password does not match", Success: false });
     }
   } catch (err) {
     console.log(err);
