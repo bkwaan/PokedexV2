@@ -4,7 +4,13 @@ const Users = require("../models/user");
 const bcrypt = require("bcrypt");
 const speakeasy = require("speakeasy");
 const saltRounds = 10;
-const mailer = require("../Util/mailer");
+const mailer = require('../Util/mailer')
+const crypto = require('crypto');
+const fs = require('fs')
+const util = require('util')
+const promiseFs = util.promisify(fs.readFile);
+const promiseCrypto = util.promisify(crypto.randomBytes);
+const handleBars = require('handlebars');
 
 router.post("/SignUp", async (req, res) => {
   let { FirstName, LastName, UserName, Email, Password } = req.body;
@@ -36,11 +42,11 @@ router.post("/SignUp", async (req, res) => {
   }
 });
 
+//Login
 router.get("/Login", async (req, res) => {
-  var { UserName, Password } = req.body;
-
+  const { UserName, Password } = req.body;
   try {
-    let user = await Users.findOne({ UserName: UserName }).exec();
+    const user = await Users.findOne({ UserName: UserName }).exec();
 
     if (user != null) {
       if (await bcrypt.compare(Password, user.Password)) {
@@ -49,28 +55,22 @@ router.get("/Login", async (req, res) => {
           secret: secret.base32,
           encoding: "base32",
         });
-
-        mailer(
-          "PokedexV2Mailer@gmail.com",
-          user.Email,
-          "OTP Code",
-          "Your OTP Code: " + token
-        );
-        res
-          .status(201)
-          .send(
-            "Login Sucess, please enter the one time code we sent to your email"
-          );
-      } else {
-        res.status(409).send("UserName or Password is incorrect");
+        mailer('PokedexV2Mailer@gmail.com', user.Email, 'OTP Code', '<p>Your OTP Code: ' + token + '</p>');
+        res.status(201).json({ Msg: 'OTP Code sent', Success: true });
       }
-    } else {
-      res.status(409).send("Account does not exist");
+      else {
+        res.status(409).json({ Msg: 'Failed username or login is incorrect', Success: false });
+      }
     }
+    else {
+      res.status(409).json({ Msg: 'Account does not exist', Success: false });
+    }
+
   } catch (err) {
     console.log(err);
   }
 });
+
 
 // Update password
 router.post("/UpdatePassword", async (req, res) => {
@@ -114,4 +114,30 @@ router.post("/UpdatePassword", async (req, res) => {
   }
 });
 
+// Forget Password
+router.get("/ForgotPassword", async (req, res) => {
+  const { UserName } = req.body;
+  try {
+    const user = await Users.findOne({ UserName: UserName });
+    if (user != null) {
+      const token = (await promiseCrypto(12)).toString('hex');
+      Users.updateOne({ UserName: UserName }, {}).set('Authentication.0.ResetAuth', token);
+      const html = await promiseFs('./api/temp.html', 'utf-8');
+      let template = handleBars.compile(html);
+      template = template({ token: 'http://localhost:3000/ResetPassword' + token, firstname: user.FirstName });
+      mailer('PokedexV2Mailer@gmail.com', user.Email, 'Pasword Reset', template);
+      res.status(201).json({ Msg: 'Email Sent', Success: true });
+    }
+    else {
+      res.status(409).json({ Msg: 'Account does not exist', Success: false });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;
+
+
+
+
