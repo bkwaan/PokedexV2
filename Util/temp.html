@@ -3,13 +3,13 @@
         <div>
             <div style=" max-width: 550px; padding: 20px; border: rgb(168, 163, 163) 1px solid; border-radius: 10px; color:black">
                 <h1 style="color: #2C73B8;"> Pokedex V2</h1>
-                <h3 >Password Reset</h3>
-                <p style="font-size: large;  font-weight: 500;"> Password reset has been reequested for your account</p>
+                <h3>{{title}}</h3>
+                <p style="font-size: large;  font-weight: 500;"> {{title}}</p>
                 <hr style=" border-top: 1px solid rgb(168, 163, 163); border-radius: 5px; width: 100%;">
                 <div style="text-align: left; font-size: medium; ">
                     <p>Hello {{firstname}},</p>
-                    <p>A Password Reset link was requested for your account</p>
-                    <div> link: <a href="{{token}}">Reset Password</a> </div>
+                    <p>{{content}}</p>
+                    <div>link: <a href="{{token}}">{{linkText}}</a> </div>
                 </div>
             </div>
         </div>
