@@ -36,7 +36,6 @@ router.post("/SignUp", async (req, res) => {
         Password,
         FirstName,
         LastName,
-        VerifyToken,
       });
       await user1.save();
       const html = await promiseFs("./Util/temp.html", "utf-8");
