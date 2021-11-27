@@ -11,6 +11,8 @@ const util = require("util");
 const promiseFs = util.promisify(fs.readFile);
 const promiseCrypto = util.promisify(crypto.randomBytes);
 const handleBars = require("handlebars");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 router.post("/SignUp", async (req, res) => {
   let { FirstName, LastName, UserName, Email, Password } = req.body;
@@ -24,18 +26,61 @@ router.post("/SignUp", async (req, res) => {
         .json({ Msg: "Username or Email already exists", Success: false });
     } else {
       Password = await bcrypt.hash(Password, saltRounds);
-      console.log(Password);
+      var VerifyToken = crypto.randomBytes(10).toString("hex");
+      VerifyToken = jwt.sign({ data: VerifyToken }, config.get("jwtPass"), {
+        expiresIn: "1h",
+      });
       let user1 = new Users({
         UserName,
         Email,
         Password,
         FirstName,
         LastName,
+        VerifyToken,
       });
       await user1.save();
+      const html = await promiseFs("./Util/temp.html", "utf-8");
+      let template = handleBars.compile(html);
+      template = template({
+        header: "Account Creation",
+        title: "Please Verify Your Account",
+        token: "http://localhost3000:/api/User/VerifyAccount/" + VerifyToken, //need to update this later
+        content:
+          "Thank you for creating your account, please verify your account by clicking the link below.",
+        firstname: user.FirstName,
+        linkText: "Verify Account",
+      });
+      mailer("PokedexV2Mailer@gmail.com", Email, "Verify Account", template);
       res
         .status(201)
         .json({ Msg: "User has successfully been saved", Success: true });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//Verify Account
+
+router.post("/VerifyAccount", async (req, res) => {
+  const { UserName, VerifyToken } = req.body;
+  try {
+    let user = await Users.findOne({ UserName: UserName }).exec();
+    if (user) {
+      if (jwt.verify(VerifyToken, config.get("jwtPass"))) {
+        user.isVerified = true;
+        await user.save();
+        res
+          .status(209)
+          .json({
+            Success: true,
+            Msg: "User has been verified, Please login to your account",
+          });
+      } else {
+        res.status(401).json({ Succcess: false, Msg: "Token has expired" });
+      }
+    } else {
+      res.status(404).json({ Success: false, Msg: "User not found" });
     }
   } catch (err) {
     console.log(err);
@@ -97,7 +142,7 @@ router.post("/UpdatePassword", async (req, res) => {
         template = template({
           header: "Password Change",
           title: "Password hass been changed on your account",
-          token: "www.google.ca",
+          token: "www.google.ca", //need to update this later
           content:
             "Your password has been recently changed on your account, if you have not requested the change. Please click the link below to update your password",
           firstname: user.FirstName,
