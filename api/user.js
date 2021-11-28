@@ -60,8 +60,7 @@ router.post("/SignUp", async (req, res) => {
 });
 
 //Verify Account
-
-router.post("/VerifyAccount", async (req, res) => {
+router.put("/VerifyAccount", async (req, res) => {
   const { UserName, VerifyToken } = req.body;
   try {
     let user = await Users.findOne({ UserName: UserName }).exec();
@@ -69,17 +68,56 @@ router.post("/VerifyAccount", async (req, res) => {
       if (jwt.verify(VerifyToken, config.get("jwtPass"))) {
         user.isVerified = true;
         await user.save();
-        res
-          .status(209)
-          .json({
-            Success: true,
-            Msg: "User has been verified, Please login to your account",
-          });
-      } else {
-        res.status(401).json({ Succcess: false, Msg: "Token has expired" });
+        res.status(209).json({
+          Success: true,
+          Msg: "User has been verified, Please login to your account",
+        });
       }
     } else {
       res.status(404).json({ Success: false, Msg: "User not found" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ Succcess: false, Msg: "Token has expired" });
+  }
+});
+
+// Send new verification link
+router.get("/NewVerificationLink/:UserName", async (req, res) => {
+  const { UserName } = req.params;
+  try {
+    const user = await Users.findOne({ UserName }).exec();
+    if (user) {
+      if (user.isVerified) {
+        res.status(409).json({
+          Success: false,
+          Message: "User has aready been verified",
+        });
+      } else {
+        let VerifyToken = crypto.randomBytes(10).toString("hex");
+        VerifyToken = jwt.sign({ data: VerifyToken }, config.get("jwtPass"), {
+          expiresIn: "1h",
+        });
+        const html = await promiseFs("./Util/temp.html", "utf-8");
+        let template = handleBars.compile(html);
+        template = template({
+          header: "Account Verification",
+          title: "Please Verify Your Account",
+          token: "http://localhost3000:/api/User/VerifyAccount/" + VerifyToken, //need to update this later
+          content: "Please verify your account by clicking the link below.",
+          firstname: user.FirstName,
+          linkText: "Verify Account",
+        });
+        mailer("PokedexV2Mailer@gmail.com", user.Email, "Verify Account", template);
+        res.status(209).json({
+          Success: true,
+          msg: "New Verification link has been sent, please check your email",
+        });
+      }
+      res.status(404).json({
+        Success: false,
+        Message: "User not found",
+      });
     }
   } catch (err) {
     console.log(err);
