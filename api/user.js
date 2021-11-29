@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Users = require("../models/user");
 const bcrypt = require("bcrypt");
-const speakeasy = require("speakeasy");
 const saltRounds = 10;
 const mailer = require("../Util/mailer");
 const crypto = require("crypto");
@@ -13,6 +12,7 @@ const promiseCrypto = util.promisify(crypto.randomBytes);
 const handleBars = require("handlebars");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const totp = require("otplib").totp;
 
 router.post("/SignUp", async (req, res) => {
   let { FirstName, LastName, UserName, Email, Password } = req.body;
@@ -60,7 +60,6 @@ router.post("/SignUp", async (req, res) => {
 });
 
 //Verify Account
-
 router.post("/VerifyAccount", async (req, res) => {
   const { UserName, VerifyToken } = req.body;
   try {
@@ -87,25 +86,28 @@ router.post("/VerifyAccount", async (req, res) => {
 });
 
 //Login
-router.get("/Login", async (req, res) => {
+router.post("/Login", async (req, res) => {
   const { UserName, Password } = req.body;
   try {
     const user = await Users.findOne({ UserName: UserName }).exec();
-
     if (user != null) {
+      console.log("mad eit");
+      console.log(Password)
       if (await bcrypt.compare(Password, user.Password)) {
-        const secret = speakeasy.generateSecret({ length: 20 });
-        const token = speakeasy.totp({
-          secret: secret.base32,
-          encoding: "base32",
-        });
+        console.log("madsadasd eit");
+        const secret = (await promiseCrypto(12)).toString("hex");
+        totp.options = { step: 300 };
+        const token = totp.generate(secret);
+        user.TwoFactSecret = secret;
+        await user.save();
+        console.log(secret);
         mailer(
           "PokedexV2Mailer@gmail.com",
           user.Email,
           "OTP Code",
           "<p>Your OTP Code: " + token + "</p>"
         );
-        res.status(201).json({ Msg: "OTP Code sent", Success: true });
+        res.status(201).json({ Msg: "OTP Code sent", Success: true, UserName: user.UserName });
       } else {
         res.status(409).json({
           Msg: "Failed username or login is incorrect",
@@ -117,6 +119,27 @@ router.get("/Login", async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(409).json({ Msg: err.message, Success: false });
+  }
+});
+
+
+// Verify OTP Code
+router.post("/VerifyOTP", async (req, res) => {
+  const { UserName, Token } = req.body;
+  try {
+    const user = await Users.findOne({ UserName: UserName }).exec();
+    const verify = totp.check(Token, user.TwoFactSecret);
+    console.log(user.TwoFactSecret);
+    if (verify) {
+      res.status(201).json({ Msg: "OTP Accepted", Success: true });
+    }
+    else {
+      res.status(201).json({ Msg: "OTP Expired or Incorrect", Success: false });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(201).json({ Msg: err.message, Success: false });
   }
 });
 
@@ -171,16 +194,15 @@ router.post("/UpdatePassword", async (req, res) => {
 });
 
 // Forget Password
-router.get("/ForgotPassword", async (req, res) => {
-  const { UserName } = req.body;
+router.get("/ForgotPassword/:UserName", async (req, res) => {
+  const { UserName } = req.params;
   try {
     const user = await Users.findOne({ UserName: UserName });
     if (user != null) {
-      const token = (await promiseCrypto(12)).toString("hex");
-      Users.updateOne({ UserName: UserName }, {}).set(
-        "Authentication.0.ResetAuth",
-        token
-      );
+      const token = jwt.sign({ UserName: UserName }, config.get("jwtPass"), {
+        expiresIn: "1h",
+      });
+      console.log(token);
       const html = await promiseFs("./Util/temp.html", "utf-8");
       let template = handleBars.compile(html);
       template = template({
@@ -194,16 +216,54 @@ router.get("/ForgotPassword", async (req, res) => {
       mailer(
         "PokedexV2Mailer@gmail.com",
         user.Email,
-        "Pasword Reset",
+        "Password Reset",
         template
       );
+
       res.status(201).json({ Msg: "Email Sent", Success: true });
     } else {
       res.status(409).json({ Msg: "Account does not exist", Success: false });
     }
   } catch (err) {
-    console.log(err);
+    res.status(409).json({ Msg: err.message, Success: false });
+
   }
 });
+
+//Verify Forgot Password token
+router.get("/VerifyForgotPassword/:Token", async (req, res) => {
+  const { Token } = req.params;
+  try {
+    const jwtData = jwt.verify(Token, config.get("jwtPass"));
+    if (jwtData) {
+      console.log(jwtData.UserName);
+      res.status(201).json({ Msg: "Valid Token", Success: true, UserName: jwtData.UserName });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(409).json({ Msg: err.message, Success: false });
+  }
+});
+
+//Reset Password
+router.post("/ResetPassword", async (req, res) => {
+  const { UserName, Password } = req.body;
+  try {
+    let user = await Users.findOne({ UserName: UserName }).exec();
+    if (user != null) {
+      const newPassword = await bcrypt.hash(Password, saltRounds);
+      user.Password = newPassword;
+      await user.save()
+      res.status(201).json({ Msg: "Password Reset Success", Success: true });
+    }
+    else {
+      res.status(201).json({ Msg: "User does not exist", Success: true });
+    }
+  } catch (err) {
+    res.status(409).json({ Msg: err.message, Success: false });
+  }
+});
+
+
 
 module.exports = router;

@@ -33,7 +33,8 @@
             width: 75%;
             max-width: 450px;
             padding-bottom: 10px;
-            margin-top: 30px;
+            margin-top: 20px;
+            margin-bottom: 10px;
             border: none;
             border-bottom: 1px grey solid;
             text-align: center;
@@ -44,11 +45,14 @@
 
 
         .forgotPasswordLink{
-            margin-top:10px;
             text-decoration: none;
             color:#2C73B8;
             cursor: pointer;
-            display: block;
+            display: inline
+        }
+
+        .warningMessage{
+            color: red;
         }
 
         .signInButton{

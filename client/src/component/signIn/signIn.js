@@ -1,24 +1,75 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import pinkBlur from './Assets/pinkBlur.png'
 import greenBlur from './Assets/greenBlur.png'
 import purpleBlur from './Assets/purpleBlur.png'
 import pokeBall from './Assets/pokeBall.png'
+import axios from 'axios';
 
 
 
 function SignIn() {
+
+
+    //Functions for state and sending request
     const [pageType, setPageType] = useState('Login');
+    const [warning, setWarning] = useState('');
+    const initalState = {
+        UserName: '',
+        Password: '',
+        Email: '',
+        confirmPassword: ''
+    }
+    //Prints state in console - only for testing if state updates properly
+    const [InputState, setInputState] = useState(initalState);
+    useEffect(() => {
+        console.log(InputState);
+    });
 
 
+    //Function for handling any changes to all input fields
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+        setInputState({
+            ...InputState,
+            [name]: value,
+        })
+    }
+    //Switches between sign in and sign up pages
+    const helpTextClick = () => {
+        (pageType == 'Login') ? setPageType('SignUp') : setPageType('Login');
+        setInputState(initalState);
+    }
+    //Send login request
+    const loginRequest = async () => {
+        try{
+        console.log('login');
+        const { UserName, Password } = InputState
+        console.log(UserName + Password)
+        let ress = await axios.post('/api/User/Login', { UserName: UserName, Password:Password })
+        console.log(ress);
+        setWarning(ress.data.Msg);
+        } catch(e){
+            console.log(e.message);
+            setWarning(e.Msg)
+        }
+
+    }
+
+    const SignUpRequest = (e) => {
+        const { UserName, Password, Email, ConfirmPassword} = e.target;
+    }
+
+
+    // Functions for Rendering Different content
     const renderLogin = () => {
         return (
             <>
-                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{offset: 2 , span:8}}>
-                    <input className='signinTextField' placeholder='Username' type='text'></input>
+                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
+                    <input name='UserName' value={InputState.UserName} className='signinTextField' placeholder='Username' type='text' onChange={handleInput}></input>
                 </Col>
-                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{offset: 2 , span:8}}>
-                    <input id='passwordField' className='signinTextField' placeholder='Password' type='text'></input>
+                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
+                    <input name='Password' value={InputState.Password} id='passwordField' className='signinTextField' placeholder='Password' type='text' onChange={handleInput}></input>
                 </Col>
             </>
         )
@@ -27,31 +78,36 @@ function SignIn() {
     const renderSignUp = () => {
         return (
             <>
-                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{offset: 2 , span:8}}>
-                    <input className='signinTextField' placeholder='Email' type='text'></input>
+                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
+                    <input name='Email' value={InputState.Email} className='signinTextField' placeholder='Email' type='text' onChange={handleInput}></input>
                 </Col>
                 {renderLogin()}
-                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{offset: 2 , span:8}}>
-                    <input id='passwordField' className='signinTextField' placeholder='Confirm Password' type='text'></input>
+                <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
+                    <input name='ConfirmPassword' value={InputState.ConfirmPassword} id='passwordField' className='signinTextField' placeholder='Confirm Password' type='text' onChange={handleInput}></input>
                 </Col>
             </>
         )
     }
 
-    const renderForgotPassword=()=>{
-        if(pageType=='Login'){
-            return(
-                <Col className='textCenter' xs='12'>
-                    <a href='' className='forgotPasswordLink'>Forgot Password</a>
-                 </Col>
+    const renderForgotPassword = () => {
+        if (pageType == 'Login') {
+            return (
+                <>
+                    <Col className='textCenter' xs='12'>
+                        <a href='' className='forgotPasswordLink'>Forgot Password</a>
+                    </Col>
+                    <Col className='textCenter' xs='12'>
+                        <label className='warningMessage'>{warning}asdasd</label>
+                    </Col>
+                </>
             )
         }
         return null;
     }
 
-    const renderHelpText=()=>{
-        if (pageType=='Login') {
-            return(
+    const renderHelpText = () => {
+        if (pageType == 'Login') {
+            return (
                 <Col xs='12'>
                     <div className='textCenter'>Dont have an Account? <div className='helpText' onClick={helpTextClick}> Sign Up </div> here</div>
                 </Col>
@@ -65,9 +121,6 @@ function SignIn() {
     }
 
 
-    const helpTextClick=()=>{
-        (pageType=='Login')? setPageType('SignUp'):setPageType('Login');
-    }
 
     return (
         <div className='pageContainer'>
@@ -80,10 +133,10 @@ function SignIn() {
                     <Col xs='12' className="textCenter" >
                         <h1 className='signInTitle'>{pageType}</h1>
                     </Col>
-                    {(pageType=='Login')? renderLogin():renderSignUp()}
+                    {(pageType == 'Login') ? renderLogin() : renderSignUp()}
                     {renderForgotPassword()}
                     <Col xs='12' className='textCenter'>
-                        <button className='signInButton' signInButton>{pageType}</button>
+                        <button className='signInButton' onClick={(pageType == 'Login') ? loginRequest : SignUpRequest}>{pageType}</button>
                     </Col>
                     {renderHelpText()}
 

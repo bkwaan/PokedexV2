@@ -31,7 +31,7 @@ const UserSchema = new Schema(
       },
     ],
     ResetAuth: { type: String },
-    TwoFactCode: { type: String },
+    TwoFactSecret: { type: String },
     isVerified: { type: Boolean, default: false },
   },
   { collection: "Users" }
