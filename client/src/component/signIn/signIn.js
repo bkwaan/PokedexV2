@@ -10,7 +10,6 @@ import axios from 'axios';
 
 function SignIn() {
 
-
     //Functions for state and sending request
     const [pageType, setPageType] = useState('Login');
     const [warning, setWarning] = useState('');
@@ -20,12 +19,12 @@ function SignIn() {
         Email: '',
         confirmPassword: ''
     }
+
     //Prints state in console - only for testing if state updates properly
     const [InputState, setInputState] = useState(initalState);
     useEffect(() => {
         console.log(InputState);
     });
-
 
     //Function for handling any changes to all input fields
     const handleInput = (e) => {
@@ -35,31 +34,27 @@ function SignIn() {
             [name]: value,
         })
     }
+
     //Switches between sign in and sign up pages
     const helpTextClick = () => {
         (pageType == 'Login') ? setPageType('SignUp') : setPageType('Login');
         setInputState(initalState);
     }
+
     //Send login request
     const loginRequest = async () => {
-        try{
-        console.log('login');
-        const { UserName, Password } = InputState
-        console.log(UserName + Password)
-        let ress = await axios.post('/api/User/Login', { UserName: UserName, Password:Password })
-        console.log(ress);
-        setWarning(ress.data.Msg);
-        } catch(e){
-            console.log(e.message);
-            setWarning(e.Msg)
+        try {
+            const { UserName, Password } = InputState;
+            const res = await axios.post('/api/User/Login', { UserName: UserName, Password: Password });
+        } catch (e) {
+            setWarning(e.response.data.Msg);
         }
 
     }
-
+    //Send Sign up request
     const SignUpRequest = (e) => {
-        const { UserName, Password, Email, ConfirmPassword} = e.target;
+        const { UserName, Password, Email, ConfirmPassword } = e.target;
     }
-
 
     // Functions for Rendering Different content
     const renderLogin = () => {
@@ -83,7 +78,7 @@ function SignIn() {
                 </Col>
                 {renderLogin()}
                 <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-                    <input name='ConfirmPassword' value={InputState.ConfirmPassword} id='passwordField' className='signinTextField' placeholder='Confirm Password' type='text' onChange={handleInput}></input>
+                    <input name='ConfirmPassword' value={InputState.confirmPassword} id='passwordField' className='signinTextField' placeholder='Confirm Password' type='text' onChange={handleInput}></input>
                 </Col>
             </>
         )
@@ -97,7 +92,7 @@ function SignIn() {
                         <a href='' className='forgotPasswordLink'>Forgot Password</a>
                     </Col>
                     <Col className='textCenter' xs='12'>
-                        <label className='warningMessage'>{warning}asdasd</label>
+                        <label className='warningMessage'>{warning}</label>
                     </Col>
                 </>
             )
@@ -119,7 +114,6 @@ function SignIn() {
             </Col>
         )
     }
-
 
 
     return (

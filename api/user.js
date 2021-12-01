@@ -109,13 +109,13 @@ router.post("/Login", async (req, res) => {
         );
         res.status(201).json({ Msg: "OTP Code sent", Success: true, UserName: user.UserName });
       } else {
-        res.status(409).json({
+        res.status(401).json({
           Msg: "Failed username or login is incorrect",
           Success: false,
         });
       }
     } else {
-      res.status(409).json({ Msg: "Account does not exist", Success: false });
+      res.status(401).json({ Msg: "Account does not exist", Success: false });
     }
   } catch (err) {
     console.log(err);
@@ -222,10 +222,10 @@ router.get("/ForgotPassword/:UserName", async (req, res) => {
 
       res.status(201).json({ Msg: "Email Sent", Success: true });
     } else {
-      res.status(409).json({ Msg: "Account does not exist", Success: false });
+      res.status(401).json({ Msg: "Account does not exist", Success: false });
     }
   } catch (err) {
-    res.status(409).json({ Msg: err.message, Success: false });
+    res.status(401).json({ Msg: err.message, Success: false });
 
   }
 });
