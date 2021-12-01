@@ -91,16 +91,12 @@ router.post("/Login", async (req, res) => {
   try {
     const user = await Users.findOne({ UserName: UserName }).exec();
     if (user != null) {
-      console.log("mad eit");
-      console.log(Password)
       if (await bcrypt.compare(Password, user.Password)) {
-        console.log("madsadasd eit");
         const secret = (await promiseCrypto(12)).toString("hex");
         totp.options = { step: 300 };
         const token = totp.generate(secret);
         user.TwoFactSecret = secret;
         await user.save();
-        console.log(secret);
         mailer(
           "PokedexV2Mailer@gmail.com",
           user.Email,
@@ -115,14 +111,12 @@ router.post("/Login", async (req, res) => {
         });
       }
     } else {
-      res.status(401).json({ Msg: "Account does not exist", Success: false });
+      res.status(404).json({ Msg: "Account does not exist", Success: false });
     }
   } catch (err) {
-    console.log(err);
     res.status(409).json({ Msg: err.message, Success: false });
   }
 });
-
 
 // Verify OTP Code
 router.post("/VerifyOTP", async (req, res) => {
@@ -130,16 +124,14 @@ router.post("/VerifyOTP", async (req, res) => {
   try {
     const user = await Users.findOne({ UserName: UserName }).exec();
     const verify = totp.check(Token, user.TwoFactSecret);
-    console.log(user.TwoFactSecret);
     if (verify) {
       res.status(201).json({ Msg: "OTP Accepted", Success: true });
     }
     else {
-      res.status(201).json({ Msg: "OTP Expired or Incorrect", Success: false });
+      res.status(401).json({ Msg: "OTP Expired or Incorrect", Success: false });
     }
   } catch (err) {
-    console.log(err);
-    res.status(201).json({ Msg: err.message, Success: false });
+    res.status(409).json({ Msg: err.message, Success: false });
   }
 });
 
@@ -202,7 +194,6 @@ router.get("/ForgotPassword/:UserName", async (req, res) => {
       const token = jwt.sign({ UserName: UserName }, config.get("jwtPass"), {
         expiresIn: "1h",
       });
-      console.log(token);
       const html = await promiseFs("./Util/temp.html", "utf-8");
       let template = handleBars.compile(html);
       template = template({
@@ -219,13 +210,13 @@ router.get("/ForgotPassword/:UserName", async (req, res) => {
         "Password Reset",
         template
       );
-
       res.status(201).json({ Msg: "Email Sent", Success: true });
     } else {
-      res.status(401).json({ Msg: "Account does not exist", Success: false });
+      res.status(404).json({ Msg: "Account does not exist", Success: false });
     }
   } catch (err) {
-    res.status(401).json({ Msg: err.message, Success: false });
+    console.log(err);
+    res.status(409).json({ Msg: err.message, Success: false });
 
   }
 });
@@ -236,8 +227,7 @@ router.get("/VerifyForgotPassword/:Token", async (req, res) => {
   try {
     const jwtData = jwt.verify(Token, config.get("jwtPass"));
     if (jwtData) {
-      console.log(jwtData.UserName);
-      res.status(201).json({ Msg: "Valid Token", Success: true, UserName: jwtData.UserName });
+      res.status(201).json({ Msg: "Valid Token", Success: true });
     }
   } catch (err) {
     console.log(err);
@@ -257,9 +247,10 @@ router.post("/ResetPassword", async (req, res) => {
       res.status(201).json({ Msg: "Password Reset Success", Success: true });
     }
     else {
-      res.status(201).json({ Msg: "User does not exist", Success: true });
+      res.status(404).json({ Msg: "User does not exist", Success: true });
     }
   } catch (err) {
+    console.log(err);
     res.status(409).json({ Msg: err.message, Success: false });
   }
 });
