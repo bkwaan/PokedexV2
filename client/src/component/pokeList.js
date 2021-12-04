@@ -1,115 +1,43 @@
-import Bulbasaur from '../images/bulbasaur.png';
+import Bulbasaur from "../images/bulbasaur.png";
+import PokeCard from "./pokeCard";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-function PokeList() {
+const PokeList = () => {
+  const [pokeNames, setPokeNames] = useState([]);
+
+  useEffect(async () => {
+    try {
+      for (var i = 1; i <= 100; i++) {
+        var pokes = await axios.get("https://pokeapi.co/api/v2/pokemon/" + i);
+        var pokeTypes = [];
+        for (var j = 0; j < pokes.data.types.length; j++) {
+          pokeTypes.push(pokes.data.types[j].type.name);
+        }
+        setPokeNames((pokeNames) => [
+          ...pokeNames,
+          <PokeCard
+            name={pokes.data.forms[0].name}
+            id={i}
+            image={pokes.data.sprites.other["official-artwork"].front_default}
+            type={pokeTypes}
+          />,
+        ]);
+        pokeTypes = [];
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   return (
     <div className="pokeListContainer">
-		<div className="searchContainer">
-			{/* <input type="text">Search</input> */}
-		</div>
-		<div className="listContainer">
-			{/* This will need it's own seperate component */}
-			<div className="pokecard">
-				<div className="pokeheader">
-					<img src={Bulbasaur}/>
-					<span className="pokenumber">#001</span>
-				</div>
-			
-				<p className="pokename">Bulbasaur</p>
-				<div className="typetags">
-					<div className="tag">
-						<p>Grass</p>
-					</div>
-					<div className="tag">
-						<p>Poison</p>
-					</div>
-				</div>
-			</div>
-			{/* Repeated cardsx */}
-			<div className="pokecard">
-				<div className="pokeheader">
-					<img src={Bulbasaur}/>
-					<span className="pokenumber">#001</span>
-				</div>
-			
-				<p className="pokename">Bulbasaur</p>
-				<div className="typetags">
-					<div className="tag">
-						<p>Grass</p>
-					</div>
-					<div className="tag">
-						<p>Poison</p>
-					</div>
-				</div>
-			</div>
-			<div className="pokecard">
-				<div className="pokeheader">
-					<img src={Bulbasaur}/>
-					<span className="pokenumber">#001</span>
-				</div>
-			
-				<p className="pokename">Bulbasaur</p>
-				<div className="typetags">
-					<div className="tag">
-						<p>Grass</p>
-					</div>
-					<div className="tag">
-						<p>Poison</p>
-					</div>
-				</div>
-			</div>
-			<div className="pokecard">
-				<div className="pokeheader">
-					<img src={Bulbasaur}/>
-					<span className="pokenumber">#001</span>
-				</div>
-			
-				<p className="pokename">Bulbasaur</p>
-				<div className="typetags">
-					<div className="tag">
-						<p>Grass</p>
-					</div>
-					<div className="tag">
-						<p>Poison</p>
-					</div>
-				</div>
-			</div>
-			<div className="pokecard">
-				<div className="pokeheader">
-					<img src={Bulbasaur}/>
-					<span className="pokenumber">#001</span>
-				</div>
-			
-				<p className="pokename">Bulbasaur</p>
-				<div className="typetags">
-					<div className="tag">
-						<p>Grass</p>
-					</div>
-					<div className="tag">
-						<p>Poison</p>
-					</div>
-				</div>
-			</div>
-			<div className="pokecard">
-				<div className="pokeheader">
-					<img src={Bulbasaur}/>
-					<span className="pokenumber">#001</span>
-				</div>
-			
-				<p className="pokename">Bulbasaur</p>
-				<div className="typetags">
-					<div className="tag">
-						<p>Grass</p>
-					</div>
-					<div className="tag">
-						<p>Poison</p>
-					</div>
-				</div>
-			</div>
-			{/* End of repeated cards */}
-		</div>
+      <div className="searchContainer">
+        {/* <input type="text">Search</input> */}
+      </div>
+      <div className="listContainer">{pokeNames}</div>
     </div>
   );
-}
+};
 
 export default PokeList;
