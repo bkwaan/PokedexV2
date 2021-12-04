@@ -4,6 +4,7 @@ import PokeModal from "./component/pokemodal/pokeModal";
 import Modal from "react-bootstrap/esm/Modal";
 import ForgetPassword from "./component/forgetPassword/ForgetPassword";
 import SignIn from './component/signIn/signIn';
+const axios = require('axios');
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
           Learn React
         </a> */}
       {/* </header> */}
-      <SignIn/>
+      <PokeModal/>
     </div>
   );
 }
