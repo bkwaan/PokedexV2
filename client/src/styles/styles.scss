@@ -7,9 +7,20 @@
 
 
 
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
 // Components
+<<<<<<< HEAD
 @import "~bootstrap/scss/bootstrap";
 @import './profile';
 @import './signin';
 @import './components/pokemodal';
 @import './components/forgetPass'
+=======
+
+@import './components/general';
+@import './components/header';
+@import './components/pokeList';
+@import './components/pokeCard';
+>>>>>>> feature_homepage

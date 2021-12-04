@@ -1,0 +1,14 @@
+.pokeListContainer {
+    .listContainer {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        column-gap: 2em;
+        row-gap: 4em;
+        max-width: 60%;
+        justify-content: space-evenly;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 80px;
+    }  
+}

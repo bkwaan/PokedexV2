@@ -4,7 +4,11 @@
   "description": "Pokedex project created using the MERN stack",
   "main": "server.js",
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^5.0.1",
+=======
+    "bootstrap": "^5.1.2",
+>>>>>>> feature_homepage
     "config": "^3.3.6",
     "express": "^4.17.1",
     "handlebars": "^4.7.7",
