@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 const PokeCard = (props) => {
   const [id, setID] = useState(props.id);
   const [type, setType] = useState(props.type);
+  const [name, setName] = useState(props.name);
 
   const checkID = (id) => {
     if (id <= 9) {
@@ -13,22 +14,32 @@ const PokeCard = (props) => {
     }
   };
 
+  const upperName = () => {
+    var x = name.toString();
+    x = x.charAt(0).toUpperCase() + x.slice(1);
+    setName(x);
+  }
+
+  const openPoke = () =>{
+    alert("HI");
+  }
   useEffect(() => {
     checkID(id);
+    upperName();
   }, []);
 
   return (
     <div className="pokeCardContainer">
-      <div className="pokecard">
+      <div className="pokecard" onClick={openPoke}>
         <div className="pokeheader">
           <img src={props.image} alt="pokeImg" />
           <span className="pokenumber">#{id}</span>
         </div>
-        <p className="pokename">{props.name}</p>
+        <p className="pokename">{name}</p>
         <div className="typetags">
             {type.map((v) => {
               return (
-                <div className="tag">
+                <div className={"tag " + v }>
                   <p>{v}</p>
                 </div>
               );

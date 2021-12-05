@@ -8,7 +8,7 @@ const PokeList = () => {
 
   useEffect(async () => {
     try {
-      for (var i = 1; i <= 100; i++) {
+      for (var i = 1; i <= 159; i++) {
         var pokes = await axios.get("https://pokeapi.co/api/v2/pokemon/" + i);
         var pokeTypes = [];
         for (var j = 0; j < pokes.data.types.length; j++) {
