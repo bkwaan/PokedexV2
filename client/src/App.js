@@ -4,6 +4,7 @@ import PokeModal from "./component/pokemodal/pokeModal";
 import Modal from "react-bootstrap/esm/Modal";
 import ForgetPassword from "./component/forgetPassword/ForgetPassword";
 import SignIn from './component/signIn/signIn';
+import TwoFactorModal from './component/signIn/twoFactorModal';
 
 function App() {
   return (

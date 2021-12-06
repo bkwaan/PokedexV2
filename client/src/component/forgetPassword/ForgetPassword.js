@@ -2,21 +2,14 @@ import { Modal, Row, Col } from "react-bootstrap";
 import PokeBall from "../../images/pokeball.png";
 import { useState } from "react";
 
-const ForgetPassword = () => {
-  const [onHide, setOnHide] = useState(false);
-  const [onShow, setOnShow] = useState(true);
-
-  const onClose = () => {
-    setOnHide(true);
-    setOnShow(false);
-  };
+const ForgetPassword = (props) => {
   
   return (
     <div>
-      <Modal size="lg" show={onShow} onHide={onHide}>
+      <Modal size="lg" {...props} centered>
         <div className="forgetPassCont">
           <div className="closeIcon">
-            <i class="bi bi-x-lg" onClick={onClose}></i>
+            <i class="bi bi-x-lg" onClick={props.onHide}></i>
           </div>
           <div className="pokeImgCont">
             <img className="pokeBallImg" src={PokeBall} />
