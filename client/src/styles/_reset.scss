@@ -14,18 +14,18 @@ body {
 
 h1,h2,h3,ul,li {
   margin: 0;
-  font-family: $noto-sans;
-  color: white;
+  font-family: $poppins;
+  color: $dark-blue;
 }
 
 p {
     margin: 0;
-    font-family: $open-sans;
+    font-family: $poppins;
     font-size: 14px;
-    color: white;
+    color: black;
     
   &::selection {
-    background-color: $green;
+    background-color: $light-blue;
   }
 }
 

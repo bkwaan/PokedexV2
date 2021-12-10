@@ -5,27 +5,26 @@ import Modal from "react-bootstrap/esm/Modal";
 import ForgetPassword from "./component/forgetPassword/ForgetPassword";
 import SignIn from './component/signIn/signIn';
 import TwoFactorModal from './component/signIn/twoFactorModal';
+import HomePage from "./component/homepage/HomePage";
 
-function App() {
+//Redux
+import { Provider } from "react-redux";
+import store from "./store";
+import { useEffect } from "react";
+import { addPokemon } from "./redux/actions/pokemon";
+
+const App = () => {
+  useEffect(() => {
+    store.dispatch(addPokemon());
+  }, []);
+
   return (
-    <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a> */}
-      {/* </header> */}
-      <SignIn/>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <HomePage />
+      </div>
+    </Provider>
   );
-}
+};
 
 export default App;

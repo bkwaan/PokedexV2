@@ -7,6 +7,9 @@
 
 
 
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
 // Components
 @import "~bootstrap/scss/bootstrap";
 @import './components/profile';
@@ -15,3 +18,7 @@
 @import './components/forgetPass';
 @import './components/twoFactorModal';
 @import './components/background';
+@import './components/general';
+@import './components/header';
+@import './components/pokeList';
+@import './components/pokeCard';
