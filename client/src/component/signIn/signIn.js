@@ -12,6 +12,8 @@ function SignIn() {
     const [warning, setWarning] = useState('');
     const [otpShow, setOtpShow] = useState(false);
     const [forgotShow, setForgotShow] = useState(false);
+
+    // Input fields
     const initalState = {
         UserName: '',
         Password: '',
@@ -48,17 +50,44 @@ function SignIn() {
         resetInput()
         setWarning('');
     }
-    
+
     //Resets input fields
     const resetInput = () => {
         setInputState(initalState);
     }
 
+
+    const validateInutFields = () => {
+        if (!InputState.Email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+            setWarning('Email invalid')
+            return false;
+        } else if (InputState.FirstName.length == 0) {
+            setWarning('First Name cannot be empty')
+            return false;
+        } else if (InputState.LastName.length == 0) {
+            setWarning('Last Name cannot be empty')
+            return false;
+        } else if (InputState.UserName.length == 0) {
+            setWarning('User Name cannot be empty')
+            return false;
+        } else if (!InputState.Password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
+            setWarning('Password must be length 8 and have 1 Upper case, 1 lower case, 1 digit')
+            return false;
+        } else if (InputState.Password != InputState.ConfirmPassword) {
+            setWarning('Confirm Password and Password do no match')
+            return false;
+        }
+
+        return true;
+    }
+
     //Send login request
     const loginRequest = async () => {
         try {
+            setWarning('')
             const { UserName, Password } = InputState;
             const res = await axios.post('/api/User/Login', { UserName: UserName, Password: Password });
+            //displays otp verification modal -- validate token is in twoFactorModal.js
             setOtpShow(true);
         } catch (e) {
             setWarning(e.response.data.Msg);
@@ -69,16 +98,13 @@ function SignIn() {
     //Send Sign up request
     const SignUpRequest = async () => {
         try {
-            if (InputState.Password == InputState.ConfirmPassword) {
-                const res = await axios.post('/api/User/SignUp', InputState);
-            } else {
-                setWarning('Confirm Password and Password do no match')
-            }
+            setWarning('')
+            if (!(validateInutFields())) return;
+            const res = await axios.post('/api/User/SignUp', InputState);
+            //Email sent to user
         } catch (e) {
             setWarning(e.response.data.Msg);
-
         }
-
     }
 
     // Returns login text fields
@@ -89,7 +115,7 @@ function SignIn() {
                     <input name='UserName' value={InputState.UserName} className='signinTextField' placeholder='Username' type='text' onChange={handleInput}></input>
                 </Col>
                 <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-                    <input name='Password' value={InputState.Password} id='passwordField' className='signinTextField' placeholder='Password' type='text' onChange={handleInput}></input>
+                    <input name='Password' value={InputState.Password} id='passwordField' className='signinTextField' placeholder='Password' type='password' minlength="8" required onChange={handleInput}></input>
                 </Col>
             </>
         )
@@ -100,7 +126,7 @@ function SignIn() {
         return (
             <>
                 <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-                    <input name='Email' value={InputState.Email} className='signinTextField' placeholder='Email' type='text' onChange={handleInput}></input>
+                    <input name='Email' type='email' value={InputState.Email} className='signinTextField' placeholder='Email' type='text' onChange={handleInput}></input>
                 </Col>
                 <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
                     <input name='FirstName' value={InputState.FirstName} className='signinTextField' placeholder='FirstName' type='text' onChange={handleInput}></input>
@@ -110,7 +136,7 @@ function SignIn() {
                 </Col>
                 {renderLogin()}
                 <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-                    <input name='ConfirmPassword' value={InputState.ConfirmPassword} id='passwordField' className='signinTextField' placeholder='Confirm Password' type='text' onChange={handleInput}></input>
+                    <input name='ConfirmPassword' type='password' minlength="8" required value={InputState.ConfirmPassword} id='passwordField' className='signinTextField' placeholder='Confirm Password' onChange={handleInput}></input>
                 </Col>
             </>
         )

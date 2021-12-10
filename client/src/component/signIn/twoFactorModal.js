@@ -14,7 +14,7 @@ function TwoFactorModal(props) {
         try {
             const res = await axios.post('/api/User/VerifyOTP', { UserName: props.username, Token: token, });
             props.onHide()
-            //Redirect to home
+            //Redirect to home page if success
         } catch (e) {
             console.log(e.response.data.Msg)
             setVerifyTokenText(e.response.data.Msg);
