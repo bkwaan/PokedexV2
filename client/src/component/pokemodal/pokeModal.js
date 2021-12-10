@@ -7,27 +7,22 @@ import { AiOutlineConsoleSql, AiOutlineHeart } from "react-icons/ai";
 import PokeEvol from "./PokeEvol";
 import React, { useState, useEffect } from "react";
 
-const axios = require("axios");
-
 const PokeModal = (props) => {
-  const [poke, setPoke] = useState("");
-  const [type, setType] = useState([]);
+  const [type, setType] = useState([...props.type]);
   const [abil, setAbil] = useState([]);
+  // const [abilities, setAbilities] = useState([...props.abilities]);
 
-
-
-
-  useEffect(() => {
-    // setType(...props.types);
-    // setAbil(...props.abilities)
-    // getpoke();
-  }, []);
+  // useEffect(() => {
+  //   // setType(...props.types);
+  //   // setAbil(...props.abilities)
+  //   // getpoke();
+  // }, []);
 
   return (
     <div>
-      <Modal size="xl" show={true}>
+      <Modal size="xl" show={props.show}>
         <div className="pokeModal">
-          <div className="infoCont">
+          <div className={"infoCont " + type[0]}>
             <Row>
               <Col xs={{ span: 8, offset: 2 }}>
                 <span className="modalTitleCont">
@@ -55,9 +50,9 @@ const PokeModal = (props) => {
             <Row>
               <Col xs={12}>
                 <div className="pokeTypeCont">
-                  {type.map((item) => (
-                    <p className="pokeType">{item}</p>
-                  ))}
+                  {type.map((type) => {
+                    return <p className={"pokeType " + type}>{type}</p>;
+                  })}
                 </div>
               </Col>
             </Row>
@@ -83,7 +78,7 @@ const PokeModal = (props) => {
                   <p>Defense</p>
                 </Col>
                 <Col xs={6}>
-                  <ProgressBar className="progressBar" now={props.defense} />
+                  <ProgressBar className="progressBar" now={props.defence} />
                 </Col>
               </Row>
               <Row className="justifyContentMid">
@@ -99,7 +94,7 @@ const PokeModal = (props) => {
           <div className="descCont">
             <div className="descTab">
               <Tabs defaultActiveKey="description">
-                <Tab eventKey="description" title="Description">
+                <Tab eventKey="description" title="Description" className="pokeDesc">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Curabitur iaculis quis lacus quis pulvinar. Fusce vehicula
                   tortor ac erat facilisis fermentum. Donec cursus magna eget
@@ -114,9 +109,9 @@ const PokeModal = (props) => {
                 </Tab>
                 <Tab eventKey="ability" title="Abilities">
                   <div className="abilityCont">
-                  {abil.map((item) => (
-                    <Abilities name={item}/>
-                  ))}
+                    {/* {abilities.map((item) => (
+                      <Abilities name={item} />
+                    ))} */}
                   </div>
                 </Tab>
               </Tabs>

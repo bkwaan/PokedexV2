@@ -11,7 +11,7 @@ const Header = () => {
       if (!pokemon[i].innerText.toLowerCase().includes(poke)) {
         pokemon[i].parentElement.style.display = "none";
       } else {
-        pokemon[i].parentElement.style.display = "block";
+        pokemon[i].parentElement.style.display = "flex";
       }
     }
   };
