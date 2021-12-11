@@ -1,4 +1,4 @@
-import { ADD_POKEMON } from "../actions/types";
+import { ADD_POKEDESC, ADD_POKEMON } from "../actions/types";
 
 const initialState = [];
 

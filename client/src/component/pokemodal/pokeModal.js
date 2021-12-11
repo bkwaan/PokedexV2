@@ -6,17 +6,12 @@ import CommentHeader from "./CommentHeader";
 import { AiOutlineConsoleSql, AiOutlineHeart } from "react-icons/ai";
 import PokeEvol from "./PokeEvol";
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 
 const PokeModal = (props) => {
-  const [type, setType] = useState([...props.type]);
-  const [abil, setAbil] = useState([]);
-  // const [abilities, setAbilities] = useState([...props.abilities]);
-
-  // useEffect(() => {
-  //   // setType(...props.types);
-  //   // setAbil(...props.abilities)
-  //   // getpoke();
-  // }, []);
+  const [type, setType] = useState([...props.ownProps.types]);
+  const idz = props.ownProps.pokeID;
+  const abil = props.pokemon[idz - 1].abilities;
 
   return (
     <div>
@@ -27,7 +22,7 @@ const PokeModal = (props) => {
               <Col xs={{ span: 8, offset: 2 }}>
                 <span className="modalTitleCont">
                   <Modal.Title className="modalTitle">
-                    {"#" + props.id}
+                    {"#" + props.ownProps.id}
                   </Modal.Title>
                 </span>
               </Col>
@@ -39,12 +34,12 @@ const PokeModal = (props) => {
             </Row>
             <Row className="justifyContentMid">
               <Col lg={12}>
-                <img className="pokeImg" src={props.image} />
+                <img className="pokeImg" src={props.ownProps.image} />
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <p className="pokeName">{props.name}</p>
+                <p className="pokeName">{props.ownProps.name}</p>
               </Col>
             </Row>
             <Row>
@@ -62,7 +57,10 @@ const PokeModal = (props) => {
                   <p>Attack</p>
                 </Col>
                 <Col xs={6}>
-                  <ProgressBar className="progressBar" now={props.attack} />
+                  <ProgressBar
+                    className="progressBar"
+                    now={props.pokemon[idz - 1].stats[1].base_stat}
+                  />
                 </Col>
               </Row>
               <Row className="justifyContentMid">
@@ -70,7 +68,10 @@ const PokeModal = (props) => {
                   <p>HP</p>
                 </Col>
                 <Col xs={6}>
-                  <ProgressBar className="progressBar" now={props.hp} />
+                  <ProgressBar
+                    className="progressBar"
+                    now={props.pokemon[idz - 1].stats[0].base_stat}
+                  />
                 </Col>
               </Row>
               <Row className="justifyContentMid">
@@ -78,7 +79,10 @@ const PokeModal = (props) => {
                   <p>Defense</p>
                 </Col>
                 <Col xs={6}>
-                  <ProgressBar className="progressBar" now={props.defence} />
+                  <ProgressBar
+                    className="progressBar"
+                    now={props.pokemon[idz - 1].stats[2].base_stat}
+                  />
                 </Col>
               </Row>
               <Row className="justifyContentMid">
@@ -86,32 +90,37 @@ const PokeModal = (props) => {
                   <p>Speed</p>
                 </Col>
                 <Col xs={6}>
-                  <ProgressBar className="progressBar" now={props.speed} />
+                  <ProgressBar
+                    className="progressBar"
+                    now={props.pokemon[idz - 1].stats[5].base_stat}
+                  />
                 </Col>
               </Row>
             </div>
           </div>
           <div className="descCont">
             <div className="descTab">
-              <Tabs defaultActiveKey="description">
-                <Tab eventKey="description" title="Description" className="pokeDesc">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Curabitur iaculis quis lacus quis pulvinar. Fusce vehicula
-                  tortor ac erat facilisis fermentum. Donec cursus magna eget
-                  turpis hendrerit consequat. Class aptent taciti sociosqu ad
-                  litora torquent per conubia nostra, per inceptos himenaeos.
-                  Sed ex purus, rhoncus eget orci a, luctus viverra lorem.
-                  Suspendisse neque nisl, malesuada non cursus a, volutpat ut
-                  orci. Fusce vel lectus neque.
+              <Tabs defaultActiveKey="sprites">
+                <Tab
+                  eventKey="description"
+                  title="Description"
+                  className="pokeDesc"
+                >
+                  {props.pokemon[idz - 1].flavor_text_entries[0].flavor_text}
                 </Tab>
-                <Tab eventKey="evolution" title="Evolution">
-                  <PokeEvol />
+                <Tab eventKey="sprites" title="Sprites">
+                  <PokeEvol
+                    image={props.pokemon[idz - 1].sprites.front_default}
+                    image2={props.pokemon[idz - 1].sprites.back_default}
+                    image3={props.pokemon[idz - 1].sprites.front_shiny}
+                    image4={props.pokemon[idz - 1].sprites.back_shiny}
+                  />
                 </Tab>
                 <Tab eventKey="ability" title="Abilities">
                   <div className="abilityCont">
-                    {/* {abilities.map((item) => (
-                      <Abilities name={item} />
-                    ))} */}
+                    {abil.map((item) => (
+                      <Abilities name={item.ability.name} />
+                    ))}
                   </div>
                 </Tab>
               </Tabs>
@@ -130,4 +139,9 @@ const PokeModal = (props) => {
   );
 };
 
-export default PokeModal;
+const mapStateToProps = (state, ownProps) => ({
+  pokemon: state.pokemon,
+  ownProps: ownProps,
+});
+
+export default connect(mapStateToProps)(PokeModal);

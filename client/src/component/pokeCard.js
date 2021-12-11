@@ -1,30 +1,31 @@
 import Bulbasaur from "../images/bulbasaur.png";
 import { useEffect, useState } from "react";
 import PokeModal from "./pokemodal/PokeModal";
+import { connect } from "react-redux";
 
 const PokeCard = (props) => {
-  const [id, setID] = useState(props.id);
-  const [type, setType] = useState(props.type);
-  const [name, setName] = useState(props.name);
+  const [id, setID] = useState("");
   const [show, setShow] = useState(false);
-  const [hp, setHp] = useState("");
-  const [attack, setAttack] = useState("");
-  const [defence, setDefence] = useState("");
-  // const [speed, setSpeed] = useState("");
-  // const [stats, setStats] = useState(props.stats);
+  const [type, setType] = useState([]);
+  var idz = props.ownProps.id;
 
+  var name = props.pokemon[idz - 1].name;
+  name = name.charAt(0).toUpperCase() + name.slice(1);
+
+  const getType = () => {
+    const pokemon = props.pokemon[idz - 1].types;
+    pokemon.map((types) => {
+      setType((type) => [...type, types.type.name]);
+    });
+  };
   const checkID = (id) => {
-    if (id <= 9) {
+    if (idz <= 9) {
       setID("00" + id);
     } else if (id < 100 && id > 9) {
       setID("0" + id);
+    } else {
+      setID(id);
     }
-  };
-
-  const upperName = () => {
-    var x = name.toString();
-    x = x.charAt(0).toUpperCase() + x.slice(1);
-    setName(x);
   };
 
   const openPoke = () => {
@@ -32,41 +33,52 @@ const PokeCard = (props) => {
   };
 
   useEffect(() => {
-    checkID(id);
-    upperName();
+    checkID(idz);
+    getType();
   }, []);
 
   return (
     <div className="pokeCardContainer">
       <div className="pokecard" onClick={openPoke}>
-        {/* <PokeModal
+        <PokeModal
           show={show}
-          name={name}
           id={id}
-          image={props.image}
-          type={type}
-          hp={stats[0].base_stat}
-          attack={stats[1].base_stat}
-          defence={stats[2].base_stat}
-          speed={stats[5].base_stat}
-        /> */}
+          pokeID={idz}
+          types={type}
+          image={
+            props.pokemon[idz - 1].sprites.other["official-artwork"]
+              .front_default
+          }
+          name={name}
+        />
         <div className="pokeheader">
-          <img src={props.image} alt="pokeImg" />
+          <img
+            src={
+              props.pokemon[idz - 1].sprites.other["official-artwork"]
+                .front_default
+            }
+            alt="pokeImg"
+          />
           <span className="pokenumber">#{id}</span>
         </div>
         <p className="pokename">{name}</p>
         <div className="typetags">
-          {/* {type.map((v) => {
+          {type.map((v) => {
             return (
               <div className={"tag " + v}>
                 <p>{v}</p>
               </div>
             );
-          })} */ props.type}
+          })}
         </div>
       </div>
     </div>
   );
 };
 
-export default PokeCard;
+const mapStateToProps = (state, ownProps) => ({
+  pokemon: state.pokemon,
+  ownProps: ownProps,
+});
+
+export default connect(mapStateToProps)(PokeCard);

@@ -220,7 +220,8 @@
   }
   .pokeEvolution {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    // max-width: 80%;
     @include mq($desktopScreen) {
       justify-content: space-around;
       padding-top: 20px;
@@ -237,9 +238,10 @@
     }
 
     .pokeEvolImg {
-      width: 35%;
+      width: 50%;
+      overflow: hidden;
       @include mq($desktopScreen) {
-        width: 18%;
+        width: 180px;
       }
     }
   }
