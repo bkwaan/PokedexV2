@@ -1,6 +1,6 @@
 import Bulbasaur from "../images/bulbasaur.png";
 import { useEffect, useState } from "react";
-import PokeModal from "./pokemodal/PokeModal";
+import PokeModal from "./pokemodal/pokeModal";
 
 const PokeCard = (props) => {
   const [id, setID] = useState(props.id);

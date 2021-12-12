@@ -56,7 +56,6 @@ function SignIn() {
         setInputState(initalState);
     }
 
-
     const validateInutFields = () => {
         if (!InputState.Email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
             setWarning('Email invalid')
