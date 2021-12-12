@@ -1,15 +1,11 @@
-import Bulbasaur from "../../images/bulbasaur.png";
-import { BsArrowRight } from "react-icons/bs";
 
-const PokeEvol = () => {
+const PokeEvol = (props) => {
   return (
       <div className="pokeEvolution">
-        <img className="pokeEvolImg" src={Bulbasaur} />
-        <div className="pokeLvlInfo">
-          <p className="pokeEvolLvl">Level 16</p>
-          <BsArrowRight/>
-        </div>
-        <img className="pokeEvolImg" src={Bulbasaur} />
+        <img className="pokeEvolImg" src={props.image} />
+        <img className="pokeEvolImg" src={props.image2} />
+        <img className="pokeEvolImg" src={props.image3} />
+        <img className="pokeEvolImg" src={props.image4} />
       </div>
   );
 };
