@@ -89,8 +89,8 @@
       }
     }
     .pokeImg {
-      @include mq($tabletScreen) {
-        width: 70%;
+      @include mq($desktopScreen) {
+        width: 80%;
       }
       width: 60%;
     }
@@ -221,7 +221,6 @@
   .pokeEvolution {
     display: flex;
     justify-content: space-evenly;
-    // max-width: 80%;
     @include mq($desktopScreen) {
       justify-content: space-around;
       padding-top: 20px;
