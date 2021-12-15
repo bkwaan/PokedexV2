@@ -2,27 +2,33 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
-  UserName: {
-    type: String,
+  pokeID: {
+    type: Number,
     required: true,
+    unique: true
   },
-  Likes: [
+  Comment: [
     {
       UserName: {
-        type:  mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        type: String,
       },
+      CommentBody: {
+        type: String,
+      },
+      CommentDate: {
+        type: Date,
+        default: Date.now(),
+      },
+      Likes: [
+        {
+          UserID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+        },
+      ],
     },
   ],
-  Comment: {
-      type: String,
-      required: true
-  },
-  Date: {
-    type: Date,
-    default: Date.now()
-  },
-
 });
 
-modules.export = Comment = mongoose.model("Comment", CommentSchema);
+module.exports = Comment = mongoose.model("Comment", CommentSchema);

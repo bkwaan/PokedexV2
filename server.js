@@ -13,6 +13,7 @@ connectDB();
 //MiddleWare
 app.use(express.json({ extended: false }));
 
+
 // Using api folder
 app.use('/api',api);
 
