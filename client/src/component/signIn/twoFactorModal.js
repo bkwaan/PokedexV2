@@ -1,38 +1,42 @@
 import { Modal, Button, Row } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-
-
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginUserAsync } from '../../redux/actions/user';
+import { useNavigate } from 'react-router-dom';
 
 
 function TwoFactorModal(props) {
 
-    const [verifyTokenText, setVerifyTokenText] = useState('')
-    const [token, setToken] = useState('')
+    const [verifyTokenText, setVerifyTokenText] = useState('');
+    const [token, setToken] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const VerifyOtpRequest = async () => {
+    const VerifyOtpRequest = async (e) => {
+        e.preventDefault();
         try {
-            const res = await axios.post('/api/User/VerifyOTP', { UserName: props.username, Token: token, });
-            props.onHide()
-            //Redirect to home page if success
+            const x = await dispatch(loginUserAsync(props.username, token));
+            console.log("123445");
+            navigate('/homepage',{ replace: true })
         } catch (e) {
-            console.log(e.response.data.Msg)
+            console.log(e.response.data.Msg);
             setVerifyTokenText(e.response.data.Msg);
         }
     }
 
     const handleInput = (e) => {
-        setToken(e.target.value)
+        setToken(e.target.value);
         console.log(token);
     }
 
     const hideModal = () => {
-        setVerifyTokenText('')
+        setVerifyTokenText('');
         props.onHide();
     }
 
     return (
         <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
+            <form onSubmit={VerifyOtpRequest}>
             <div className='header'>
                 <div className='modalTitle'>
                     Verify OTP.
@@ -46,8 +50,9 @@ function TwoFactorModal(props) {
                 <p className='modalWarning'>{verifyTokenText}</p>
             </div>
             <div className='footer'>
-                <Button onClick={VerifyOtpRequest}>Verify</Button>
+                <Button type='submit'>Verify</Button>
             </div>
+            </form>
         </Modal>
     );
 }

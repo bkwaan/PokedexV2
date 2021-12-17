@@ -6,12 +6,17 @@ import ForgetPassword from "./component/forgetPassword/ForgetPassword";
 import SignIn from './component/signIn/signIn';
 import TwoFactorModal from './component/signIn/twoFactorModal';
 import HomePage from "./component/homepage/HomePage";
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute'
+import { PersistGate } from 'redux-persist/integration/react'
 
 //Redux
 import { Provider } from "react-redux";
-import store from "./store";
+import {store} from "./store";
+import {persistor} from "./store"
 import { useEffect } from "react";
 import { addPokeDescription, addPokemon } from "./redux/actions/pokemon";
+import { CookiesProvider } from 'react-cookie';
 
 const App = () => {
   useEffect(() => {
@@ -20,9 +25,14 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <div className="App">
-        <HomePage />
-      </div>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/Login' element={<SignIn />}></Route>
+            <Route path='/HomePage' element={<ProtectedRoute child={<HomePage/>} />}/>
+          </Routes>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   );
 };

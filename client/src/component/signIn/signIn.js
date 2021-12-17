@@ -4,8 +4,23 @@ import axios from 'axios';
 import TwoFactorModal from './twoFactorModal';
 import Backgroud from './background';
 import ForgetPassword from '../forgetPassword/ForgetPassword';
+import { useSelector } from 'react-redux';
+import { getUser } from '../../redux/Selectors/user';
+import { useNavigate } from 'react-router-dom';
+import { useNavItem } from '@restart/ui/esm/NavItem';
 
 function SignIn() {
+
+    // Check if user is already logged in
+    const navigate = useNavigate();
+    const authd = useSelector(getUser);
+    useEffect(()=>{
+        if(Object.keys(authd).length != 0){
+            console.log("12344599999")
+            navigate('/homepage', {replace:true});
+        }
+        
+    }, [])
 
     //Handling state
     const [pageType, setPageType] = useState('Login');
@@ -24,11 +39,6 @@ function SignIn() {
     }
     const [InputState, setInputState] = useState(initalState);
 
-
-    useEffect(() => {
-        console.log(InputState);
-    });
-
     //Function for handling any changes to all input fields
     const handleInput = (e) => {
         const { name, value } = e.target;
@@ -44,10 +54,15 @@ function SignIn() {
         setOtpShow(false);
     }
 
+    // Handle hiding Forgot password modal
+    const hideForgotModal = () => {
+        setForgotShow(false);
+    }
+
     //Switches between sign in and sign up pages
     const helpTextClick = () => {
         (pageType == 'Login') ? setPageType('SignUp') : setPageType('Login');
-        resetInput()
+        resetInput();
         setWarning('');
     }
 
@@ -56,6 +71,7 @@ function SignIn() {
         setInputState(initalState);
     }
 
+    //Validates input
     const validateInutFields = () => {
         if (!InputState.Email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
             setWarning('Email invalid')
@@ -76,14 +92,13 @@ function SignIn() {
             setWarning('Confirm Password and Password do no match')
             return false;
         }
-
         return true;
     }
 
     //Send login request
     const loginRequest = async () => {
         try {
-            setWarning('')
+            setWarning('');
             const { UserName, Password } = InputState;
             const res = await axios.post('/api/User/Login', { UserName: UserName, Password: Password });
             //displays otp verification modal -- validate token is in twoFactorModal.js
@@ -97,7 +112,7 @@ function SignIn() {
     //Send Sign up request
     const SignUpRequest = async () => {
         try {
-            setWarning('')
+            setWarning('');
             if (!(validateInutFields())) return;
             const res = await axios.post('/api/User/SignUp', InputState);
             //Email sent to user
@@ -196,7 +211,7 @@ function SignIn() {
             </Container>
             <Backgroud />
             <TwoFactorModal show={otpShow} onHide={hideOtpModal} username={InputState.UserName} />
-            <ForgetPassword show={forgotShow} onHide={() => setForgotShow(false)} />
+            <ForgetPassword show={forgotShow} onHide={hideForgotModal} />
         </div>
     );
 }

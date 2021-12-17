@@ -142,7 +142,7 @@ router.post("/Login", async (req, res) => {
           "OTP Code",
           "<p>Your OTP Code: " + token + "</p>"
         );
-        res.status(201).json({ Msg: "OTP Code sent", Success: true, UserName: user.UserName });
+        res.status(201).json({ Msg: "OTP Code sent", Success: true });
       } else {
         res.status(401).json({
           Msg: "Failed username or login is incorrect",
@@ -164,7 +164,13 @@ router.post("/VerifyOTP", async (req, res) => {
     const user = await Users.findOne({ UserName: UserName }).exec();
     const verify = totp.check(Token, user.TwoFactSecret);
     if (verify) {
-      res.status(201).json({ Msg: "OTP Accepted", Success: true });
+      const clientInfo = {
+        UserName: user.UserName,
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Email: user.Email,
+      }
+      res.status(201).json({ Msg: "OTP Accepted", Success: true, clientInfo: clientInfo });
     }
     else {
       res.status(401).json({ Msg: "OTP Expired or Incorrect", Success: false });
