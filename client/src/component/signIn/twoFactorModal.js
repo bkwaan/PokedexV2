@@ -16,16 +16,14 @@ function TwoFactorModal(props) {
     e.preventDefault();
     try {
       const x = await dispatch(loginUserAsync(props.username, token));
-      console.log(props.location.state.prev);
-      if(!props.location.state.prev){
-        navigate('/homepag', { replace: true })
+      if(!props.location.state){
+        navigate('/homepage', { replace: true })
       }
       else{
         console.log(props.location.state.prev)
         navigate(props.location.state.prev, { replace: true })
       }
     } catch (e) {
-      console.log(e.response.data.Msg);
       setVerifyTokenText(e.response.data.Msg);
     }
   }
@@ -41,7 +39,7 @@ function TwoFactorModal(props) {
   }
 
   return (
-    <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered >
       <form onSubmit={VerifyOtpRequest}>
         <div className='header'>
           <div className='modalTitle'>

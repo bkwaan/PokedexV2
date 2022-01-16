@@ -6,7 +6,7 @@ import { getUser } from '../../redux/Selectors/user';
 const ProtectedRoute = (props) => {
     const location = useLocation();
     const authd = useSelector(getUser);
-    const component = (Object.keys(authd).length === 0) ? <Navigate to='/login' state={{prev: location.pathname}}/> : props.child
+    const component = (Object.keys(authd).length === 0) ? <Navigate to='/' state={{prev: location.pathname}}/> : props.child
     return (
         component
     );

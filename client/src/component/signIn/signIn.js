@@ -94,7 +94,8 @@ function SignIn() {
   }
 
   //Send login request
-  const loginRequest = async () => {
+  const loginRequest = async (e) => {
+    e.preventDefault();
     try {
       setWarning('');
       const { UserName, Password } = InputState;
@@ -108,7 +109,8 @@ function SignIn() {
   }
 
   //Send Sign up request
-  const SignUpRequest = async () => {
+  const SignUpRequest = async (e) => {
+    e.preventDefault();
     try {
       setWarning('');
       if (!(validateInutFields())) return;
@@ -192,7 +194,7 @@ function SignIn() {
   return (
     <div className={(forgotShow || otpShow) ? 'pageContainer wrapper' : 'pageContainer'}>
       <Container fluid className='signInContainer'>
-        <Row>
+        <form noValidate>
           <Col xs='12' className="textCenter">
             <h1 className={pageType == 'SignUp' ? 'appTitle SignUp' : 'appTitle'}>POKEDEX</h1>
           </Col>
@@ -205,7 +207,7 @@ function SignIn() {
             <button className='signInButton' onClick={(pageType == 'Login') ? loginRequest : SignUpRequest}>{pageType}</button>
           </Col>
           {renderHelpText()}
-        </Row>
+        </form>
       </Container>
       <Backgroud />
       <TwoFactorModal show={otpShow} onHide={hideOtpModal} username={InputState.UserName} location={location} />

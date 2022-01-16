@@ -16,7 +16,6 @@ import { store } from "./store";
 import { persistor } from "./store"
 import { useEffect } from "react";
 import { addPokeDescription, addPokemon } from "./redux/actions/pokemon";
-import { CookiesProvider } from 'react-cookie';
 
 const App = () => {
   useEffect(() => {
@@ -28,7 +27,7 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
           <Routes>
-            <Route exact path='/login' element={<SignIn />}></Route>
+            <Route exact path='/' element={<SignIn />}></Route>
             <Route exact path='/homepage' element={<ProtectedRoute child={<HomePage />} />} />
             <Route exact path='/profile' element={<ProtectedRoute child={<Profile />} />} />
           </Routes>
