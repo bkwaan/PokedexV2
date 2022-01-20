@@ -4,11 +4,13 @@ import HomePage from "./component/homepage/HomePage";
 import { Provider } from "react-redux";
 import store from "./store";
 import { useEffect } from "react";
-import { addPokeDescription, addPokemon } from "./redux/actions/pokemon";
+import { addPokemon } from "./redux/actions/pokemon";
+import { getComment } from "./redux/actions/comment";
 
 const App = () => {
   useEffect(() => {
     store.dispatch(addPokemon());
+    store.dispatch(getComment(222));
   }, []);
 
   return (

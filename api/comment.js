@@ -14,6 +14,7 @@ router.post("/AddComment", async (req, res) => {
       });
       await newComment.save();
       return res.status(209).json({
+        Data: newComment,
         Msg: "Comment has been added",
         Success: true,
       });
@@ -22,6 +23,7 @@ router.post("/AddComment", async (req, res) => {
     comment.Comment.push({ UserName, CommentBody });
     await comment.save();
     res.status(209).json({
+      Data: comment.Comment[comment.Comment.length-1],
       Msg: "Comment has been added",
       Success: true,
     });
@@ -34,7 +36,7 @@ router.post("/AddComment", async (req, res) => {
 //Get Comment
 router.get("/GetComment/pokeID/:pokeID", async (req, res) => {
   const { pokeID } = req.params;
-  console.log(pokeID)
+  console.log(pokeID);
   try {
     let comment = await Comment.findOne({ pokeID }).exec();
     if (!comment) {
@@ -53,5 +55,30 @@ router.get("/GetComment/pokeID/:pokeID", async (req, res) => {
   }
 });
 
+//Delete a comment
+router.delete("/DeleteComment", async (req, res) => {
+  const { PokeID, id } = req.body;
+  try {
+    let comment = await Comment.findOne({ PokeID }).exec();
+    if (!comment) {
+      return res.status(404).json({
+        Message: "Comment not found",
+        Success: false,
+      });
+    }
+    comment.Comment.pull(id);
+    await comment.save();
+    res.status(209).json({
+      Message: "Comment has been removed",
+      Success: true,
+    });
+    console.log(comment);
+  } catch (err) {
+    if (err.errors["Comment.0._id"].kind === "ObjectId") {
+      return res.status(404).send("Comment not found");
+    }
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;

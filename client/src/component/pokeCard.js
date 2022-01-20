@@ -1,13 +1,12 @@
-import Bulbasaur from "../images/bulbasaur.png";
 import { useEffect, useState } from "react";
 import PokeModal from "./pokemodal/PokeModal";
 import { connect } from "react-redux";
 
 const PokeCard = (props) => {
   const [id, setID] = useState("");
-  const [show, setShow] = useState(false);
   const [type, setType] = useState([]);
-  var idz = props.ownProps.id;
+  const [show, setShow] = useState(false);
+  var idz = props.id;
 
   var name = props.pokemon[idz - 1].name;
   name = name.charAt(0).toUpperCase() + name.slice(1);
@@ -28,8 +27,10 @@ const PokeCard = (props) => {
     }
   };
 
-  const openPoke = () => {
-    setShow(!show);
+  const openPoke = () => setShow(true);
+
+  const handleClose = () => {
+    setShow((show) => !show);
   };
 
   useEffect(() => {
@@ -39,18 +40,18 @@ const PokeCard = (props) => {
 
   return (
     <div className="pokeCardContainer">
+      <PokeModal
+        show={show}
+        handleClose={handleClose}
+        id={id}
+        pokeID={idz}
+        types={type}
+        image={
+          props.pokemon[idz - 1].sprites.other["official-artwork"].front_default
+        }
+        name={name}
+      />
       <div className="pokecard" onClick={openPoke}>
-        <PokeModal
-          show={show}
-          id={id}
-          pokeID={idz}
-          types={type}
-          image={
-            props.pokemon[idz - 1].sprites.other["official-artwork"]
-              .front_default
-          }
-          name={name}
-        />
         <div className="pokeheader">
           <img
             src={
@@ -76,9 +77,8 @@ const PokeCard = (props) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   pokemon: state.pokemon,
-  ownProps: ownProps,
 });
 
 export default connect(mapStateToProps)(PokeCard);

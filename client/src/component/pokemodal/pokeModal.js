@@ -1,5 +1,4 @@
 import { Modal, Row, Col, ProgressBar, Tabs, Tab } from "react-bootstrap";
-import Bulbasaur from "../../images/bulbasaur.png";
 import Abilities from "./Abilities";
 import PokeComment from "./PokeComment";
 import CommentHeader from "./CommentHeader";
@@ -7,22 +6,27 @@ import { AiOutlineConsoleSql, AiOutlineHeart } from "react-icons/ai";
 import PokeEvol from "./PokeEvol";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { getComment } from "../../redux/actions/comment";
 
 const PokeModal = (props) => {
-  const [type, setType] = useState([...props.ownProps.types]);
-  const idz = props.ownProps.pokeID;
+  const [type, setType] = useState([...props.types]);
+  const idz = props.pokeID;
   const abil = props.pokemon[idz - 1].abilities;
+
+  useEffect(() => {
+    props.getComment(233);
+  },[])
 
   return (
     <div>
-      <Modal size="xl" show={props.show}>
+      <Modal size="xl" show={props.show} onHide={props.handleClose}>
         <div className="pokeModal">
           <div className={"infoCont " + type[0]}>
             <Row>
               <Col xs={{ span: 8, offset: 2 }}>
                 <span className="modalTitleCont">
                   <Modal.Title className="modalTitle">
-                    {"#" + props.ownProps.id}
+                    {"#" + props.id}
                   </Modal.Title>
                 </span>
               </Col>
@@ -34,12 +38,12 @@ const PokeModal = (props) => {
             </Row>
             <Row className="justifyContentMid">
               <Col lg={12}>
-                <img className="pokeImg" src={props.ownProps.image} />
+                <img className="pokeImg" src={props.image} />
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <p className="pokeName">{props.ownProps.name}</p>
+                <p className="pokeName">{props.name}</p>
               </Col>
             </Row>
             <Row>
@@ -139,9 +143,9 @@ const PokeModal = (props) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   pokemon: state.pokemon,
-  ownProps: ownProps,
+  comment: state.comment,
 });
 
-export default connect(mapStateToProps)(PokeModal);
+export default connect(mapStateToProps,{getComment})(PokeModal);

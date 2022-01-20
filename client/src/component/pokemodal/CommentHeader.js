@@ -1,6 +1,15 @@
 import Form from "react-bootstrap/Form";
+import { connect } from "react-redux";
+import { addComment } from "../../redux/actions/comment";
 
-const PokeComment = () => {
+const PokeComment = (props) => {
+
+  const addComment = (e) => {
+    e.preventDefault();
+    props.addComment("233","sklvi", "there my name is costco");
+
+  }
+
   return (
     <div className="commentSection">
       <div className="commentHeader">
@@ -14,7 +23,7 @@ const PokeComment = () => {
         <p className="commTitle">Join The Discussion!</p>
       </div>
       <div className="commText">
-        <Form>
+        <Form onSubmit={(e)=>addComment(e)}>
           <Form.Control
             as="textarea"
             rows={3}
@@ -28,4 +37,4 @@ const PokeComment = () => {
   );
 };
 
-export default PokeComment;
+export default connect(null,{addComment})(PokeComment);
