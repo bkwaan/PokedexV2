@@ -13,9 +13,9 @@ const PokeModal = (props) => {
   const idz = props.pokeID;
   const abil = props.pokemon[idz - 1].abilities;
 
-  useEffect(() => {
-    props.getComment(233);
-  },[])
+  // useEffect(() => {
+  //   props.getComment(233);
+  // },[])
 
   return (
     <div>

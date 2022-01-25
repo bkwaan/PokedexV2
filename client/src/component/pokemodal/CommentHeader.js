@@ -1,12 +1,12 @@
 import Form from "react-bootstrap/Form";
 import { connect } from "react-redux";
-import { addComment } from "../../redux/actions/comment";
+import { editComment } from "../../redux/actions/comment";
 
 const PokeComment = (props) => {
 
   const addComment = (e) => {
     e.preventDefault();
-    props.addComment("233","sklvi", "there my name is costco");
+    props.editComment("222","61e78c467f754881b0076093", "there my name is test");
 
   }
 
@@ -37,4 +37,4 @@ const PokeComment = (props) => {
   );
 };
 
-export default connect(null,{addComment})(PokeComment);
+export default connect(null,{editComment})(PokeComment);

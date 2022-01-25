@@ -1,4 +1,4 @@
-import { GET_COMMENT, ADD_COMMENT, DEL_COMMENT } from "../actions/types";
+import { GET_COMMENT, ADD_COMMENT, DEL_COMMENT, EDIT_COMMENT } from "../actions/types";
 
 const initialState = { comments: [] };
 
@@ -21,12 +21,22 @@ export default function (state = initialState, action) {
       };
     }
     case DEL_COMMENT: {
-      let comments = state.comments[action.PokeID][0];
-      comments.filter((item) => action.id != item._id);
+      let comments = state.comments;     
+      comments[action.PokeID][0] = comments[action.PokeID][0].filter((item) => action.id != item._id);
+      console.log(comments); 
       return {
         ...state,
-        comments: { comments },
+         comments,
       };
+    }
+    case EDIT_COMMENT: {
+      let comments = state.comments;
+      let index = comments[action.PokeID][0].findIndex(comment => comment._id === action._id);
+      comments[action.PokeID][0][index].CommentBody = action.payload.CommentBody;
+      return {
+        ...state,
+        comments
+      }
     }
     default:
       return state;

@@ -42,7 +42,24 @@ export const delComment = (PokeID, id) => async (dispatch) => {
       type: actions.DEL_COMMENT,
       payload: comment.data.Success,
       PokeID: PokeID,
-      id: id
+      id: id,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const editComment = (PokeID, _id, CommentBody) => async (dispatch) => {
+  try {
+    let comment = await axios.put("/api/Comment/UpdateComment", {
+      _id,
+      CommentBody,
+    });
+    dispatch({
+      type: actions.EDIT_COMMENT,
+      payload: comment.data.Data,
+      PokeID: PokeID,
+      _id: _id,
     });
   } catch (err) {
     console.log(err);
