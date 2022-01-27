@@ -2,21 +2,30 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 import TwoFactorModal from './twoFactorModal';
-import Backgroud from './background';
+import Background from './background';
 import ForgetPassword from '../forgetPassword/ForgetPassword';
 import { useSelector } from 'react-redux';
-import { getUser } from '../../redux/Selectors/user';
+import { isLoggedIn } from '../../redux/Selectors/user';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginUserAsync } from '../../redux/actions/user';
 
 function SignIn() {
 
   // Check if user is already logged in
   const navigate = useNavigate();
   const location = useLocation();
-  const authd = useSelector(getUser);
+  const authd = useSelector(isLoggedIn);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (Object.keys(authd).length != 0) {
-      navigate('/homepage', { replace: true });
+    if (authd) {
+      console.log(location)
+      if(!location.state){
+        navigate('/homepage', { replace: true })
+      }
+      else{
+        navigate(location.state.prev, { replace: true })
+      }
     }
   }, [])
 
@@ -83,8 +92,8 @@ function SignIn() {
     } else if (InputState.UserName.length == 0) {
       setWarning('User Name cannot be empty')
       return false;
-    } else if (!InputState.Password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
-      setWarning('Password must be length 8 and have 1 Upper case, 1 lower case, 1 digit')
+    } else if (!InputState.Password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!$^&*-+*@])[A-Za-z\d!$^&*-+*@]{8,}/)) {
+      setWarning('Password must be length 8 and have 1 Upper case, 1 lower case, 1 digit and \n 1 of the following charcters: [!$^&*-+*@]')
       return false;
     } else if (InputState.Password != InputState.ConfirmPassword) {
       setWarning('Confirm Password and Password do no match')
@@ -99,7 +108,8 @@ function SignIn() {
     try {
       setWarning('');
       const { UserName, Password } = InputState;
-      const res = await axios.post('/api/User/Login', { UserName: UserName, Password: Password });
+      // const res = await axios.post('/api/User/Login', { UserName: UserName, Password: Password });
+      await dispatch(loginUserAsync(InputState.UserName, InputState.Password));
       //displays otp verification modal -- validate token is in twoFactorModal.js
       setOtpShow(true);
     } catch (e) {
@@ -170,7 +180,7 @@ function SignIn() {
         </>
       )
     }
-    return <Col className='textCenter' xs='12'>
+    return <Col className='textCenter' xs={{offset:1, span:10}} sm={{ offset: 3, span: 6 }} lg={{offset: 4, span:4}}>
       <label className='warningMessage'>{warning}</label>
     </Col>
   }
@@ -196,10 +206,10 @@ function SignIn() {
       <Container fluid className='signInContainer'>
         <form noValidate>
           <Col xs='12' className="textCenter">
-            <h1 className={pageType == 'SignUp' ? 'appTitle SignUp' : 'appTitle'}>POKEDEX</h1>
+            <p className={pageType == 'SignUp' ? 'appTitle SignUp' : 'appTitle'}>POKEDEX</p>
           </Col>
           <Col xs='12' className="textCenter" >
-            <h1 className='signInTitle'>{pageType}</h1>
+            <p className='signInTitle'>{pageType}</p>
           </Col>
           {(pageType == 'Login') ? renderLogin() : renderSignUp()}
           {renderForgotPassword()}
@@ -209,7 +219,7 @@ function SignIn() {
           {renderHelpText()}
         </form>
       </Container>
-      <Backgroud />
+      <Background />
       <TwoFactorModal show={otpShow} onHide={hideOtpModal} username={InputState.UserName} location={location} />
       <ForgetPassword show={forgotShow} onHide={hideForgotModal} />
     </div>

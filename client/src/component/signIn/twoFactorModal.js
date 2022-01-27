@@ -1,7 +1,7 @@
 import { Modal, Button, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUserAsync } from '../../redux/actions/user';
+import { verifyOtpCode } from '../../redux/actions/user';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -15,12 +15,11 @@ function TwoFactorModal(props) {
   const VerifyOtpRequest = async (e) => {
     e.preventDefault();
     try {
-      const x = await dispatch(loginUserAsync(props.username, token));
+      const x = await dispatch(verifyOtpCode(props.username, token));
       if(!props.location.state){
         navigate('/homepage', { replace: true })
       }
       else{
-        console.log(props.location.state.prev)
         navigate(props.location.state.prev, { replace: true })
       }
     } catch (e) {
@@ -39,7 +38,7 @@ function TwoFactorModal(props) {
   }
 
   return (
-    <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered >
+    <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered onHide={hideModal} >
       <form onSubmit={VerifyOtpRequest}>
         <div className='header'>
           <div className='modalTitle'>

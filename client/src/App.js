@@ -9,6 +9,7 @@ import HomePage from "./component/homepage/HomePage";
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute'
 import { PersistGate } from 'redux-persist/integration/react'
+import ResetPassword from './component/forgetPassword/ResetPassword';
 
 //Redux
 import { Provider } from "react-redux";
@@ -16,6 +17,7 @@ import { store } from "./store";
 import { persistor } from "./store"
 import { useEffect } from "react";
 import { addPokeDescription, addPokemon } from "./redux/actions/pokemon";
+
 
 const App = () => {
   useEffect(() => {
@@ -30,6 +32,7 @@ const App = () => {
             <Route exact path='/' element={<SignIn />}></Route>
             <Route exact path='/homepage' element={<ProtectedRoute child={<HomePage />} />} />
             <Route exact path='/profile' element={<ProtectedRoute child={<Profile />} />} />
+            <Route exact path='/ResetPassword/:Token' element={<ResetPassword/>}/>
           </Routes>
         </BrowserRouter>
       </PersistGate>

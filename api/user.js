@@ -136,16 +136,22 @@ router.post("/Login", async (req, res) => {
         const token = totp.generate(secret);
         user.TwoFactSecret = secret;
         await user.save();
+        const clientInfo = {
+          UserName: user.UserName,
+          FirstName: user.FirstName,
+          LastName: user.LastName,
+          Email: user.Email,
+        }
         mailer(
           "PokedexV2Mailer@gmail.com",
           user.Email,
           "OTP Code",
           "<p>Your OTP Code: " + token + "</p>"
         );
-        res.status(201).json({ Msg: "OTP Code sent", Success: true });
+        res.status(201).json({ Msg: "OTP Code sent", Success: true, clientInfo: clientInfo });
       } else {
         res.status(401).json({
-          Msg: "Failed username or login is incorrect",
+          Msg: "Failed credentials are incorrect",
           Success: false,
         });
       }
@@ -164,13 +170,7 @@ router.post("/VerifyOTP", async (req, res) => {
     const user = await Users.findOne({ UserName: UserName }).exec();
     const verify = totp.check(Token, user.TwoFactSecret);
     if (verify) {
-      const clientInfo = {
-        UserName: user.UserName,
-        FirstName: user.FirstName,
-        LastName: user.LastName,
-        Email: user.Email,
-      }
-      res.status(201).json({ Msg: "OTP Accepted", Success: true, clientInfo: clientInfo });
+      res.status(201).json({ Msg: "OTP Accepted", Success: true });
     }
     else {
       res.status(401).json({ Msg: "OTP Expired or Incorrect", Success: false });
@@ -231,20 +231,21 @@ router.post("/UpdatePassword", async (req, res) => {
 });
 
 // Forget Password
-router.get("/ForgotPassword/:UserName", async (req, res) => {
-  const { UserName } = req.params;
+router.get("/ForgotPassword/:Email", async (req, res) => {
+  const { Email } = req.params;
   try {
-    const user = await Users.findOne({ UserName: UserName });
+    const user = await Users.findOne({ Email: Email });
     if (user != null) {
-      const token = jwt.sign({ UserName: UserName }, config.get("jwtPass"), {
-        expiresIn: "1h",
+      const token = jwt.sign({}, `${config.get("jwtPass")}${user.Password.substr(user.Password.length-5)}`, {
+        expiresIn: "5m",
       });
+      console.log(user.Password)
       const html = await promiseFs("./Util/temp.html", "utf-8");
       let template = handleBars.compile(html);
       template = template({
         header: "Password Reset",
         title: "Password reset has been requested for your account",
-        token: "http://localhost:3000/ResetPassword" + token,
+        token: "http://localhost:3000/ResetPassword/" + token,
         content: "A Password Reset link was requested for your account",
         firstname: user.FirstName,
         linkText: "Reset Password",
@@ -266,34 +267,24 @@ router.get("/ForgotPassword/:UserName", async (req, res) => {
   }
 });
 
-//Verify Forgot Password token
-router.get("/VerifyForgotPassword/:Token", async (req, res) => {
-  const { Token } = req.params;
-  try {
-    const jwtData = jwt.verify(Token, config.get("jwtPass"));
-    if (jwtData) {
-      res.status(201).json({ Msg: "Valid Token", Success: true });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(409).json({ Msg: err.message, Success: false });
-  }
-});
-
 //Reset Password
 router.post("/ResetPassword", async (req, res) => {
-  const { UserName, Password } = req.body;
+  const { Email, Password, Token } = req.body;
   try {
-    let user = await Users.findOne({ UserName: UserName }).exec();
-    if (user != null) {
-      const newPassword = await bcrypt.hash(Password, saltRounds);
-      user.Password = newPassword;
-      await user.save()
-      res.status(201).json({ Msg: "Password Reset Success", Success: true });
+    const user = await Users.findOne({ Email: Email }).exec();
+    if (user === null) {
+      res.status(404).json({ Msg: "User does not exist", Success: false });
+      return;
     }
-    else {
-      res.status(404).json({ Msg: "User does not exist", Success: true });
+    jwt.verify(Token, `${config.get("jwtPass")}${user.Password.substr(user.Password.length-5)}`);
+    const comparePasswords = await bcrypt.compare(Password,user.Password)
+    if (comparePasswords) {
+      res.status(409).json({ Msg: 'Cannot use old password', Success: false });
+      return;
     }
+    user.Password = await bcrypt.hash(Password, saltRounds);
+    await user.save()
+    res.status(201).json({ Msg: "Password Reset Success", Success: true });
   } catch (err) {
     console.log(err);
     res.status(409).json({ Msg: err.message, Success: false });

@@ -6,7 +6,7 @@ import pokeBall from './Assets/pokeBall.png'
 function Background(props) {
 
   return (
-    <div>
+    <div className='backContainer'>
       <img src={greenBlur} className='greenBlur' />
 
       <img src={pinkBlur} className='pinkBlur' />

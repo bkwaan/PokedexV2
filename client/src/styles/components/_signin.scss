@@ -1,8 +1,5 @@
 
 .pageContainer{
-    position: relative;
-    overflow: hidden;
-    height: 100vh;
     .signInContainer{
         height: 98vh;
         overflow-y: scroll;
@@ -45,7 +42,6 @@
             font-size: 20px;
             background-color: transparent;
             outline:none;
-
         }
 
 
@@ -58,6 +54,7 @@
 
         .warningMessage{
             color: red;
+            max-width: 450px;
         }
 
         .signInButton{
