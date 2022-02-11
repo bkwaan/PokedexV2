@@ -7,9 +7,9 @@ function Profile() {
         <Col>
           <Row className="profileRow">
             <Col>
-            <div className='profileImageBackground'>
-              <img className='profileImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-            </div>
+              <div className='profileImageBackground'>
+                <img className='profileImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
+              </div>
             </Col>
             <Col className='profileUsername' >
               Bkwann
@@ -20,26 +20,28 @@ function Profile() {
           </Row>
           <Row className='profileInputGroup'>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-
               <label>Username</label>
               <input type='text'></input>
-
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-
               <label>Email</label>
               <input type='text'></input>
-
+            </Col>
+            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+              <label>First Name</label>
+              <input type='text'></input>
+            </Col>
+            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+              <label>Last Name</label>
+              <input type='text'></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>Password</label>
               <input type='text'></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-
               <label>Confirm Password</label>
               <input type='text'></input>
-
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 2, offset: 9 }} lg={{ span: 1, offset: 9 }} className='buttonCol'>
               <button className='saveButton'>Save</button>

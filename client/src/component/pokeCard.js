@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PokeModal from "./pokemodal/PokeModal";
+import PokeModal from "./pokemodal/pokeModal";
 import { connect } from "react-redux";
 
 const PokeCard = (props) => {

@@ -1,0 +1,41 @@
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 20px 20px 20px;
+    .modalTitle{
+        color: #2C73B8;
+        font-size: x-large;
+        font-weight: 700;
+    }
+
+}
+.verificationCodeInput{
+    margin-top:20px;
+    padding:5px;
+    width: 100%;
+}
+.modalBody{
+    padding: 20px 10px 10px 10px;
+    margin: 0px 10px;
+    border-bottom: 1px grey solid;
+    border-top: 1px grey solid;
+    .modalWarning{
+        margin: 5px 0px 0px 0px;
+        color:red;
+        min-height: 21px;
+    }
+
+
+}
+.footer{
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px;
+    >button{
+        background-color: #2C73B8;
+    }
+    
+}
+
+

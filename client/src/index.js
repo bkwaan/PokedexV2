@@ -5,17 +5,17 @@ import App from './App';
 import Profile from './component/profile/profile';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from "react-router-dom";
 
-import store from './store';
+import {store} from './store';
 import SignIn from './component/signIn/signIn'
 
 
 ReactDOM.render(
-  <Provider store={store}>
+
   <React.StrictMode>
     <App />
-  </React.StrictMode>
-  </Provider>,
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

@@ -1,0 +1,39 @@
+.backContainer{
+    position: absolute;
+    z-index: -1;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    overflow: hidden;
+
+    .pinkBlur{
+        position: absolute;
+        right:-400px;
+        top:-130px;
+        z-index: -1;
+        background-attachment: fixed;
+    }
+    .greenBlur{
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        background-attachment: fixed;
+    }
+
+    .purpleBlur{
+        position: absolute;
+        bottom:-150px;
+        left:-125px;
+        z-index: -1;
+        background-attachment: fixed;
+    }
+
+    .pokeBall{
+        position: absolute;
+        right:0;
+        bottom: 0px;
+        z-index: -1;
+        background-attachment: fixed;
+    }
+}
