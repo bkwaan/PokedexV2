@@ -2,7 +2,7 @@ import { Modal, Row, Col, ProgressBar, Tabs, Tab } from "react-bootstrap";
 import Abilities from "./Abilities";
 import PokeComment from "./PokeComment";
 import CommentHeader from "./CommentHeader";
-import { AiOutlineConsoleSql, AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import PokeEvol from "./PokeEvol";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
@@ -12,10 +12,17 @@ const PokeModal = (props) => {
   const [type, setType] = useState([...props.types]);
   const idz = props.pokeID;
   const abil = props.pokemon[idz - 1].abilities;
+  const [pokeComments, setPokeComments] = useState([]);
+  const setComments = () => {
+    if (props.comment.comments[idz] != undefined) {
+      setPokeComments(props.comment.comments[idz][0]);
+    }
+  };
 
-  // useEffect(() => {
-  //   props.getComment(233);
-  // },[])
+  useEffect(() => {
+    // props.getComment(idz);
+    setComments();
+  },[]);
 
   return (
     <div>
@@ -130,11 +137,15 @@ const PokeModal = (props) => {
               </Tabs>
             </div>
             <span class="customBr"></span>
-            <CommentHeader />
+            <CommentHeader Id={idz} />
             <div className="pokeCommCont">
-              <PokeComment />
-              <PokeComment />
-              <PokeComment />
+              {pokeComments.map((comment) => (
+                <PokeComment
+                  name={comment.UserName}
+                  date={comment.CommentDate}
+                  comment={comment.CommentBody}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -148,4 +159,4 @@ const mapStateToProps = (state) => ({
   comment: state.comment,
 });
 
-export default connect(mapStateToProps,{getComment})(PokeModal);
+export default connect(mapStateToProps, { getComment })(PokeModal);

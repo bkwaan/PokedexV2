@@ -4,11 +4,13 @@ import axios from "axios";
 export const getComment = (id) => async (dispatch) => {
   try {
     let comment = await axios.get("/api/Comment/GetComment/PokeID/" + id);
-    dispatch({
-      type: actions.GET_COMMENT,
-      payload: comment.data.Data,
-      id: id,
-    });
+    if (comment.data.Success) {
+      dispatch({
+        type: actions.GET_COMMENT,
+        payload: comment.data.Data,
+        id: id,
+      });
+    }
   } catch (err) {
     console.log(err);
   }

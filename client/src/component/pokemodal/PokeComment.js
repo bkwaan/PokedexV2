@@ -1,12 +1,12 @@
 import { BiTrashAlt } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
-import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
 
-const PokeComment = (props) => {
+const PokeComment = ({ name, comment, date }) => {
   return (
     <div className="pokeComment">
       <div class="commInfo">
-        <p>Bkwaan:</p>
+        <p>{name}</p>
         <div className="iconsCont">
           <span className="iconPadding">
             <BiTrashAlt />
@@ -17,16 +17,18 @@ const PokeComment = (props) => {
         </div>
       </div>
       <p className="userComment">
-        Wow! This is the best pokemon! I Love this pokemon!
+        {comment}
       </p>
-      <p className="commDate">2020-08-05</p>
+      <p className="commDate">{date}</p>
       <span class="customBr"></span>
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  comment: state.comment,
-});
+PokeComment.propTypes = {
+  name: PropTypes.string,
+  comment: PropTypes.string,
+  date: PropTypes.string,
+};
 
-export default connect(mapStateToProps)(PokeComment);
+export default PokeComment;

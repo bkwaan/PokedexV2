@@ -1,14 +1,23 @@
+import { useState } from "react";
+import { PropTypes } from "prop-types";
 import Form from "react-bootstrap/Form";
 import { connect } from "react-redux";
-import { editComment } from "../../redux/actions/comment";
+import { addComment } from "../../redux/actions/comment";
 
-const PokeComment = (props) => {
+const CommentHeader = ({Id, addComment}) => {
+  const [comment, setComment] = useState("");
+  const [id, setId] = useState(Id);
 
-  const addComment = (e) => {
+  const pushComment = (e) => {
     e.preventDefault();
-    props.editComment("222","61e78c467f754881b0076093", "there my name is test");
+    addComment(id, "bosco", comment);
+    const textArea = document.getElementsByTagName("textarea")[0];
+    textArea.value = "";
+  };
 
-  }
+  const handleChange = (e) => {
+    setComment(e.target.value);
+  };
 
   return (
     <div className="commentSection">
@@ -23,13 +32,14 @@ const PokeComment = (props) => {
         <p className="commTitle">Join The Discussion!</p>
       </div>
       <div className="commText">
-        <Form onSubmit={(e)=>addComment(e)}>
+        <Form onSubmit={(e) => pushComment(e)}>
           <Form.Control
             as="textarea"
             rows={3}
+            onChange={(e) => handleChange(e)}
           />
           <div className="commSubmit">
-          <button>Submit</button>
+            <button>Submit</button>
           </div>
         </Form>
       </div>
@@ -37,4 +47,9 @@ const PokeComment = (props) => {
   );
 };
 
-export default connect(null,{editComment})(PokeComment);
+CommentHeader.propTypes = {
+  Id: PropTypes.number,
+  addComment: PropTypes.func
+}
+
+export default connect(null, { addComment })(CommentHeader);

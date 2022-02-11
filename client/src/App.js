@@ -10,7 +10,6 @@ import { getComment } from "./redux/actions/comment";
 const App = () => {
   useEffect(() => {
     store.dispatch(addPokemon());
-    store.dispatch(getComment(222));
   }, []);
 
   return (
