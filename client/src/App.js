@@ -18,6 +18,7 @@ import { persistor } from "./store"
 import { useEffect } from "react";
 import { addPokemon } from "./redux/actions/pokemon";
 import { getComment } from "./redux/actions/comment";
+import ProfilePage from './component/profile/profilePage';
 
 
 const App = () => {
@@ -32,7 +33,7 @@ const App = () => {
           <Routes>
             <Route exact path='/' element={<SignIn />}></Route>
             <Route exact path='/homepage' element={<ProtectedRoute child={<HomePage />} />} />
-            <Route exact path='/profile' element={<ProtectedRoute child={<Profile />} />} />
+            <Route exact path='/profile' element={<ProtectedRoute child={<ProfilePage />} />} />
             <Route exact path='/ResetPassword/:Token' element={<ResetPassword/>}/>
           </Routes>
         </BrowserRouter>

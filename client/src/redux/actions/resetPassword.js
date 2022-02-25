@@ -1,12 +1,5 @@
 import axios from "axios"
-import { RESET_PASSWORD, VALID_RESET_TOKEN } from "./types"
-
-// const verifyResetToken = (msg) =>{
-//     return {
-//         type: VALID_RESET_TOKEN
-//         payload:msg
-//     }
-// }
+import { RESET_PASSWORD } from "./types"
 
 export const resetPassword = (msg) => {
     return {

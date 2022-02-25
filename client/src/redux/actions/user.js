@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN, LOGOUT, VALID_OTP } from '../actions/types'
+import { LOGIN, LOGOUT, VALID_OTP, UPDATE_PROFILE_DATA } from '../actions/types'
 
 // Actions
 export const loginUser = (data) => {
@@ -15,15 +15,17 @@ export const logout = () => {
     }
 }
 
-
 export const verifiedOtp = () => {
     return {
         type: VALID_OTP
     }
 }
 
-export const signUp = () => {
-
+export const updateProfile = (data)=> {
+    return {
+        type: UPDATE_PROFILE_DATA,
+        payload: data
+    }
 }
 
 
@@ -42,6 +44,17 @@ export const loginUserAsync = (UserName, Password) => async (dispatch, getState)
     try {
         const res = await axios.post('/api/User/Login', { UserName: UserName, Password: Password })
         dispatch(loginUser(res.data.clientInfo));
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+export const updateUserAsync = (userData) => async (dispatch, getState) => {
+    try {
+        const res = await axios.post('api/User/UpdateUser', userData)
+        console.log(res.data.clientInfo)
+        dispatch(updateProfile(res.data.clientInfo));
     } catch (e) {
         throw e;
     }

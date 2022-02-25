@@ -1,0 +1,46 @@
+.favoritesContainer{
+    margin: 10% 2% 0% 2%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    .favoritesContainerHeader{
+        background-color: #9DBFE1;
+        padding-top: 15px;
+        text-align: center;
+        color: white;
+        font-size: x-large;
+        line-height: 80%;
+    }
+    .favoritesScrollBar{
+        overflow: auto;
+        white-space: nowrap;
+        padding: 50px 0px;
+        .pokemonTile{
+            width: 100px;
+            height: 120px;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: plum;
+            text-align: center;
+            margin:10px 25px;
+            position: relative;
+            .pokemonImage{
+                display: block;
+                border-radius: 50%;
+                background-color: white;
+            }
+            .heartIcon{
+                position: absolute;
+                width:20px;
+                height:20px;
+                top:-5px;
+                left:-5px;
+                z-index: 10;
+            }
+            >label{
+                color: white;
+                font-size: small;
+                text-align: center;
+            }
+        }
+    }
+}

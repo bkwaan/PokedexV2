@@ -236,7 +236,7 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
   try {
     const user = await Users.findOne({ Email: Email });
     if (user != null) {
-      const token = jwt.sign({}, `${config.get("jwtPass")}${user.Password.substr(user.Password.length-5)}`, {
+      const token = jwt.sign({}, `${config.get("jwtPass")}${user.Password.substr(user.Password.length - 5)}`, {
         expiresIn: "5m",
       });
       console.log(user.Password)
@@ -276,8 +276,8 @@ router.post("/ResetPassword", async (req, res) => {
       res.status(404).json({ Msg: "User does not exist", Success: false });
       return;
     }
-    jwt.verify(Token, `${config.get("jwtPass")}${user.Password.substr(user.Password.length-5)}`);
-    const comparePasswords = await bcrypt.compare(Password,user.Password)
+    jwt.verify(Token, `${config.get("jwtPass")}${user.Password.substr(user.Password.length - 5)}`);
+    const comparePasswords = await bcrypt.compare(Password, user.Password)
     if (comparePasswords) {
       res.status(409).json({ Msg: 'Cannot use old password', Success: false });
       return;
@@ -286,10 +286,37 @@ router.post("/ResetPassword", async (req, res) => {
     await user.save()
     res.status(201).json({ Msg: "Password Reset Success", Success: true });
   } catch (err) {
+    if(err.message === 'invalid signature'){
+      res.status(409).json({ Msg: 'Token invalid', Success: false });
+      return
+    }
+    res.status(409).json({ Msg: err.message, Success: false });
+  }
+});
+
+router.post("/UpdateUser", async (req, res) => {
+  const { Email, Password, FirstName, LastName, UserName, oldEmail } = req.body;
+  try {
+    let user = await Users.findOne({ Email: oldEmail }).exec();
+    if (user === null) {
+      res.status(404).json({ Msg: "User does not dexist", Success: false });
+      return;
+    }
+    if(Password.length==0){
+      await Users.updateOne({ Email: oldEmail }, { Email, UserName, FirstName, LastName })
+    }
+    else{
+      let newPassword = await bcrypt.hash(Password, saltRounds);
+      await Users.updateOne({ Email: oldEmail }, { Email, Password: newPassword, UserName, FirstName, LastName })
+    }
+    res.status(201).json({ Msg: "Updated user profile data", Success: true, clientInfo: {Email, UserName, FirstName, LastName} });
+  } catch (err) {
     console.log(err);
     res.status(409).json({ Msg: err.message, Success: false });
   }
 });
+
+
 
 
 
