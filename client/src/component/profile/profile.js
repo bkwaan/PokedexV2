@@ -90,7 +90,6 @@ function Profile() {
     })
   }
   const isProfileDataChanged = ()=> {
-    console.log('check')
     const keys =  Object.keys(initalState)
     for(let k = 0; k < keys.length; k+=1){
       if(initalState[keys[k]] !== userData[keys[k]]){

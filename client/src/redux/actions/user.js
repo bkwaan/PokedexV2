@@ -53,7 +53,6 @@ export const loginUserAsync = (UserName, Password) => async (dispatch, getState)
 export const updateUserAsync = (userData) => async (dispatch, getState) => {
     try {
         const res = await axios.post('api/User/UpdateUser', userData)
-        console.log(res.data.clientInfo)
         dispatch(updateProfile(res.data.clientInfo));
     } catch (e) {
         throw e;

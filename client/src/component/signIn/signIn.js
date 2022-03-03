@@ -19,7 +19,6 @@ function SignIn() {
   const dispatch = useDispatch();
   useEffect(() => {
     if (authd) {
-      console.log(location)
       if(!location.state){
         navigate('/homepage', { replace: true })
       }
