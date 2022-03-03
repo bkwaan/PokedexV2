@@ -6,10 +6,11 @@ const PokeList = (props) => {
     <div className="pokeListContainer">
       <div className="listContainer">
         {
-        props.pokemon.map((pokemon) => {
+        props.pokemon.map((pokemon,index) => {
           return(
             <PokeCard
               id={pokemon.id}
+              key={index}
             />
           )
         })}

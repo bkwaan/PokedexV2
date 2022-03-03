@@ -12,17 +12,31 @@ const PokeModal = (props) => {
   const [type, setType] = useState([...props.types]);
   const idz = props.pokeID;
   const abil = props.pokemon[idz - 1].abilities;
-  const [pokeComments, setPokeComments] = useState([]);
-  const setComments = () => {
-    if (props.comment.comments[idz] != undefined) {
-      setPokeComments(props.comment.comments[idz][0]);
-    }
-  };
+
+  let pokeCommentz =
+    props.comment.comments[idz].length != 0 &&
+    props.comment.comments[idz][0].length != 0 ? (
+      props.comment.comments[idz][0].map((comment) => (
+        <PokeComment
+          name={comment.UserName}
+          date={comment.CommentDate.split("T")[0]}
+          comment={comment.CommentBody}
+          key={comment._id}
+          id={comment._id}
+          pokeID={idz}
+          likes={comment.Likes.length}
+        />
+      ))
+    ) : (
+      <div className="commentLoginHead">
+        <h3>No comments yet!</h3>
+        <p>Be the first one to leave a comment!</p>
+      </div>
+    );
 
   useEffect(() => {
-    // props.getComment(idz);
-    setComments();
-  },[]);
+    props.getComment(idz);
+  }, []);
 
   return (
     <div>
@@ -56,8 +70,12 @@ const PokeModal = (props) => {
             <Row>
               <Col xs={12}>
                 <div className="pokeTypeCont">
-                  {type.map((type) => {
-                    return <p className={"pokeType " + type}>{type}</p>;
+                  {type.map((type, index) => {
+                    return (
+                      <p key={index} className={"pokeType " + type}>
+                        {type}
+                      </p>
+                    );
                   })}
                 </div>
               </Col>
@@ -129,8 +147,8 @@ const PokeModal = (props) => {
                 </Tab>
                 <Tab eventKey="ability" title="Abilities">
                   <div className="abilityCont">
-                    {abil.map((item) => (
-                      <Abilities name={item.ability.name} />
+                    {abil.map((item, index) => (
+                      <Abilities name={item.ability.name} key={index} />
                     ))}
                   </div>
                 </Tab>
@@ -138,15 +156,7 @@ const PokeModal = (props) => {
             </div>
             <span class="customBr"></span>
             <CommentHeader Id={idz} />
-            <div className="pokeCommCont">
-              {pokeComments.map((comment) => (
-                <PokeComment
-                  name={comment.UserName}
-                  date={comment.CommentDate}
-                  comment={comment.CommentBody}
-                />
-              ))}
-            </div>
+            <div className="pokeCommCont">{pokeCommentz}</div>
           </div>
         </div>
       </Modal>

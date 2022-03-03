@@ -10,6 +10,11 @@ export const getComment = (id) => async (dispatch) => {
         payload: comment.data.Data,
         id: id,
       });
+    } else {
+      dispatch({
+        type: actions.GET_COMMENT,
+        payload: "Comment has not been added",
+      });
     }
   } catch (err) {
     console.log(err);
@@ -37,14 +42,31 @@ export const addComment =
 export const delComment = (PokeID, id) => async (dispatch) => {
   try {
     let comment = await axios.delete("/api/Comment/DeleteComment", {
-      PokeID: PokeID,
-      id: id,
+      data: {
+        PokeID: PokeID,
+        id: id,
+      },
     });
     dispatch({
       type: actions.DEL_COMMENT,
-      payload: comment.data.Success,
+      payload: comment.data.Msg,
       PokeID: PokeID,
       id: id,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const likeComment = (PokeID, commentID, userID) => async (dispatch) => {
+  try {
+    let comment = await axios.put("/api/Comment/LikeComment", {
+      commentID,
+      userID,
+    });
+    dispatch({
+      type: actions.LIKE_COMMENT,
+      payload: { comment: comment.data.Data, PokeID, commentID },
     });
   } catch (err) {
     console.log(err);
@@ -66,4 +88,14 @@ export const editComment = (PokeID, _id, CommentBody) => async (dispatch) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const sortComment = (PokeId, sortBy) => (dispatch) => {
+  dispatch({
+    type: actions.SORT_COMMENT,
+    payload: {
+      PokeId,
+      sortBy,
+    },
+  });
 };
