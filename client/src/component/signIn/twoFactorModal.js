@@ -29,7 +29,6 @@ function TwoFactorModal(props) {
 
   const handleInput = (e) => {
     setToken(e.target.value);
-    console.log(token);
   }
 
   const hideModal = () => {

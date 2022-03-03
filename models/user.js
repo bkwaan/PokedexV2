@@ -30,9 +30,18 @@ const UserSchema = new Schema(
         PokeID: { type: String },
       },
     ],
-    ResetAuth: { type: String },
-    TwoFactSecret: { type: String },
-    isVerified: { type: Boolean, default: false },
+    ResetAuth: {
+       type: String 
+    },
+    TwoFactSecret: { 
+      type: String 
+    },
+    isVerified: { 
+      type: Boolean, default: false 
+    },
+    PreviousPassword: {
+      type: String
+    },
   },
   { collection: "Users" }
 );

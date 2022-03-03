@@ -19,7 +19,6 @@ function SignIn() {
   const dispatch = useDispatch();
   useEffect(() => {
     if (authd) {
-      console.log(location)
       if(!location.state){
         navigate('/homepage', { replace: true })
       }
@@ -79,7 +78,7 @@ function SignIn() {
   }
 
   //Validates input
-  const validateInutFields = () => {
+  const validateInputFields = () => {
     if (!InputState.Email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       setWarning('Email invalid')
       return false;
@@ -123,7 +122,7 @@ function SignIn() {
     e.preventDefault();
     try {
       setWarning('');
-      if (!(validateInutFields())) return;
+      if (!(validateInputFields())) return;
       const res = await axios.post('/api/User/SignUp', InputState);
       //Email sent to user
     } catch (e) {

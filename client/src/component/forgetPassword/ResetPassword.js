@@ -42,12 +42,23 @@ const ResetPassword = (props) => {
     const handleReset = async (e) => {
         e.preventDefault();
         setWarning('')
-        if (password !== confirmPassword) {
-
-            setWarning('Passwords do no match')
+        const { isValid, Msg } = validateInputFields()
+        if (!isValid) {
+            setWarning(Msg)
             return;
         }
         dispatch(resetPasswordAsync(email, password, Token))
+    }
+
+    const validateInputFields = () => {
+        if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+            return { isValid: false, Msg: 'Email Invalid' }
+        } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!$^&*-+*@])[A-Za-z\d!$^&*-+*@]{8,}/)) {
+            return { isValid: false, Msg: 'Password must be length 8 and have 1 Upper case, 1 lower case, 1 digit and \n 1 of the following charcters: [!$^&*-+*@]' }
+        } else if (password != confirmPassword) {
+            return { isValid: false, Msg: 'Confirm Password and Password do no match' }
+        }
+        return {isValid: true}
     }
 
     return (
@@ -61,7 +72,7 @@ const ResetPassword = (props) => {
                         <p className="subtitle">Reset Password</p>
                     </Col>
                     <Col xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-                        <input className="textInput" placeholder="UserName" onChange={onEmailChange}></input>
+                        <input className="textInput" placeholder="Email" onChange={onEmailChange}></input>
                     </Col>
                     <Col xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
                         <input className="textInput" placeholder="Password" onChange={onPasswordChange} type='password'></input>
@@ -70,7 +81,7 @@ const ResetPassword = (props) => {
                         <input className="textInput" placeholder="Confirm Password" onChange={onConfirmPasswordChange} type='password'></input>
                     </Col>
                     <Col xs='12'>
-                        <div className={`message ${resetPasswordStatus.Success? 'success':'warning'}`}>{warning}</div>
+                        <div className={`message ${resetPasswordStatus.Success ? 'success' : 'warning'}`}>{warning}</div>
                     </Col>
                     <Col xs='12'>
                         <button className="reset" onClick={handleReset}>Reset</button>

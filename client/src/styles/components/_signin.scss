@@ -2,7 +2,7 @@
 .pageContainer{
     .signInContainer{
         height: 98vh;
-        overflow-y: scroll;
+        overflow-y: auto;
         .appTitle{
             margin-top:15vh;
             margin-bottom: 40px;

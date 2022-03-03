@@ -1,8 +1,104 @@
+import { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserAsync } from '../../redux/actions/user';
+import { getUser } from '../../redux/Selectors/user';
+import Favorites from './favorites';
 
 function Profile() {
+  const { FirstName, LastName, UserName, Email } = useSelector(getUser);
+  const initalState= {
+    FirstName,
+    LastName,
+    Email,
+    UserName,
+    Password: '',
+    ConfirmPassword: '',
+  }
+  const [userData, setUserData] = useState(initalState);
+  const [warning, setWarning] = useState('');
+  const [submitButton, setSubmitButton] = useState('Edit');
+  const dispatch =  useDispatch();
+
+  const handleEdit = () => {
+    if (submitButton === 'Edit') {
+      setWarning('')
+      setSubmitButton('Save');
+      return;
+    }
+    if(isProfileDataChanged()){
+      submitChangedProfileData();
+    }
+    setSubmitButton('Edit');
+  }
+
+  const handleInput = (e) =>{
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const validateInputFields = () => {
+    if (!userData.Email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+      setWarning('Email invalid');
+      return false;
+    } else if (userData.FirstName.length == 0) {
+      setWarning('First Name cannot be empty');
+      return false;
+    } else if (userData.LastName.length == 0) {
+      setWarning('Last Name cannot be empty');
+      return false;
+    } else if (userData.UserName.length == 0) {
+      setWarning('User Name cannot be empty');
+      return false;
+    }
+    return true;
+  }
+
+  const validatePasswordFields = () =>{
+    const match = userData.Password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!$^&*-+*@])[A-Za-z\d!$^&*-+*@]{8,}/)
+    if (!match) {
+      setWarning('Password must be length 8 and have 1 Upper case, 1 lower case, 1 digit and \n 1 of the following charcters: [!$^&*-+*@]');
+      return false;
+    } else if (userData.Password != userData.ConfirmPassword) {
+      setWarning('Confirm Password and Password do no match');
+      return false;
+    }
+    return true;
+  }
+
+  const isPasswordChanged = ()=>{
+    if(userData.Password.length===0 && userData.ConfirmPassword.length==0) {
+      return false;
+    }
+    return true;
+  }
+
+  const submitChangedProfileData = () => {
+    if(validateInputFields() && (!isPasswordChanged() || validatePasswordFields())){
+      dispatch(updateUserAsync({...userData, oldEmail:Email}))
+      setUserData({
+        ...userData,
+        Password:'',
+        ConfirmPassword:''
+      })
+      return
+    }
+    setUserData({
+      ...initalState
+    })
+  }
+  const isProfileDataChanged = ()=> {
+    const keys =  Object.keys(initalState)
+    for(let k = 0; k < keys.length; k+=1){
+      if(initalState[keys[k]] !== userData[keys[k]]){
+        return true
+      }
+    }
+    return false
+  }
   return (
-    <Container fluid='md' className='mainContainer'>
       <Row className='profileContainer'>
         <Col>
           <Row className="profileRow">
@@ -21,111 +117,37 @@ function Profile() {
           <Row className='profileInputGroup'>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>Username</label>
-              <input type='text'></input>
+              <input name='UserName' type='text' disabled={submitButton === 'Edit'} value={userData.UserName} onChange={handleInput}></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>Email</label>
-              <input type='text'></input>
+              <input name='Email' type='text' value={userData.Email} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>First Name</label>
-              <input type='text'></input>
+              <input name='FirstName' type='text' value={userData.FirstName} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>Last Name</label>
-              <input type='text'></input>
+              <input name='LastName' type='text' value={userData.LastName} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>Password</label>
-              <input type='text'></input>
+              <input name='Password' value={userData.Password} type='text' disabled={submitButton === 'Edit'} onChange={handleInput}></input>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
               <label>Confirm Password</label>
-              <input type='text'></input>
+              <input name='ConfirmPassword' value={userData.ConfirmPassword} type='text' disabled={submitButton === 'Edit'} onChange={handleInput}></input>
+            </Col>
+            <Col xs={{ span: 6, offset: 3 }} className='warningLabel'>
+              <label>{warning}</label>
             </Col>
             <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 2, offset: 9 }} lg={{ span: 1, offset: 9 }} className='buttonCol'>
-              <button className='saveButton'>Save</button>
+              <button className='saveButton' onClick={handleEdit}>{submitButton}</button>
             </Col>
           </Row>
         </Col>
       </Row>
-
-
-      <Row className='favoritesContainer' >
-        <Col>
-          <Row className='favoritesContainerHeader'>
-            <Col xs={{ span: 6, offset: 3 }}>
-              FAVORITES
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <div className='favoritesScrollBar'>
-                <div className='pokemonTile'>
-                  <img className='heartIcon' src='https://www.freeiconspng.com/uploads/heart-icon-14.png'></img>
-                  <img className='pokemonImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-                  <label className='pokemonLabel'>Mr Mime</label>
-                </div>
-                <div className='pokemonTile'>
-                  <img className='heartIcon' src='https://www.freeiconspng.com/uploads/heart-icon-14.png'></img>
-                  <img className='pokemonImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-                  <label className='pokemonLabel'>Mr Mime</label>
-                </div>
-                <div className='pokemonTile'>
-                  <img className='heartIcon' src='https://www.freeiconspng.com/uploads/heart-icon-14.png'></img>
-                  <img className='pokemonImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-                  <label className='pokemonLabel'>Mr Mime</label>
-                </div>
-                <div className='pokemonTile'>
-                  <img className='heartIcon' src='https://www.freeiconspng.com/uploads/heart-icon-14.png'></img>
-                  <img className='pokemonImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-                  <label className='pokemonLabel'>Mr Mime</label>
-                </div>
-                <div className='pokemonTile'>
-                  <img className='heartIcon' src='https://www.freeiconspng.com/uploads/heart-icon-14.png'></img>
-                  <img className='pokemonImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-                  <label className='pokemonLabel'>Mr Mime</label>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-
-
-      <Row className='activityContainer' >
-        <Col>
-          <Row className='activityContainerHeader'>
-            <Col>ACTIVITY</Col>
-          </Row>
-          <Row>
-            <Col>
-              <Row className='activityCell'>
-                <Col>
-                  <Row className='activityCellInfoRow'>
-                    <Col xs='8'>
-                      <label className='activityCellTitle'>#001 Mr Mime</label>
-                    </Col>
-                    <Col className='activityCellFollowData' xs='4' >
-                      <label>20k</label>
-                      <img src='https://www.freeiconspng.com/uploads/heart-icon-14.png'></img>
-                    </Col>
-                  </Row>
-                  <Row className='activityCellInfoRow'>
-                    <Col xs='12' sm='9'>
-                      <p className='activityCellDescription'> wow this is the bets pokemon eveere skdkasdja dsajkdjasdkjas</p>
-                    </Col>
-                    <Col xs='12' sm={{ span: 3 }} className='.ms-auto'>
-                      <label className='activityDate'>2021-01-03</label>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Container>
   );
 }
 
