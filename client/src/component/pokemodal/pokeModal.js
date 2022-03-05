@@ -24,7 +24,8 @@ const PokeModal = (props) => {
           key={comment._id}
           id={comment._id}
           pokeID={idz}
-          likes={comment.Likes.length}
+          likes={comment.Likes}
+          likesLength={comment.Likes.length}
         />
       ))
     ) : (

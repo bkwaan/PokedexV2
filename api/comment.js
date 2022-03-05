@@ -2,16 +2,14 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../models/comment");
 
-
 router.put("/LikeComment", async (req, res) => {
-  let { commentID, userID  } = req.body;
+  let { commentID, userID } = req.body;
   try {
-    console.log("this happened")
     let comment = await Comment.updateOne(
       {
         "Comment._id": commentID,
       },
-      { $addToSet: { "Comment.$.Likes": userID} }
+      { $addToSet: { "Comment.$.Likes": userID } }
     ).exec();
     if (comment.modifiedCount === 1) {
       return res.status(200).json({
@@ -19,20 +17,40 @@ router.put("/LikeComment", async (req, res) => {
         Success: true,
         Data: comment,
       });
-    } 
-    res
-      .status(400)
-      .json({ Msg: "Comment was not updated", Success: false });
+    }
+    console.log(comment);
+    res.status(400).json({ Msg: "Comment was not updated", Success: false });
   } catch (err) {
     console.log(err);
     res.status(500).send("Server Error");
   }
 });
 
-router.put("/UnlikeComment", async (req,res) => {
-
-})
-
+router.put("/UnlikeComment", async (req, res) => {
+  let { commentID, userID } = req.body;
+  try {
+    let comment = await Comment.updateOne(
+      {
+        "Comment._id": commentID,
+      },
+      {
+        $pull: { "Comment.$.Likes": userID },
+      }
+    ).exec();
+    console.log(comment);
+    if (comment.modifiedCount === 1) {
+      return res.status(200).json({
+        Msg: "Comment was succesfully unliked",
+        Success: true,
+        Data: comment,
+      });
+    }
+    res.status(400).json({ Msg: "Like was not updated", Success: false });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error");
+  }
+});
 
 // Add a comment
 router.post("/AddComment", async (req, res) => {
@@ -131,7 +149,5 @@ router.put("/UpdateComment", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
-
-
 
 module.exports = router;

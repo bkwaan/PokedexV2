@@ -58,20 +58,47 @@ export const delComment = (PokeID, id) => async (dispatch) => {
   }
 };
 
-export const likeComment = (PokeID, commentID, userID) => async (dispatch) => {
-  try {
-    let comment = await axios.put("/api/Comment/LikeComment", {
-      commentID,
-      userID,
-    });
-    dispatch({
-      type: actions.LIKE_COMMENT,
-      payload: { comment: comment.data.Data, PokeID, commentID },
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const likeComment =
+  (PokeID, commentID, userID, likeAction) => async (dispatch) => {
+    try {
+      let comment =
+        likeAction === "like"
+          ? await axios.put("/api/Comment/LikeComment", {
+              commentID,
+              userID,
+            })
+          : await axios.put("/api/Comment/UnlikeComment", {
+              commentID,
+              userID,
+            });
+      dispatch({
+        type: actions.LIKE_COMMENT,
+        payload: { comment: comment.data.Data, PokeID, commentID, userID, likeAction },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+export const unlikeComment =
+  (PokeID, commentID, userID) => async (dispatch) => {
+    try {
+      let comment = await axios.put("/api/Comment/UnlikeComment", {
+        commentID,
+        userID,
+      });
+      dispatch({
+        type: actions.UNLIKE_COMMENT,
+        payload: {
+          comment: comment.data.Data,
+          PokeID,
+          commentID,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 export const editComment = (PokeID, _id, CommentBody) => async (dispatch) => {
   try {

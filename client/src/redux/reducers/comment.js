@@ -5,6 +5,7 @@ import {
   EDIT_COMMENT,
   SORT_COMMENT,
   LIKE_COMMENT,
+  UNLIKE_COMMENT,
 } from "../actions/types";
 
 let comments = [...Array(156)].map(() => [[]]);
@@ -76,18 +77,31 @@ export default function (state = initialState, action) {
     }
 
     case LIKE_COMMENT: {
-      console.log("THIS HAPPENED")
       let comments = state.comments;
-      let likeCommentIndex = comments[action.payload.PokeID][0].findIndex(
+      let commentIndex = comments[action.payload.PokeID][0].findIndex(
         (comment) => comment._id === action.payload.commentID
       );
-      comments[action.payload.PokeID][0][likeCommentIndex].Likes.push(
-        action.payload.commentID
-      );
+
+      action.payload.likeAction === "like"
+        ? comments[action.payload.PokeID][0][commentIndex].Likes.push(
+            action.payload.userID
+          )
+        : (comments[action.payload.PokeID][0][commentIndex].Likes = comments[
+            action.payload.PokeID
+          ][0][commentIndex].Likes.filter(
+            (item) => item != action.payload.userID
+          ));
+
+      console.log(comments[action.payload.PokeID][0][commentIndex].Likes);
       return {
         ...state,
         comments,
       };
+    }
+
+    case UNLIKE_COMMENT: {
+      let comments = state.comments;
+      let unlikeIndex = comments[action.payload.PokeID][0].findIndex();
     }
     default:
       return state;

@@ -47,7 +47,7 @@ const CommentHeader = ({ Id, addComment, sortComment }) => {
             onChange={(e) => handleChange(e)}
           />
           <div className="commSubmit">
-            <button title={"Please login to submit a comment"} disabled={loggedIn}>
+            <button title={"Please login to submit a comment"} disabled={!loggedIn}>
               Submit
             </button>
           </div>

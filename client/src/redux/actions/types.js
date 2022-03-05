@@ -7,6 +7,7 @@ export const DEL_COMMENT = "DEL_COMMENT";
 export const EDIT_COMMENT = "EDIT_COMMENT";
 export const SORT_COMMENT = "SORT_COMMENT";
 export const LIKE_COMMENT = "LIKE_COMMENT";
+export const UNLIKE_COMMENT = "UNLIKE_COMMENT";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const FORGOT_PASSWORD = "FORGOT_PASSWORD";

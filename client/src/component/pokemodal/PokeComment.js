@@ -1,10 +1,9 @@
 import { BiTrashAlt } from "react-icons/bi";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { PropTypes } from "prop-types";
 import { delComment, likeComment } from "../../redux/actions/comment";
 import { connect, useSelector } from "react-redux";
-import { getUser } from "../../redux/Selectors/user";
-
+import { getUser, isLoggedIn } from "../../redux/Selectors/user";
 const PokeComment = ({
   name,
   comment,
@@ -14,12 +13,18 @@ const PokeComment = ({
   delComment,
   likes,
   likeComment,
+  likesLength
 }) => {
   const user = useSelector(getUser);
+  const isLogged = useSelector(isLoggedIn);
+
+  let likeAction = likes.includes(user.ID) ? "unlike" : "like";
   const deleteComment = (e) => {
     e.preventDefault();
     delComment(pokeID, id);
   };
+
+  var liked = likes.length > 0 ? <AiFillHeart /> : <AiOutlineHeart />;
 
   return (
     <div className={"pokeComment"} id={id}>
@@ -33,13 +38,14 @@ const PokeComment = ({
             />
           </span>
           <span className="iconPadding">
-            <AiOutlineHeart
-              onClick={() =>
-                likeComment(pokeID, id, "621ee24badaa4b5cdbd6a7eb")
-              }
-            />
-            {likes}
+            <span
+              style={{ display: "inline" }}
+              onClick={() => !isLogged ? null : likeComment(pokeID, id, user.ID, likeAction)}
+            >
+              {liked}
+            </span>
           </span>
+          {likesLength}
         </div>
       </div>
       <p className="userComment">{comment}</p>
@@ -57,8 +63,11 @@ PokeComment.propTypes = {
   delComment: PropTypes.func,
   pokeID: PropTypes.number,
   sortComment: PropTypes.func,
-  likes: PropTypes.number,
+  likes: PropTypes.array,
   likeComment: PropTypes.func,
+  likesLength: PropTypes.number
 };
 
-export default connect(null, { delComment, likeComment })(PokeComment);
+export default connect(null, { delComment, likeComment })(
+  PokeComment
+);
