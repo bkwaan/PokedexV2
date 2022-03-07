@@ -125,6 +125,7 @@ function SignIn() {
       if (!(validateInputFields())) return;
       const res = await axios.post('/api/User/SignUp', InputState);
       //Email sent to user
+      setWarning('Verification Email has been sent')
     } catch (e) {
       setWarning(e.response.data.Msg);
     }
@@ -180,7 +181,7 @@ function SignIn() {
       )
     }
     return <Col className='textCenter' xs={{offset:1, span:10}} sm={{ offset: 3, span: 6 }} lg={{offset: 4, span:4}}>
-      <label className='warningMessage'>{warning}</label>
+      <label className={(warning ==='Verification Email has been sent')? 'successMessage': 'warningMessage'}>{warning}</label>
     </Col>
   }
 

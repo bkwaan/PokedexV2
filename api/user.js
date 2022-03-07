@@ -43,7 +43,7 @@ router.post("/SignUp", async (req, res) => {
       template = template({
         header: "Account Creation",
         title: "Please Verify Your Account",
-        token: "http://localhost3000:/api/User/VerifyAccount/" + VerifyToken, //need to update this later
+        token: `http://localhost:3000/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
         content:
           "Thank you for creating your account, please verify your account by clicking the link below.",
         firstname: user.FirstName,
@@ -65,15 +65,19 @@ router.put("/VerifyAccount", async (req, res) => {
   try {
     let user = await Users.findOne({ UserName: UserName }).exec();
     if (user) {
-      if (jwt.verify(VerifyToken, config.get("jwtPass"))) {
+      if (!user.isVerified && jwt.verify(VerifyToken, config.get("jwtPass"))) {
         user.isVerified = true;
         await user.save();
         res.status(209).json({
           Success: true,
-          Msg: "User has been verified, Please login to your account",
+          Msg: "User has been verified",
         });
       }
-    } else {
+      else {
+        res.status(401).json({ Success: false, Msg: "User already verified" });
+      }
+    }
+    else {
       res.status(404).json({ Success: false, Msg: "User not found" });
     }
   } catch (err) {
@@ -103,7 +107,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
         template = template({
           header: "Account Verification",
           title: "Please Verify Your Account",
-          token: "http://localhost3000:/api/User/VerifyAccount/" + VerifyToken, //need to update this later
+          token: `http://localhost:3000/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
           content: "Please verify your account by clicking the link below.",
           firstname: user.FirstName,
           linkText: "Verify Account",
@@ -114,6 +118,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
           msg: "New Verification link has been sent, please check your email",
         });
       }
+    } else{
       res.status(404).json({
         Success: false,
         Message: "User not found",
@@ -130,19 +135,19 @@ router.post("/Login", async (req, res) => {
   try {
     const user = await Users.findOne({ UserName: UserName }).exec();
     if (user != null) {
-      if (await bcrypt.compare(Password, user.Password)) {
+      if (await bcrypt.compare(Password, user.Password) && user.isVerified) {
         const secret = (await promiseCrypto(12)).toString("hex");
         totp.options = { step: 300 };
         const token = totp.generate(secret);
         user.TwoFactSecret = secret;
         await user.save();
-        console.log(user.ID)
         const clientInfo = {
           ID: user['_id'],
           UserName: user.UserName,
           FirstName: user.FirstName,
           LastName: user.LastName,
           Email: user.Email,
+          isVerified: user.isVerified
         }
         mailer(
           "PokedexV2Mailer@gmail.com",
@@ -151,6 +156,11 @@ router.post("/Login", async (req, res) => {
           "<p>Your OTP Code: " + token + "</p>"
         );
         res.status(201).json({ Msg: "OTP Code sent", Success: true, clientInfo: clientInfo });
+      } else if (!user.isVerified) {
+        res.status(401).json({
+          Msg: "Account has not been verified",
+          Success: false,
+        });
       } else {
         res.status(401).json({
           Msg: "Failed credentials are incorrect",
@@ -236,7 +246,7 @@ router.post("/UpdatePassword", async (req, res) => {
 router.get("/ForgotPassword/:Email", async (req, res) => {
   const { Email } = req.params;
   try {
-    const user = await Users.findOne({ Email: Email });
+    const user = await Users.findOne({ Email: Email }).exec();
     if (user != null) {
       const token = jwt.sign({}, `${config.get("jwtPass")}${user.Password.substr(user.Password.length - 5)}`, {
         expiresIn: "5m",
@@ -288,7 +298,7 @@ router.post("/ResetPassword", async (req, res) => {
     await user.save()
     res.status(201).json({ Msg: "Password Reset Success", Success: true });
   } catch (err) {
-    if(err.message === 'invalid signature'){
+    if (err.message === 'invalid signature' || err.message === 'jwt malformed') {
       res.status(409).json({ Msg: 'Token invalid', Success: false });
       return
     }
@@ -297,29 +307,33 @@ router.post("/ResetPassword", async (req, res) => {
 });
 
 router.post("/UpdateUser", async (req, res) => {
-  const { Email, Password, FirstName, LastName, UserName, oldEmail } = req.body;
+  const { Email, Password, FirstName, LastName, UserName, ID } = req.body;
   try {
-    let user = await Users.findOne({ Email: oldEmail }).exec();
+    let user = await Users.findById(ID).exec();
     if (user === null) {
-      res.status(404).json({ Msg: "User does not dexist", Success: false });
+      res.status(404).json({ Msg: "User does not exist", Success: false });
       return;
     }
-    if(Password.length==0){
-      await Users.updateOne({ Email: oldEmail }, { Email, UserName, FirstName, LastName })
+    let duplicateUser = await Users.find({
+      '_id': {$ne: ID},
+      $or: [{ Email: Email }, { UserName: UserName }],
+    }).exec();
+    if(duplicateUser.length>=1) {
+      res.status(409).json({ Msg: 'UserName/Email already taken', Success: false });
+    } else{
+      if (Password.length === 0) {
+        await Users.updateOne({ '_id': ID }, { Email, UserName, FirstName, LastName })
+      }
+      else {
+        let newPassword = await bcrypt.hash(Password, saltRounds);
+        await Users.updateOne({ '_id': ID }, { Email, Password: newPassword, UserName, FirstName, LastName })
+      }
+      res.status(201).json({ Msg: "Updated user profile data", Success: true, clientInfo: { Email, UserName, FirstName, LastName } });
     }
-    else{
-      let newPassword = await bcrypt.hash(Password, saltRounds);
-      await Users.updateOne({ Email: oldEmail }, { Email, Password: newPassword, UserName, FirstName, LastName })
-    }
-    res.status(201).json({ Msg: "Updated user profile data", Success: true, clientInfo: {Email, UserName, FirstName, LastName} });
   } catch (err) {
     console.log(err);
-    res.status(409).json({ Msg: err.message, Success: false });
+    res.status(409).json({ Msg: err.message, Success: false }); 
   }
 });
-
-
-
-
 
 module.exports = router;

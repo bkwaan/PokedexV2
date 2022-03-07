@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { addPokemon } from "./redux/actions/pokemon";
 import { getComment } from "./redux/actions/comment";
 import ProfilePage from './component/profile/profilePage';
+import VerifyAccount from './component/verifyAccount/VerifyAccount';
 
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
             <Route exact path='/homepage' element={<ProtectedRoute child={<HomePage />} />} />
             <Route exact path='/profile' element={<ProtectedRoute child={<ProfilePage />} />} />
             <Route exact path='/ResetPassword/:Token' element={<ResetPassword/>}/>
+            <Route exact path='/VerifyAccount/:UserName/:Token' element={<VerifyAccount/>}/>
           </Routes>
         </BrowserRouter>
       </PersistGate>

@@ -5,3 +5,7 @@ export const getUser = (state) => {
 export const isLoggedIn = (state) => {
     return state.user.ValidOtp;
 }
+
+export const isVerifiedUser = (state) => {
+    return state.user.isVerified
+}

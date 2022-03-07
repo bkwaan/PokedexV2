@@ -1,4 +1,4 @@
-import { LOGIN, UPDATE_PROFILE_DATA, VALID_OTP} from '../actions/types'
+import { LOGIN, UPDATE_PROFILE_DATA, VALID_OTP, VERIFY_ACCOUNT} from '../actions/types'
 const initialState ={
     ID:'',
     UserName: '',
@@ -6,6 +6,7 @@ const initialState ={
     LastName: '',
     Email: '',
     ValidOtp: false,
+    isVerified: false,
     
 }
 
@@ -26,6 +27,11 @@ export default function (state = initialState, action) {
                 ...state,
                 ...action.payload
             }
+        case VERIFY_ACCOUNT:
+          return{
+            ...state,
+            isVerified: true
+          }
         default:
             return state;
     }

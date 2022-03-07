@@ -1,0 +1,65 @@
+.verifyAccountContainer{
+    text-align: center;
+    height: 98vh;
+    overflow-y: auto;
+    .title{
+       margin-top: 20vh;
+       margin-bottom: 35px;
+       font-size: 40px;
+       font-weight: bold;
+       letter-spacing: 0.2em;
+       color: #2C73B8;
+       @include mq($tabletScreen){
+          font-size: 70px;
+      }
+    }
+    .subtitle{
+       margin-bottom: 30px;
+       font-size: 20px;
+       color: #090F4D;
+       @include mq($tabletScreen){
+          font-size: 30px;
+      }
+    }
+ 
+    .textInput {
+          width: 75%;
+          max-width: 450px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          margin-top: 20px;
+          margin-bottom: 10px;
+          border: none;
+          border-bottom: 1px grey solid;
+          text-align: center;
+          font-size: 20px;
+          background-color: transparent;
+          outline:none;
+    }
+ 
+    .reset {
+       padding: 7.5px 30px 7.5px 30px;
+       margin: 30px 0;
+       border:none;
+       border-radius: 5px;
+       color:white;
+       background: #2C73B8;
+       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+       font-size: x-large;
+       @include mq($tabletScreen){
+             font-size: xx-large;
+       }
+    }
+ 
+    .message{
+       min-height: 20px;
+    }
+    .warning{
+       color: red;
+    }
+ 
+    .success{
+       color: green;
+    }
+ 
+ }

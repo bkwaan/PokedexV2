@@ -6,8 +6,8 @@ import { getUser } from '../../redux/Selectors/user';
 import Favorites from './favorites';
 
 function Profile() {
-  const { FirstName, LastName, UserName, Email } = useSelector(getUser);
-  const initalState= {
+  const { FirstName, LastName, UserName, Email, ID } = useSelector(getUser);
+  const initalState = {
     FirstName,
     LastName,
     Email,
@@ -18,7 +18,7 @@ function Profile() {
   const [userData, setUserData] = useState(initalState);
   const [warning, setWarning] = useState('');
   const [submitButton, setSubmitButton] = useState('Edit');
-  const dispatch =  useDispatch();
+  const dispatch = useDispatch();
 
   const handleEdit = () => {
     if (submitButton === 'Edit') {
@@ -26,13 +26,13 @@ function Profile() {
       setSubmitButton('Save');
       return;
     }
-    if(isProfileDataChanged()){
+    if (isProfileDataChanged()) {
       submitChangedProfileData();
     }
     setSubmitButton('Edit');
   }
 
-  const handleInput = (e) =>{
+  const handleInput = (e) => {
     setUserData({
       ...userData,
       [e.target.name]: e.target.value
@@ -56,7 +56,7 @@ function Profile() {
     return true;
   }
 
-  const validatePasswordFields = () =>{
+  const validatePasswordFields = () => {
     const match = userData.Password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!$^&*-+*@])[A-Za-z\d!$^&*-+*@]{8,}/)
     if (!match) {
       setWarning('Password must be length 8 and have 1 Upper case, 1 lower case, 1 digit and \n 1 of the following charcters: [!$^&*-+*@]');
@@ -68,86 +68,90 @@ function Profile() {
     return true;
   }
 
-  const isPasswordChanged = ()=>{
-    if(userData.Password.length===0 && userData.ConfirmPassword.length==0) {
+  const isPasswordChanged = () => {
+    if (userData.Password.length === 0 && userData.ConfirmPassword.length == 0) {
       return false;
     }
     return true;
   }
 
-  const submitChangedProfileData = () => {
-    if(validateInputFields() && (!isPasswordChanged() || validatePasswordFields())){
-      dispatch(updateUserAsync({...userData, oldEmail:Email}))
+  const submitChangedProfileData = async () => {
+    try {
+      if (validateInputFields() && (!isPasswordChanged() || validatePasswordFields())) {
+        await dispatch(updateUserAsync({ ...userData, ID }))
+        setUserData({
+          ...userData,
+          Password: '',
+          ConfirmPassword: ''
+        })
+        return
+      }
       setUserData({
-        ...userData,
-        Password:'',
-        ConfirmPassword:''
+        ...initalState
       })
-      return
+    } catch (err) {
+      setWarning(err.response.data.Msg)
     }
-    setUserData({
-      ...initalState
-    })
   }
-  const isProfileDataChanged = ()=> {
-    const keys =  Object.keys(initalState)
-    for(let k = 0; k < keys.length; k+=1){
-      if(initalState[keys[k]] !== userData[keys[k]]){
+  const isProfileDataChanged = () => {
+    const keys = Object.keys(initalState)
+    for (let k = 0; k < keys.length; k += 1) {
+      if (initalState[keys[k]] !== userData[keys[k]]) {
         return true
       }
     }
     return false
   }
   return (
-      <Row className='profileContainer'>
-        <Col>
-          <Row className="profileRow">
-            <Col>
-              <div className='profileImageBackground'>
-                <img className='profileImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
-              </div>
-            </Col>
-            <Col className='profileUsername' >
-              Bkwann
-            </Col>
-            <Col className='profileColor'>
-              <button className="colorButton"></button>
-            </Col>
-          </Row>
-          <Row className='profileInputGroup'>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-              <label>Username</label>
-              <input name='UserName' type='text' disabled={submitButton === 'Edit'} value={userData.UserName} onChange={handleInput}></input>
-            </Col>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-              <label>Email</label>
-              <input name='Email' type='text' value={userData.Email} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
-            </Col>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-              <label>First Name</label>
-              <input name='FirstName' type='text' value={userData.FirstName} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
-            </Col>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-              <label>Last Name</label>
-              <input name='LastName' type='text' value={userData.LastName} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
-            </Col>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-              <label>Password</label>
-              <input name='Password' value={userData.Password} type='text' disabled={submitButton === 'Edit'} onChange={handleInput}></input>
-            </Col>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
-              <label>Confirm Password</label>
-              <input name='ConfirmPassword' value={userData.ConfirmPassword} type='text' disabled={submitButton === 'Edit'} onChange={handleInput}></input>
-            </Col>
-            <Col xs={{ span: 6, offset: 3 }} className='warningLabel'>
-              <label>{warning}</label>
-            </Col>
-            <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 2, offset: 9 }} lg={{ span: 1, offset: 9 }} className='buttonCol'>
-              <button className='saveButton' onClick={handleEdit}>{submitButton}</button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+    <Row className='profileContainer'>
+      <Col>
+        <Row className="profileRow">
+          <Col>
+            <div className='profileImageBackground'>
+              <img className='profileImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
+            </div>
+          </Col>
+          <Col className='profileUsername' >
+            Bkwann
+          </Col>
+          <Col className='profileColor'>
+            <button className="colorButton"></button>
+          </Col>
+        </Row>
+        <Row className='profileInputGroup'>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+            <label>Username</label>
+            <input name='UserName' type='text' disabled={submitButton === 'Edit'} value={userData.UserName} onChange={handleInput}></input>
+          </Col>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+            <label>Email</label>
+            <input name='Email' type='text' value={userData.Email} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
+          </Col>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+            <label>First Name</label>
+            <input name='FirstName' type='text' value={userData.FirstName} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
+          </Col>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+            <label>Last Name</label>
+            <input name='LastName' type='text' value={userData.LastName} disabled={submitButton === 'Edit'} onChange={handleInput}></input>
+          </Col>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+            <label>Password</label>
+            <input name='Password' value={userData.Password} type='text' disabled={submitButton === 'Edit'} onChange={handleInput}></input>
+          </Col>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 4, offset: 2 }} lg={{ span: 3, offset: 2 }} className='inputGroupCol'>
+            <label>Confirm Password</label>
+            <input name='ConfirmPassword' value={userData.ConfirmPassword} type='text' disabled={submitButton === 'Edit'} onChange={handleInput}></input>
+          </Col>
+          <Col xs={{ span: 6, offset: 3 }} className='warningLabel'>
+            <label>{warning}</label>
+          </Col>
+          <Col xs={{ span: 8, offset: 2 }} sm={{ span: 6, offset: 3 }} md={{ span: 2, offset: 9 }} lg={{ span: 1, offset: 9 }} className='buttonCol'>
+            <button className='saveButton' onClick={handleEdit}>{submitButton}</button>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 }
 

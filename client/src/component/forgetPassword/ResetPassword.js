@@ -19,7 +19,6 @@ const ResetPassword = (props) => {
     useEffect(() => {
         setWarning(resetPasswordStatus.Msg)
         if (resetPasswordStatus.Success) {
-            console.log(resetPasswordStatus)
             setTimeout(() => {
                 navigate('/', { replace: true })
             }, 3000)

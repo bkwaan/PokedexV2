@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN, LOGOUT, VALID_OTP, UPDATE_PROFILE_DATA } from '../actions/types'
+import { LOGIN, LOGOUT, VALID_OTP, UPDATE_PROFILE_DATA, VERIFY_ACCOUNT, REQUEST_NEW_VERIFICATION_LINK } from '../actions/types'
 
 // Actions
 export const loginUser = (data) => {
@@ -29,6 +29,18 @@ export const updateProfile = (data)=> {
 }
 
 
+export const verifyUserAccount = () => {
+    return {
+        type: VERIFY_ACCOUNT,
+    }
+}
+
+export const requestNewVerificationLink =() =>{
+    return{
+        type: REQUEST_NEW_VERIFICATION_LINK
+    }
+}
+
 // Thunks
 //Adds user to state after they login and validate their otp
 export const verifyOtpCode = (userName, token) => async (dispatch, getState) => {
@@ -54,6 +66,25 @@ export const updateUserAsync = (userData) => async (dispatch, getState) => {
     try {
         const res = await axios.post('api/User/UpdateUser', userData)
         dispatch(updateProfile(res.data.clientInfo));
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+export const verifyUserAccountAsync = (userName, token) => async (dispatch, getState) => {
+    try {
+        const res = await axios.put('/api/User/VerifyAccount', { UserName: userName, VerifyToken: token });
+        dispatch((verifyUserAccount()));
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const requestNewVerificationLinkAsync = (userName) => async (dispatch, getState) => {
+    try {
+        const res = await axios.get(`/api/User/NewVerificationLink/${userName}`);
+        dispatch((requestNewVerificationLink()));
     } catch (e) {
         throw e;
     }
