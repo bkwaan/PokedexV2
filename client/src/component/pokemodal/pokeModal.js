@@ -5,13 +5,23 @@ import CommentHeader from "./CommentHeader";
 import { AiOutlineHeart } from "react-icons/ai";
 import PokeEvol from "./PokeEvol";
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getComment } from "../../redux/actions/comment";
+import { updatePokeLikeAsync} from "../../redux/actions/user";
+import { isLoggedIn, getUser } from "../../redux/Selectors/user";
+
 
 const PokeModal = (props) => {
   const [type, setType] = useState([...props.types]);
   const idz = props.pokeID;
   const abil = props.pokemon[idz - 1].abilities;
+  const loggedIn = useSelector(isLoggedIn);
+  const user = useSelector(getUser);
+  var likePoke = user.FavouritePokemon.includes(idz) ? "unlike" : "like";
+  console.log(likePoke)
+  useEffect(() => {
+    props.getComment(idz);
+  }, []);
 
   let pokeCommentz =
     props.comment.comments[idz].length != 0 &&
@@ -35,9 +45,7 @@ const PokeModal = (props) => {
       </div>
     );
 
-  useEffect(() => {
-    props.getComment(idz);
-  }, []);
+
 
   return (
     <div>
@@ -53,7 +61,7 @@ const PokeModal = (props) => {
                 </span>
               </Col>
               <Col xs={2}>
-                <div className="likeCont">
+                <div className="likeCont" onClick={()=> props.updatePokeLikeAsync(idz, user.ID, likePoke)}>
                   <AiOutlineHeart />
                 </div>
               </Col>
@@ -170,4 +178,4 @@ const mapStateToProps = (state) => ({
   comment: state.comment,
 });
 
-export default connect(mapStateToProps, { getComment })(PokeModal);
+export default connect(mapStateToProps, { getComment,updatePokeLikeAsync })(PokeModal);

@@ -5,7 +5,6 @@ import {
   EDIT_COMMENT,
   SORT_COMMENT,
   LIKE_COMMENT,
-  UNLIKE_COMMENT,
 } from "../actions/types";
 
 let comments = [...Array(156)].map(() => [[]]);
@@ -17,7 +16,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_COMMENT:
-      let comments = state.comments;
+      let comments = [...state.comments];
       let getComments = action.payload;
       getComments.map((comment) => {
         comments[action.id][0].push(comment);
@@ -27,7 +26,7 @@ export default function (state = initialState, action) {
         comments,
       };
     case ADD_COMMENT: {
-      let comments = state.comments;
+      let comments = [...state.comments];
       comments[action.id][0].push(action.payload);
       return {
         ...state,
@@ -35,7 +34,7 @@ export default function (state = initialState, action) {
       };
     }
     case DEL_COMMENT: {
-      let comments = state.comments;
+      let comments = [...state.comments];
       comments[action.PokeID][0] = comments[action.PokeID][0].filter(
         (item) => action.id != item._id
       );
@@ -58,7 +57,7 @@ export default function (state = initialState, action) {
     //   }
 
     case SORT_COMMENT: {
-      let comments = state.comments;
+      let comments = [...state.comments];
       let sortComments = comments[action.payload.PokeId][0];
 
       action.payload.sortBy === "Newest"
@@ -77,11 +76,10 @@ export default function (state = initialState, action) {
     }
 
     case LIKE_COMMENT: {
-      let comments = state.comments;
+      let comments = [...state.comments];
       let commentIndex = comments[action.payload.PokeID][0].findIndex(
         (comment) => comment._id === action.payload.commentID
       );
-
       action.payload.likeAction === "like"
         ? comments[action.payload.PokeID][0][commentIndex].Likes.push(
             action.payload.userID
@@ -91,17 +89,10 @@ export default function (state = initialState, action) {
           ][0][commentIndex].Likes.filter(
             (item) => item != action.payload.userID
           ));
-
-      console.log(comments[action.payload.PokeID][0][commentIndex].Likes);
       return {
         ...state,
         comments,
       };
-    }
-
-    case UNLIKE_COMMENT: {
-      let comments = state.comments;
-      let unlikeIndex = comments[action.payload.PokeID][0].findIndex();
     }
     default:
       return state;
