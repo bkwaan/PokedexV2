@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PropTypes } from "prop-types";
 import Form from "react-bootstrap/Form";
 import { connect } from "react-redux";
 import { addComment, sortComment } from "../../redux/actions/comment";
-import { useSelector } from 'react-redux'
-import { isLoggedIn } from '../../redux/Selectors/user';
-
+import { useSelector } from "react-redux";
+import { isLoggedIn, getUser } from "../../redux/Selectors/user";
 
 const CommentHeader = ({ Id, addComment, sortComment }) => {
   const [comment, setComment] = useState("");
 
   const loggedIn = useSelector(isLoggedIn);
+  const user = useSelector(getUser)
 
   const pushComment = (e) => {
     e.preventDefault();
-    addComment(Id, "bosco", comment);
+    addComment(Id, user.UserName, comment);
     const textArea = document.getElementsByTagName("textarea")[0];
     textArea.value = "";
   };
@@ -22,9 +22,6 @@ const CommentHeader = ({ Id, addComment, sortComment }) => {
   const handleChange = (e) => {
     setComment(e.target.value);
   };
-
-
- 
 
   return (
     <div className="commentSection">
@@ -47,7 +44,10 @@ const CommentHeader = ({ Id, addComment, sortComment }) => {
             onChange={(e) => handleChange(e)}
           />
           <div className="commSubmit">
-            <button title={"Please login to submit a comment"} disabled={!loggedIn}>
+            <button
+              title={"Please login to submit a comment"}
+              disabled={!loggedIn}
+            >
               Submit
             </button>
           </div>

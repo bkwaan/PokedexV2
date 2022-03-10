@@ -10,7 +10,7 @@ router.put("/LikeComment", async (req, res) => {
         "Comment._id": commentID,
       },
       { $addToSet: { "Comment.$.Likes": userID } }
-    ).exec();
+    );
     if (comment.modifiedCount === 1) {
       return res.status(200).json({
         Msg: "Comment was succesfully liked",
@@ -18,7 +18,6 @@ router.put("/LikeComment", async (req, res) => {
         Data: comment,
       });
     }
-    console.log(comment);
     res.status(400).json({ Msg: "Comment was not updated", Success: false });
   } catch (err) {
     console.log(err);
@@ -36,7 +35,7 @@ router.put("/UnlikeComment", async (req, res) => {
       {
         $pull: { "Comment.$.Likes": userID },
       }
-    ).exec();
+    );
     console.log(comment);
     if (comment.modifiedCount === 1) {
       return res.status(200).json({
@@ -136,7 +135,7 @@ router.put("/UpdateComment", async (req, res) => {
     let comment = await Comment.updateOne(
       { "Comment._id": _id },
       { $set: { "Comment.$.CommentBody": CommentBody } }
-    ).exec();
+    );
     if (comment.acknowledged) {
       return res.status(200).json({
         Msg: "Comment was succesfully updated",

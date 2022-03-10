@@ -80,25 +80,7 @@ export const likeComment =
     }
   };
 
-export const unlikeComment =
-  (PokeID, commentID, userID) => async (dispatch) => {
-    try {
-      let comment = await axios.put("/api/Comment/UnlikeComment", {
-        commentID,
-        userID,
-      });
-      dispatch({
-        type: actions.UNLIKE_COMMENT,
-        payload: {
-          comment: comment.data.Data,
-          PokeID,
-          commentID,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
 
 export const editComment = (PokeID, _id, CommentBody) => async (dispatch) => {
   try {

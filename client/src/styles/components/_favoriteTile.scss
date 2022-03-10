@@ -1,0 +1,31 @@
+.pokemonTile{
+    width: 100px;
+    height: 120px;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin:10px 25px;
+    position: relative;
+    white-space: nowrap;
+
+    .pokemonImageBackground{
+        display: block;
+        border-radius: 50%;
+        background-color: white;
+        padding: 10px;
+    }
+    .heartIcon{
+        position: absolute;
+        width:20px;
+        height:20px;
+        top:-5px;
+        left:-5px;
+        z-index: 10;
+    }
+    >label{
+        color: white;
+        font-size: small;
+        text-align: center;
+    }
+}

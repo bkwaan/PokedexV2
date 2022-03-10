@@ -68,7 +68,7 @@ router.put("/VerifyAccount", async (req, res) => {
       if (!user.isVerified && jwt.verify(VerifyToken, config.get("jwtPass"))) {
         user.isVerified = true;
         await user.save();
-        res.status(209).json({
+        res.status(200).json({
           Success: true,
           Msg: "User has been verified",
         });
@@ -112,8 +112,13 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
           firstname: user.FirstName,
           linkText: "Verify Account",
         });
-        mailer("PokedexV2Mailer@gmail.com", user.Email, "Verify Account", template);
-        res.status(209).json({
+        mailer(
+          "PokedexV2Mailer@gmail.com",
+          user.Email,
+          "Verify Account",
+          template
+        );
+        res.status(200).json({
           Success: true,
           msg: "New Verification link has been sent, please check your email",
         });
@@ -141,14 +146,16 @@ router.post("/Login", async (req, res) => {
         const token = totp.generate(secret);
         user.TwoFactSecret = secret;
         await user.save();
+        console.log(user.ID);
         const clientInfo = {
-          ID: user['_id'],
+          ID: user["_id"],
           UserName: user.UserName,
           FirstName: user.FirstName,
           LastName: user.LastName,
           Email: user.Email,
-          isVerified: user.isVerified
-        }
+          isVerified: user.isVerified,
+          FavouritePokemon: user.FavouritePokemon
+        };
         mailer(
           "PokedexV2Mailer@gmail.com",
           user.Email,
@@ -183,8 +190,7 @@ router.post("/VerifyOTP", async (req, res) => {
     const verify = totp.check(Token, user.TwoFactSecret);
     if (verify) {
       res.status(201).json({ Msg: "OTP Accepted", Success: true });
-    }
-    else {
+    } else {
       res.status(401).json({ Msg: "OTP Expired or Incorrect", Success: false });
     }
   } catch (err) {
@@ -225,7 +231,7 @@ router.post("/UpdatePassword", async (req, res) => {
           "Pasword Change",
           template
         );
-        res.status(209).json({
+        res.status(200).json({
           Msg: "Password has been successfully updated!",
           Success: true,
         });
@@ -248,10 +254,16 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
   try {
     const user = await Users.findOne({ Email: Email }).exec();
     if (user != null) {
-      const token = jwt.sign({}, `${config.get("jwtPass")}${user.Password.substr(user.Password.length - 5)}`, {
-        expiresIn: "5m",
-      });
-      console.log(user.Password)
+      const token = jwt.sign(
+        {},
+        `${config.get("jwtPass")}${user.Password.substr(
+          user.Password.length - 5
+        )}`,
+        {
+          expiresIn: "5m",
+        }
+      );
+      console.log(user.Password);
       const html = await promiseFs("./Util/temp.html", "utf-8");
       let template = handleBars.compile(html);
       template = template({
@@ -275,7 +287,6 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(409).json({ Msg: err.message, Success: false });
-
   }
 });
 
@@ -288,14 +299,19 @@ router.post("/ResetPassword", async (req, res) => {
       res.status(404).json({ Msg: "User does not exist", Success: false });
       return;
     }
-    jwt.verify(Token, `${config.get("jwtPass")}${user.Password.substr(user.Password.length - 5)}`);
-    const comparePasswords = await bcrypt.compare(Password, user.Password)
+    jwt.verify(
+      Token,
+      `${config.get("jwtPass")}${user.Password.substr(
+        user.Password.length - 5
+      )}`
+    );
+    const comparePasswords = await bcrypt.compare(Password, user.Password);
     if (comparePasswords) {
-      res.status(409).json({ Msg: 'Cannot use old password', Success: false });
+      res.status(409).json({ Msg: "Cannot use old password", Success: false });
       return;
     }
     user.Password = await bcrypt.hash(Password, saltRounds);
-    await user.save()
+    await user.save();
     res.status(201).json({ Msg: "Password Reset Success", Success: true });
   } catch (err) {
     if (err.message === 'invalid signature' || err.message === 'jwt malformed') {
@@ -336,4 +352,54 @@ router.post("/UpdateUser", async (req, res) => {
   }
 });
 
+// Favouriting Pokemon
+router.put("/FavouritePoke", async (req, res) => {
+  let { userID, PokeID } = req.body;
+  try {
+    let user = await Users.updateOne(
+      { _id: userID },
+      { $addToSet: { FavouritePokemon: PokeID } }
+    );
+    if (user.modifiedCount === 1) {
+      return res.status(200).json({
+        Msg: "Pokemon Successfully liked",
+        Data: PokeID,
+        Succcess: true,
+      });
+    }
+    console.log(user);
+    res.status(400).json({
+      Msg: "Pokemon is already in the favourites list",
+      Succcess: false,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(409).json({ Msg: err.message, Success: false });
+  }
+});
+
+//unFavourite Pokemon
+router.put("/UnfavouritePoke", async (req, res) => {
+  let { userID, PokeID } = req.body;
+  try {
+    let user = await Users.updateOne(
+      { _id: userID },
+      { $pull: { FavouritePokemon: PokeID } }
+    );
+    if (user.modifiedCount === 1) {
+      return res.status(200).json({
+        Msg: "Pokemon Successfully unliked",
+        Data: PokeID,
+        Succcess: true,
+      });
+    }
+    res.status(400).json({
+      Msg: "Pokemon is not in the favourites list",
+      Succcess: false,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(409).json({ Msg: err.message, Success: false });
+  }
+});
 module.exports = router;

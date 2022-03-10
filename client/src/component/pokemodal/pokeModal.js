@@ -2,16 +2,26 @@ import { Modal, Row, Col, ProgressBar, Tabs, Tab } from "react-bootstrap";
 import Abilities from "./Abilities";
 import PokeComment from "./PokeComment";
 import CommentHeader from "./CommentHeader";
-import { AiOutlineHeart } from "react-icons/ai";
+import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import PokeEvol from "./PokeEvol";
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getComment } from "../../redux/actions/comment";
+import { updatePokeLikeAsync } from "../../redux/actions/user";
+import { isLoggedIn, getUser } from "../../redux/Selectors/user";
 
 const PokeModal = (props) => {
   const [type, setType] = useState([...props.types]);
   const idz = props.pokeID;
   const abil = props.pokemon[idz - 1].abilities;
+  const loggedIn = useSelector(isLoggedIn);
+  const user = useSelector(getUser);
+  var likedPoke = user.FavouritePokemon.includes(idz); 
+  var likePoke = likedPoke ? "unlike" : "like";
+  var heart = likedPoke ? <BsFillHeartFill /> : <BsHeart />;
+  useEffect(() => {
+    props.getComment(idz);
+  }, []);
 
   let pokeCommentz =
     props.comment.comments[idz].length != 0 &&
@@ -35,10 +45,6 @@ const PokeModal = (props) => {
       </div>
     );
 
-  useEffect(() => {
-    props.getComment(idz);
-  }, []);
-
   return (
     <div>
       <Modal size="xl" show={props.show} onHide={props.handleClose}>
@@ -53,8 +59,15 @@ const PokeModal = (props) => {
                 </span>
               </Col>
               <Col xs={2}>
-                <div className="likeCont">
-                  <AiOutlineHeart />
+                <div
+                  className="likeCont"
+                  onClick={() =>
+                    loggedIn
+                      ? props.updatePokeLikeAsync(idz, user.ID, likePoke)
+                      : null
+                  }
+                >
+                  {heart}
                 </div>
               </Col>
             </Row>
@@ -170,4 +183,6 @@ const mapStateToProps = (state) => ({
   comment: state.comment,
 });
 
-export default connect(mapStateToProps, { getComment })(PokeModal);
+export default connect(mapStateToProps, { getComment, updatePokeLikeAsync })(
+  PokeModal
+);

@@ -25,22 +25,19 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    FavouritePokemon: [
-      {
-        PokeID: { type: String },
-      },
-    ],
+    FavouritePokemon: [{ type: Number, unique: true }],
     ResetAuth: {
-       type: String 
+      type: String,
     },
-    TwoFactSecret: { 
-      type: String 
+    TwoFactSecret: {
+      type: String,
     },
-    isVerified: { 
-      type: Boolean, default: false 
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     PreviousPassword: {
-      type: String
+      type: String,
     },
   },
   { collection: "Users" }

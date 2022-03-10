@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import PokeModal from "./pokemodal/pokeModal";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { getFavoritePokemonClickedId } from "../redux/Selectors/user";
+import { profilePokeClickedClear } from "../redux/actions/user";
 
 const PokeCard = (props) => {
   const [id, setID] = useState("");
   const [type, setType] = useState([]);
   const [show, setShow] = useState(false);
+  const favPokeClickedId = useSelector(getFavoritePokemonClickedId)
+  const dispatch =  useDispatch()
   var idz = props.id;
 
   var name = props.pokemon[idz - 1].name;
@@ -33,9 +37,17 @@ const PokeCard = (props) => {
     setShow((show) => !show);
   };
 
+  const isClickedFromFavorites = () =>{
+    if(favPokeClickedId === idz){
+      openPoke()
+      dispatch(profilePokeClickedClear())
+    }
+  }
+
   useEffect(() => {
     checkID(idz);
     getType();
+    isClickedFromFavorites()
   }, []);
 
   return (

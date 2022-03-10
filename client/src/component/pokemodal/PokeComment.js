@@ -13,7 +13,7 @@ const PokeComment = ({
   delComment,
   likes,
   likeComment,
-  likesLength
+  likesLength,
 }) => {
   const user = useSelector(getUser);
   const isLogged = useSelector(isLoggedIn);
@@ -40,7 +40,9 @@ const PokeComment = ({
           <span className="iconPadding">
             <span
               style={{ display: "inline" }}
-              onClick={() => !isLogged ? null : likeComment(pokeID, id, user.ID, likeAction)}
+              onClick={() =>
+                !isLogged ? null : likeComment(pokeID, id, user.ID, likeAction)
+              }
             >
               {liked}
             </span>
@@ -65,9 +67,7 @@ PokeComment.propTypes = {
   sortComment: PropTypes.func,
   likes: PropTypes.array,
   likeComment: PropTypes.func,
-  likesLength: PropTypes.number
+  likesLength: PropTypes.number,
 };
 
-export default connect(null, { delComment, likeComment })(
-  PokeComment
-);
+export default connect(null, { delComment, likeComment })(PokeComment);

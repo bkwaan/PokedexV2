@@ -10,37 +10,8 @@
         line-height: 80%;
     }
     .favoritesScrollBar{
-        overflow: auto;
         white-space: nowrap;
+        overflow-x: scroll;
         padding: 50px 0px;
-        .pokemonTile{
-            width: 100px;
-            height: 120px;
-            display: inline-block;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: plum;
-            text-align: center;
-            margin:10px 25px;
-            position: relative;
-            .pokemonImage{
-                display: block;
-                border-radius: 50%;
-                background-color: white;
-            }
-            .heartIcon{
-                position: absolute;
-                width:20px;
-                height:20px;
-                top:-5px;
-                left:-5px;
-                z-index: 10;
-            }
-            >label{
-                color: white;
-                font-size: small;
-                text-align: center;
-            }
-        }
     }
 }

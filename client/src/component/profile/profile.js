@@ -3,7 +3,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserAsync } from '../../redux/actions/user';
 import { getUser } from '../../redux/Selectors/user';
-import Favorites from './favorites';
 
 function Profile() {
   const { FirstName, LastName, UserName, Email, ID } = useSelector(getUser);
