@@ -33,7 +33,6 @@ export default function (state = initialState, action) {
       };
     case LIKE_POKE:
       let FavouritePokemon = [...state.FavouritePokemon];
-      console.log(action.payload.data);
       action.payload.pokeAction === "like"
         ? FavouritePokemon.push(action.payload.data.Data)
         : (FavouritePokemon = FavouritePokemon.filter(
