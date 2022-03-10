@@ -64,9 +64,9 @@ const PokeCard = (props) => {
         </div>
         <p className="pokename">{name}</p>
         <div className="typetags">
-          {type.map((v) => {
+          {type.map((v,index) => {
             return (
-              <div className={"tag " + v}>
+              <div className={"tag " + v} key={index}>
                 <p>{v}</p>
               </div>
             );

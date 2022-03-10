@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PropTypes } from "prop-types";
 import Form from "react-bootstrap/Form";
 import { connect } from "react-redux";
-import { addComment } from "../../redux/actions/comment";
+import { addComment, sortComment } from "../../redux/actions/comment";
+import { useSelector } from 'react-redux'
+import { isLoggedIn } from '../../redux/Selectors/user';
 
-const CommentHeader = ({Id, addComment}) => {
+
+const CommentHeader = ({ Id, addComment, sortComment }) => {
   const [comment, setComment] = useState("");
-  const [id, setId] = useState(Id);
+
+  const loggedIn = useSelector(isLoggedIn);
 
   const pushComment = (e) => {
     e.preventDefault();
-    addComment(id, "bosco", comment);
+    addComment(Id, "bosco", comment);
     const textArea = document.getElementsByTagName("textarea")[0];
     textArea.value = "";
   };
@@ -19,19 +23,23 @@ const CommentHeader = ({Id, addComment}) => {
     setComment(e.target.value);
   };
 
+
+ 
+
   return (
     <div className="commentSection">
       <div className="commentHeader">
         <div className="commFilter">
-          <label>Show: </label>
-          <select>
-            <option>Newest</option>
+          <label>Sort: </label>
+          <select onChange={(e) => sortComment(Id, e.target.value)}>
             <option>Oldest</option>
+            <option>Newest</option>
           </select>
         </div>
         <p className="commTitle">Join The Discussion!</p>
       </div>
       <div className="commText">
+        {" "}
         <Form onSubmit={(e) => pushComment(e)}>
           <Form.Control
             as="textarea"
@@ -39,7 +47,9 @@ const CommentHeader = ({Id, addComment}) => {
             onChange={(e) => handleChange(e)}
           />
           <div className="commSubmit">
-            <button>Submit</button>
+            <button title={"Please login to submit a comment"} disabled={!loggedIn}>
+              Submit
+            </button>
           </div>
         </Form>
       </div>
@@ -49,7 +59,8 @@ const CommentHeader = ({Id, addComment}) => {
 
 CommentHeader.propTypes = {
   Id: PropTypes.number,
-  addComment: PropTypes.func
-}
+  addComment: PropTypes.func,
+  sortComment: PropTypes.func,
+};
 
-export default connect(null, { addComment })(CommentHeader);
+export default connect(null, { addComment, sortComment })(CommentHeader);

@@ -1,7 +1,4 @@
-import logo from './logo.svg';
 import Profile from './component/profile/profile';
-import PokeModal from "./component/pokemodal/pokeModal";
-import Modal from "react-bootstrap/esm/Modal";
 import ForgetPassword from "./component/forgetPassword/ForgetPassword";
 import SignIn from './component/signIn/signIn';
 import TwoFactorModal from './component/signIn/twoFactorModal';
@@ -25,6 +22,7 @@ import VerifyAccount from './component/verifyAccount/VerifyAccount';
 const App = () => {
   useEffect(() => {
     store.dispatch(addPokemon());
+    // store.dispatch(getComment(1));
   }, []);
 
   return (
@@ -33,7 +31,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route exact path='/' element={<SignIn />}></Route>
-            <Route exact path='/homepage' element={<ProtectedRoute child={<HomePage />} />} />
+            <Route exact path='/homepage' element={<HomePage />} />
             <Route exact path='/profile' element={<ProtectedRoute child={<ProfilePage />} />} />
             <Route exact path='/ResetPassword/:Token' element={<ResetPassword/>}/>
             <Route exact path='/VerifyAccount/:UserName/:Token' element={<VerifyAccount/>}/>

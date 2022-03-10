@@ -144,6 +144,12 @@
     @include mq($desktopScreen) {
       height: 250px;
     }
+
+    .commentLoginHead {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .pokeComment {
       padding: 10px;
       p {
@@ -176,6 +182,13 @@
   .commentSection {
     p {
       color: black;
+    }
+
+    .commentLoginCont {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
     }
 
     .commentHeader {

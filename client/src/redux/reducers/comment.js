@@ -3,26 +3,35 @@ import {
   ADD_COMMENT,
   DEL_COMMENT,
   EDIT_COMMENT,
+  SORT_COMMENT,
+  LIKE_COMMENT,
+  UNLIKE_COMMENT,
 } from "../actions/types";
 
-const initialState = { comments: [] };
+let comments = [...Array(156)].map(() => [[]]);
+
+const initialState = {
+  comments,
+};
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_COMMENT:
+      let comments = state.comments;
+      let getComments = action.payload;
+      getComments.map((comment) => {
+        comments[action.id][0].push(comment);
+      });
       return {
         ...state,
-        comments: { ...state.comments, [action.id]: [action.payload] },
+        comments,
       };
     case ADD_COMMENT: {
       let comments = state.comments;
-      let newComm = [action.payload];
-      comments[action.id] === undefined
-        ? (comments[action.id] = newComm)
-        : comments[action.id][0].push(action.payload);
+      comments[action.id][0].push(action.payload);
       return {
         ...state,
-        comments
+        comments,
       };
     }
     case DEL_COMMENT: {
@@ -35,17 +44,64 @@ export default function (state = initialState, action) {
         comments,
       };
     }
-    case EDIT_COMMENT: {
+    //   case EDIT_COMMENT: {
+    //     let comments = state.comments;
+    //     let index = comments[action.PokeID][0].findIndex(
+    //       (comment) => comment._id === action._id
+    //     );
+    //     comments[action.PokeID][0][index].CommentBody =
+    //       action.payload.CommentBody;
+    //     return {
+    //       ...state,
+    //       comments,
+    //     };
+    //   }
+
+    case SORT_COMMENT: {
       let comments = state.comments;
-      let index = comments[action.PokeID][0].findIndex(
-        (comment) => comment._id === action._id
-      );
-      comments[action.PokeID][0][index].CommentBody =
-        action.payload.CommentBody;
+      let sortComments = comments[action.payload.PokeId][0];
+
+      action.payload.sortBy === "Newest"
+        ? (sortComments = sortComments.sort(
+            (a, b) => Date.parse(b.CommentDate) - Date.parse(a.CommentDate)
+          ))
+        : (sortComments = sortComments.sort(
+            (a, b) => Date.parse(a.CommentDate) - Date.parse(b.CommentDate)
+          ));
+
+      comments[action.payload.PokeID] = sortComments;
       return {
         ...state,
         comments,
       };
+    }
+
+    case LIKE_COMMENT: {
+      let comments = state.comments;
+      let commentIndex = comments[action.payload.PokeID][0].findIndex(
+        (comment) => comment._id === action.payload.commentID
+      );
+
+      action.payload.likeAction === "like"
+        ? comments[action.payload.PokeID][0][commentIndex].Likes.push(
+            action.payload.userID
+          )
+        : (comments[action.payload.PokeID][0][commentIndex].Likes = comments[
+            action.payload.PokeID
+          ][0][commentIndex].Likes.filter(
+            (item) => item != action.payload.userID
+          ));
+
+      console.log(comments[action.payload.PokeID][0][commentIndex].Likes);
+      return {
+        ...state,
+        comments,
+      };
+    }
+
+    case UNLIKE_COMMENT: {
+      let comments = state.comments;
+      let unlikeIndex = comments[action.payload.PokeID][0].findIndex();
     }
     default:
       return state;

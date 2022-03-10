@@ -2,6 +2,56 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../models/comment");
 
+router.put("/LikeComment", async (req, res) => {
+  let { commentID, userID } = req.body;
+  try {
+    let comment = await Comment.updateOne(
+      {
+        "Comment._id": commentID,
+      },
+      { $addToSet: { "Comment.$.Likes": userID } }
+    ).exec();
+    if (comment.modifiedCount === 1) {
+      return res.status(200).json({
+        Msg: "Comment was succesfully liked",
+        Success: true,
+        Data: comment,
+      });
+    }
+    console.log(comment);
+    res.status(400).json({ Msg: "Comment was not updated", Success: false });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.put("/UnlikeComment", async (req, res) => {
+  let { commentID, userID } = req.body;
+  try {
+    let comment = await Comment.updateOne(
+      {
+        "Comment._id": commentID,
+      },
+      {
+        $pull: { "Comment.$.Likes": userID },
+      }
+    ).exec();
+    console.log(comment);
+    if (comment.modifiedCount === 1) {
+      return res.status(200).json({
+        Msg: "Comment was succesfully unliked",
+        Success: true,
+        Data: comment,
+      });
+    }
+    res.status(400).json({ Msg: "Like was not updated", Success: false });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error");
+  }
+});
+
 // Add a comment
 router.post("/AddComment", async (req, res) => {
   const { PokeID, UserName, CommentBody } = req.body;
@@ -12,9 +62,10 @@ router.post("/AddComment", async (req, res) => {
         pokeID: PokeID,
         Comment: [{ UserName, CommentBody }],
       });
+      console.log(newComment.Comment);
       await newComment.save();
       return res.status(209).json({
-        Data: newComment,
+        Data: newComment.Comment[0],
         Msg: "Comment has been added",
         Success: true,
       });
@@ -56,9 +107,9 @@ router.get("/GetComment/pokeID/:pokeID", async (req, res) => {
 
 //Delete a comment
 router.delete("/DeleteComment", async (req, res) => {
-  const { pokeID, id } = req.body;
+  const { PokeID, id } = req.body;
   try {
-    let comment = await Comment.findOne({ pokeID }).exec();
+    let comment = await Comment.findOne({ pokeID: PokeID }).exec();
     if (!comment) {
       return res.status(404).json({
         Msg: "Comment not found",
