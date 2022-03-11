@@ -169,7 +169,7 @@ const PokeModal = (props) => {
               </Tabs>
             </div>
             <span class="customBr"></span>
-            <CommentHeader Id={idz} />
+            <CommentHeader Id={idz} PokeName={props.name} />
             <div className="pokeCommCont">{pokeCommentz}</div>
           </div>
         </div>

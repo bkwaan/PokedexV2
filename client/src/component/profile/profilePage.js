@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import Activity from './activity';
+import Activity from './Activity/activity'
 import Favorites from './Favorites/favorites'
 import Profile from './profile';
 

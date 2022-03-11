@@ -22,13 +22,15 @@ export const getComment = (id) => async (dispatch) => {
 };
 
 export const addComment =
-  (PokeID, UserName, CommentBody) => async (dispatch) => {
+  (PokeID, UserName, CommentBody, PokeName) => async (dispatch) => {
     try {
       let comment = await axios.post("/api/Comment/AddComment", {
         PokeID: PokeID,
         UserName: UserName,
         CommentBody: CommentBody,
+        PokeName: PokeName
       });
+      console.log(PokeName)
       dispatch({
         type: actions.ADD_COMMENT,
         payload: comment.data.Data,

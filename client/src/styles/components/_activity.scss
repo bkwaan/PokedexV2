@@ -1,5 +1,5 @@
 .activityContainer{
-    margin: 10% 2% 0% 2%;
+    margin: 10% 2% 10% 2%;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     .activityContainerHeader{
         margin-bottom: 20px;
@@ -10,33 +10,20 @@
         font-size: x-large;
         line-height: 80%;
     }
-    .activityCell{
-        margin: 10px 5px;
-        border: 1px solid #DFDFDF;
-        box-sizing: border-box;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-        border-radius: 5px;
-        .activityCellInfoRow{
-            padding: 5px 10px;
-            .activityCellFollowData{
-                text-align: end;
-                >img{
-                    width: 20px;
-                    height: 20px;
-                }
-            }
-            .activityCellTitle{
-                color:#ABC1EB;
-                font-size: x-large;
-            }
-            .activityCellDescription{
-                color: black;
-               
-            }
-            .activityDate{
-                width: 100%;
-                text-align: end;
-            }
-        }
+    .activityTileScrollContainer{
+        max-height:400px;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 8px;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: rgb(173, 170, 170);
+            border-radius: 10px;
+          }
+          &::-webkit-scrollbar-track {
+            background: white;
+            border-radius: 10px;
+            background-clip: content-box;
+          }
     }
 }

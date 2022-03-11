@@ -14,3 +14,7 @@ export const isVerifiedUser = (state) => {
 export const getFavoritePokemonClickedId = (state) => {
     return state.user.FavouritePokemonClicked
 }
+
+export const getUserComments = (state) => {
+    return state.user.userComments
+}

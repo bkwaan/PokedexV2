@@ -1,4 +1,4 @@
-import { LOGIN, UPDATE_PROFILE_DATA, VALID_OTP, VERIFY_ACCOUNT, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR} from '../actions/types'
+import { LOGIN, UPDATE_PROFILE_DATA, VALID_OTP, VERIFY_ACCOUNT, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR, GET_USER_COMMENTS} from '../actions/types'
 const initialState ={
     ID:'',
     UserName: '',
@@ -7,8 +7,8 @@ const initialState ={
     Email: '',
     ValidOtp: false,
     isVerified: false,
-    FavouritePokemonClicked: 0
-    
+    FavouritePokemonClicked: 0,
+    userComments: []
 }
 
 export default function (state = initialState, action) {
@@ -53,6 +53,11 @@ export default function (state = initialState, action) {
               return{
                 ...state,
                 FavouritePokemonClicked: 0
+              }
+            case GET_USER_COMMENTS:
+              return{
+                ...state,
+                userComments: [...action.payload]
               }
         default:
             return state;

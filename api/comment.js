@@ -53,16 +53,18 @@ router.put("/UnlikeComment", async (req, res) => {
 
 // Add a comment
 router.post("/AddComment", async (req, res) => {
-  const { PokeID, UserName, CommentBody } = req.body;
+  const { PokeID, UserName, CommentBody, PokeName } = req.body;
   try {
     let comment = await Comment.findOne({ pokeID: PokeID }).exec();
     if (!comment) {
       let newComment = new Comment({
         pokeID: PokeID,
+        PokeName,
         Comment: [{ UserName, CommentBody }],
       });
       console.log(newComment.Comment);
       await newComment.save();
+      console.log(comment)
       return res.status(209).json({
         Data: newComment.Comment[0],
         Msg: "Comment has been added",
@@ -145,6 +147,26 @@ router.put("/UpdateComment", async (req, res) => {
     }
     res.status(400).json({ Msg: "Comment was not updated", Success: false });
   } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
+
+
+router.get("/GetUserComments/:UserName", async (req, res) => {
+  const { UserName } = req.params
+  try {
+    const comments = await Comment.find({"Comment.UserName": UserName}).sort({"Comment.CommentDate": 'desc'}).exec()
+    console.log(comments)
+    if (comments.length >0 ) {
+      return res.status(200).json({
+        Msg: "Comments found",
+        Success: true,
+        payload: comments
+      });
+    }
+    res.status(400).json({ Msg: "Comments not found", Success: false });
+  } catch (err) {
+    console.log(err)
     res.status(500).send("Server Error");
   }
 });

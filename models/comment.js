@@ -7,6 +7,9 @@ const CommentSchema = new Schema({
     required: true,
     unique: true,
   },
+  PokeName: {
+    type: String,
+  },
   Comment: [
     {
       UserName: {

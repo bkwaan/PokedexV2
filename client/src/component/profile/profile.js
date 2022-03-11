@@ -111,7 +111,7 @@ function Profile() {
             </div>
           </Col>
           <Col className='profileUsername' >
-            Bkwann
+            {userData.UserName}
           </Col>
           <Col className='profileColor'>
             <button className="colorButton"></button>

@@ -18,7 +18,7 @@ function Favorites() {
         <Row>
           <Col className='favoritesScrollBar'>
               {pokemon.map((x,index) => {
-                return <FavoriteTile sprite={x.sprites.other['official-artwork'].front_default} colorName={x.types[0].type.name} pokeName={x.name} id={x.id}/>
+                return <FavoriteTile sprite={x.sprites.other['official-artwork'].front_default} colorName={x.types[0].type.name} pokeName={x.name} id={x.id} key={x.id}/>
               })}
           </Col>
         </Row>
