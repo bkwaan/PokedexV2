@@ -16,5 +16,5 @@ export const getFavoritePokemonClickedId = (state) => {
 }
 
 export const getUserComments = (state) => {
-    return state.user.userComments
+    return state.user.UserComments
 }

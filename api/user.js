@@ -13,6 +13,32 @@ const handleBars = require("handlebars");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const totp = require("otplib").totp;
+const multer = require('multer');
+
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'profilePics');
+  },
+  filename: function (req, file, cb) {
+    const { UserName } = req.body
+    const fileType = file.mimetype.split('/')[1]
+    const name = `${UserName}.${fileType}`
+    cb(null, name);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}
+
+const upload = multer({ storage, fileFilter })
 
 router.post("/SignUp", async (req, res) => {
   let { FirstName, LastName, UserName, Email, Password } = req.body;
@@ -123,7 +149,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
           msg: "New Verification link has been sent, please check your email",
         });
       }
-    } else{
+    } else {
       res.status(404).json({
         Success: false,
         Message: "User not found",
@@ -154,7 +180,8 @@ router.post("/Login", async (req, res) => {
           LastName: user.LastName,
           Email: user.Email,
           isVerified: user.isVerified,
-          FavouritePokemon: user.FavouritePokemon
+          FavouritePokemon: user.FavouritePokemon,
+          profilePic: user.profilePic
         };
         mailer(
           "PokedexV2Mailer@gmail.com",
@@ -331,12 +358,12 @@ router.post("/UpdateUser", async (req, res) => {
       return;
     }
     let duplicateUser = await Users.find({
-      '_id': {$ne: ID},
+      '_id': { $ne: ID },
       $or: [{ Email: Email }, { UserName: UserName }],
     }).exec();
-    if(duplicateUser.length>=1) {
+    if (duplicateUser.length >= 1) {
       res.status(409).json({ Msg: 'UserName/Email already taken', Success: false });
-    } else{
+    } else {
       if (Password.length === 0) {
         await Users.updateOne({ '_id': ID }, { Email, UserName, FirstName, LastName })
       }
@@ -348,7 +375,7 @@ router.post("/UpdateUser", async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(409).json({ Msg: err.message, Success: false }); 
+    res.status(409).json({ Msg: err.message, Success: false });
   }
 });
 
@@ -402,4 +429,48 @@ router.put("/UnfavouritePoke", async (req, res) => {
     res.status(409).json({ Msg: err.message, Success: false });
   }
 });
+
+
+router.post("/UpdateProfilePic", upload.single('profilePic'), async (req, res) => {
+  const { UserName } = req.body;
+  try {
+    const user = await Users.findOne({ UserName }).exec()
+    if (user != null) {
+      user.profilePic = req.file.filename
+      await user.save()
+      res.status(200).json({ Msg: 'Upload success', Success: true, filepath: req.file.filename })
+    } else{
+      res.status(404),json({Msg: 'User not found', Succcess: failed})
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(409).json({ Msg: err.message, Success: false })
+  }
+})
+
+
+router.get("/GetUserData/:ID", async (req,res) => {
+  const {ID} = req.params
+  try{
+    const user = await Users.findOne({_id: ID}).exec()
+    if(user != null){
+      const clientInfo = {
+        UserName: user.UserName,
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Email: user.Email,
+        isVerified: user.isVerified,
+        FavouritePokemon: user.FavouritePokemon,
+        profilePic: user.profilePic
+      };
+      res.status(200).json({Msg: 'user found', Success: true, clientInfo})
+    } else{
+      res.status(404).json({Msg: 'User Not found', Success: false})
+    }
+  }catch(err){
+    res.status(409).json({Msg: err.message, Success: false})
+  }
+})
+
+
 module.exports = router;

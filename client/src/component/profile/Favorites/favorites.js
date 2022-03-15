@@ -16,10 +16,16 @@ function Favorites() {
           </Col>
         </Row>
         <Row>
-          <Col className='favoritesScrollBar'>
-              {pokemon.map((x,index) => {
-                return <FavoriteTile sprite={x.sprites.other['official-artwork'].front_default} colorName={x.types[0].type.name} pokeName={x.name} id={x.id} key={x.id}/>
-              })}
+          <Col className={(pokemon && pokemon.length > 0) ? 'favoritesScrollBar' : 'favoritesScrollBar favoritesScrollBarEmpty'}>
+            {pokemon && pokemon.length > 0
+              ? pokemon.map((x, index) => {
+                return <FavoriteTile sprite={x.sprites.other['official-artwork'].front_default} colorName={x.types[0].type.name} pokeName={x.name} id={x.id} key={x.id} />
+              })
+              : <div className='emptyCell'>
+                <p className='emptyFavoritesTitle'>No favorites yet</p>
+                <p className='emptyFavoritesSubtitle'>Keep track of your favorite pokemon by clicking the &#9825; icon </p>
+              </div>
+            }
           </Col>
         </Row>
       </Col>

@@ -1,14 +1,14 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
-import TwoFactorModal from './twoFactorModal';
-import Background from './background';
+import TwoFactorModal from './twoFactorModal'
 import ForgetPassword from '../forgetPassword/ForgetPassword';
 import { useSelector } from 'react-redux';
 import { isLoggedIn } from '../../redux/Selectors/user';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUserAsync } from '../../redux/actions/user';
+import Background from '../background';
 
 function SignIn() {
 
@@ -150,7 +150,7 @@ function SignIn() {
     return (
       <>
         <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-          <input name='Email' type='email' value={InputState.Email} className='signinTextField' placeholder='Email' type='text' onChange={handleInput}></input>
+          <input name='Email' type='email' value={InputState.Email} className='signinTextField' placeholder='Email' onChange={handleInput}></input>
         </Col>
         <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
           <input name='FirstName' value={InputState.FirstName} className='signinTextField' placeholder='FirstName' type='text' onChange={handleInput}></input>
@@ -219,7 +219,7 @@ function SignIn() {
           {renderHelpText()}
         </form>
       </Container>
-      <Background />
+      <Background/>
       <TwoFactorModal show={otpShow} onHide={hideOtpModal} username={InputState.UserName} location={location} />
       <ForgetPassword show={forgotShow} onHide={hideForgotModal} />
     </div>

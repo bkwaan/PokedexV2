@@ -4,18 +4,18 @@
 // - Removes margins
 // - Removes padding
 // - Removes list style (if it  is a list)
-@mixin flatten($list:false,$text:true){
+@mixin flatten($list: false, $text: true) {
     margin: 0;
     padding: 0;
-    @if($text == true){
+    @if ($text == true) {
         line-height: 1;
     }
-    @if($list == true){
+    @if ($list == true) {
         list-style: none;
     }
 }
 @mixin mq($w) {
-    @media(min-width: $w){
-        @content
+    @media (min-width: $w) {
+        @content;
     }
 }

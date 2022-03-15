@@ -2,13 +2,19 @@ import { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserCommentsAsync } from '../../../redux/actions/user';
+import comment from '../../../redux/reducers/comment';
 import { getUser, getUserComments } from '../../../redux/Selectors/user';
 import ActivityTile from './activityTile';
 
 function Activity() {
   const comments = useSelector(getUserComments)
-  const { UserName } = useSelector(getUser);
+  const { ID } = useSelector(getUser);
   const dispatch = useDispatch()
+
+  useEffect(async () => {
+    dispatch(getUserCommentsAsync(ID))
+    console.log(comments)
+  }, [])
 
   const checkID = (id) => {
     let newId
@@ -36,9 +42,9 @@ function Activity() {
     }
     return newLikes
   }
-  useEffect(async () => {
-    dispatch(getUserCommentsAsync(UserName))
-  }, [])
+
+
+
   return (
     <Row className='activityContainer' >
       <Col>
@@ -46,14 +52,17 @@ function Activity() {
           <Col>ACTIVITY</Col>
         </Row>
         <Row>
-          <Col className='activityTileScrollContainer'>
-            {comments.map((x) => {
-              return x.Comment.map((y) => {
-                return <ActivityTile key={x.id} id={checkID(x.pokeID)} pokeName={x.PokeName} likes={checkLikes(y.Likes.length)} originalId={x.pokeID}
-                  commentBody={y.CommentBody} commentDate={y.CommentDate.substr(0, y.CommentDate.indexOf('T'))}
-                />
+          <Col className={(comments && comments.length > 0) ? 'activityTileScrollContainer' : 'activityTileScrollContainer emptyActivityScrollContainer'}>
+            {comments && comments.length > 0
+              ? comments.map((x) => {
+                return <ActivityTile key={x.pokeID} id={checkID(x.pokeID)} pokeName={x.pokeName} likes={checkLikes(x.Likes.length)} originalId={x.pokeID}
+                  commentBody={x.CommentBody} commentDate={x.CommentDate.substr(0, x.CommentDate.indexOf('T'))} />
               })
-            })}
+              :<div className='emptyCell'>
+                <p className='emptyActivityTitle'>No Activity yet</p>
+                <p className='emptyActivitySubtitle'>Any comments you make will be displayed here!</p>
+          </div>
+            }
           </Col>
         </Row>
       </Col>

@@ -1,39 +1,57 @@
-.backContainer{
+.backContainer {
+  position: absolute;
+  z-index: -1;
+  height: 100%;
+  width: 100vw;
+  top: 0;
+  overflow: hidden;
+
+  .blur {
     position: absolute;
     z-index: -1;
-    height: 100vh;
-    width: 100vw;
+    background-attachment: fixed;
+  }
+
+  .pinkBlur {
+    width: 75%;
+    right: -200px;
+    top: -100px;
+    @media (min-width: 650px) {
+      width: fit-content;
+      right: -400px;
+      top: -130px;
+    }
+  }
+  .greenBlur {
+    width: 50%;
+    left: -50px;
     top: 0;
-    overflow: hidden;
+    @media (min-width: 650px) {
+      width: fit-content;
+      left: 0;
+      top: 0;
+    }
+  }
 
-    .pinkBlur{
-        position: absolute;
-        right:-400px;
-        top:-130px;
-        z-index: -1;
-        background-attachment: fixed;
+  .purpleBlur {
+    width: 75%;
+    bottom: -90px;
+    left: -125px;
+    @media (min-width: 650px) {
+      width: fit-content;
+      bottom: -150px;
+      left: -125px;
     }
-    .greenBlur{
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: -1;
-        background-attachment: fixed;
-    }
+  }
 
-    .purpleBlur{
-        position: absolute;
-        bottom:-150px;
-        left:-125px;
-        z-index: -1;
-        background-attachment: fixed;
+  .pokeBall {
+    width: 50%;
+    right: 0;
+    bottom: 0px;
+    @media (min-width: 650px) {
+      width: fit-content;
+      right: 0;
+      bottom: 0px;
     }
-
-    .pokeBall{
-        position: absolute;
-        right:0;
-        bottom: 0px;
-        z-index: -1;
-        background-attachment: fixed;
-    }
+  }
 }

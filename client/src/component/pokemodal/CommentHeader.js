@@ -14,7 +14,7 @@ const CommentHeader = ({ Id, addComment, sortComment, PokeName }) => {
 
   const pushComment = (e) => {
     e.preventDefault();
-    addComment(Id, user.UserName, comment,PokeName );
+    addComment(Id, user.UserName, comment,PokeName, user.ID );
     const textArea = document.getElementsByTagName("textarea")[0];
     textArea.value = "";
   };

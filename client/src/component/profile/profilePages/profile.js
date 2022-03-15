@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { BsImage } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserAsync } from '../../redux/actions/user';
-import { getUser } from '../../redux/Selectors/user';
+import { getUserDataAsync, updateUserAsync } from '../../../redux/actions/user';
+import { getUser } from '../../../redux/Selectors/user';
+import ProfileUpload from './profileUpload';
+
 
 function Profile() {
-  const { FirstName, LastName, UserName, Email, ID } = useSelector(getUser);
+  const { FirstName, LastName, UserName, Email, ID, profilePic } = useSelector(getUser);
+
   const initalState = {
     FirstName,
     LastName,
@@ -13,11 +17,22 @@ function Profile() {
     UserName,
     Password: '',
     ConfirmPassword: '',
+    profilePic
   }
   const [userData, setUserData] = useState(initalState);
   const [warning, setWarning] = useState('');
   const [submitButton, setSubmitButton] = useState('Edit');
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(async () => {
+    dispatch(getUserDataAsync(ID))
+    setUserData(initalState)
+  }, [FirstName, LastName, UserName, Email, ID, profilePic])
+
+  const handleModalClose = () => setShow(false);
+
+  const handleModalShow = () => setShow(true);
 
   const handleEdit = () => {
     if (submitButton === 'Edit') {
@@ -105,16 +120,17 @@ function Profile() {
     <Row className='profileContainer'>
       <Col>
         <Row className="profileRow">
-          <Col>
+          <Col xs={{ span: 4, offset: 0 }} >
             <div className='profileImageBackground'>
-              <img className='profileImage' src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"></img>
+              {profilePic
+                ? <img className='profileImage' src={profilePic} onClick={handleModalShow}></img>
+                : <BsImage className='emptyProfileIcon' onClick={handleModalShow} />
+              }
+              <ProfileUpload show={show} onHide={handleModalClose} />
             </div>
           </Col>
-          <Col className='profileUsername' >
+          <Col className='profileUsername' xs={{ span: 4, offset: 0 }}>
             {userData.UserName}
-          </Col>
-          <Col className='profileColor'>
-            <button className="colorButton"></button>
           </Col>
         </Row>
         <Row className='profileInputGroup'>

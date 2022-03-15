@@ -53,14 +53,16 @@ router.put("/UnlikeComment", async (req, res) => {
 
 // Add a comment
 router.post("/AddComment", async (req, res) => {
-  const { PokeID, UserName, CommentBody, PokeName } = req.body;
+  const { PokeID, UserName, CommentBody, PokeName, UserId } = req.body;
   try {
+    console.log(UserId)
     let comment = await Comment.findOne({ pokeID: PokeID }).exec();
+    const CommentDate = new Date()
     if (!comment) {
       let newComment = new Comment({
         pokeID: PokeID,
         PokeName,
-        Comment: [{ UserName, CommentBody }],
+        Comment: [{ UserName, CommentBody, UserId, CommentDate }],
       });
       console.log(newComment.Comment);
       await newComment.save();
@@ -71,8 +73,8 @@ router.post("/AddComment", async (req, res) => {
         Success: true,
       });
     }
-
-    comment.Comment.push({ UserName, CommentBody });
+    
+    comment.Comment.push({ UserName, CommentBody, UserId, CommentDate });
     await comment.save();
     res.status(209).json({
       Data: comment.Comment[comment.Comment.length - 1],
@@ -152,19 +154,32 @@ router.put("/UpdateComment", async (req, res) => {
 });
 
 
-router.get("/GetUserComments/:UserName", async (req, res) => {
-  const { UserName } = req.params
+router.get("/GetUserComments/:ID", async (req, res) => {
+  const { ID } = req.params
   try {
-    const comments = await Comment.find({"Comment.UserName": UserName}).sort({"Comment.CommentDate": 'desc'}).exec()
-    console.log(comments)
-    if (comments.length >0 ) {
-      return res.status(200).json({
+    const comments = await Comment.find({ "Comment.UserId": ID }).exec()
+    if (comments.length > 0) {
+      const filteredComments = []
+      comments.forEach((x) => {
+        x.Comment.forEach((y) => {
+          if(y.UserId.equals(ID)){
+            filteredComments.push({...y.toObject(),pokeID:x.pokeID, pokeName:x.PokeName})
+          }
+        })
+      })
+      filteredComments.sort((x, y) => {
+        return ((Date.parse(y.CommentDate) - Date.parse(x.CommentDate)))
+      })
+      console.log(filteredComments)
+      // console.log(filteredComments)
+      res.status(200).json({
         Msg: "Comments found",
         Success: true,
-        payload: comments
+        payload: filteredComments
       });
+    } else {
+      res.status(404).json({ Msg: "Comments not found", Success: false });
     }
-    res.status(400).json({ Msg: "Comments not found", Success: false });
   } catch (err) {
     console.log(err)
     res.status(500).send("Server Error");

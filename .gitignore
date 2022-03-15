@@ -10,6 +10,7 @@
 
 # production
 /build
+/profilePics
 
 #env variables
 config/default.json

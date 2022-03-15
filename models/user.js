@@ -39,6 +39,9 @@ const UserSchema = new Schema(
     PreviousPassword: {
       type: String,
     },
+    profilePic: { 
+      type: String 
+    }
   },
   { collection: "Users" }
 );

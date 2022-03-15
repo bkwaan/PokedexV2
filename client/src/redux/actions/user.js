@@ -1,5 +1,6 @@
 import axios from "axios";
-import { LOGIN, LOGOUT, VALID_OTP, UPDATE_PROFILE_DATA, VERIFY_ACCOUNT, REQUEST_NEW_VERIFICATION_LINK, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR, GET_USER_COMMENTS } from '../actions/types'
+
+import { LOGIN, LOGOUT, VALID_OTP, UPDATE_PROFILE_DATA, VERIFY_ACCOUNT, REQUEST_NEW_VERIFICATION_LINK, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR, GET_USER_COMMENTS, UPLOAD_PIC, GET_USER_DATA } from '../actions/types'
 
 // Actions
 export const loginUser = (data) => {
@@ -61,9 +62,24 @@ export const profilePokeClickedClear = (id) => {
   }
 }
 
-export const getUserComments = (data) =>{
+export const getUserComments = (data) => {
   return {
     type: GET_USER_COMMENTS,
+    payload: data
+  }
+}
+
+
+export const uploadProfilePic = (data) => {
+  return {
+    type: UPLOAD_PIC,
+    payload: data
+  }
+}
+
+export const getUserData = (data) => {
+  return {
+    type: GET_USER_DATA,
     payload: data
   }
 }
@@ -146,17 +162,33 @@ export const requestNewVerificationLinkAsync = (userName) => async (dispatch, ge
   }
 }
 
-
 export const getUserCommentsAsync = (UserName) => async (dispatch, getState) => {
-  try{
+  try {
     const res = await axios.get(`/api/Comment/GetUserComments/${UserName}`)
     dispatch(getUserComments(res.data.payload))
-  }catch(err){
+  } catch (err) {
     throw err
   }
 }
 
+export const uploadUserProfilePicAsync = (file) => async (dispatch, getState) => {
+  try {
+    const { UserName } = getState().user
+    const formData = new FormData()
+    formData.append('UserName', UserName);
+    formData.append('profilePic', file);
+    const res = await axios.post('/api/User/UpdateProfilePic', formData, { headers: { "Content-Type": "multipart/form-data" } })
+    dispatch(uploadProfilePic(res.data.filepath))
+  } catch (err) {
+    throw err
+  }
+}
 
-
-
-
+export const getUserDataAsync = (ID) => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(`/api/User/GetUserData/${ID}`)
+    dispatch(getUserData(res.data.clientInfo))
+  } catch (err) {
+    throw err
+  }
+}

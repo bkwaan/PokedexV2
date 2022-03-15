@@ -1,34 +1,34 @@
-.activityCell{
-    margin: 25px 10px;
-    border: 1px solid #DFDFDF;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 5px;
-    .activityCellInfoRow{
-        padding: 5px 10px;
-        .activityCellFollowData{
-            text-align: end;
-            padding-top:5px;
-            >img{
-                width: 20px;
-                height: 20px;
-                margin-left:2px
-            }
-        }
-        .activityCellTitle{
-            color:#ABC1EB;
-            font-size: x-large;
-            &:hover{    
-                text-decoration:underline;  
-            }
-        }
-        .activityCellDescription{
-            color: black;
-           
-        }
-        .activityDate{
-            width: 100%;
-            text-align: end;
-        }
+.activityCell {
+  margin: 25px 10px;
+  border: 1px solid #dfdfdf;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+  background-color: white;
+  .activityCellInfoRow {
+    padding: 5px 10px;
+    .activityCellFollowData {
+      text-align: end;
+      padding-top: 5px;
+      > img {
+        width: 20px;
+        height: 20px;
+        margin-left: 2px;
+      }
     }
+    .activityCellTitle {
+      color: #abc1eb;
+      font-size: x-large;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .activityCellDescription {
+      color: black;
+    }
+    .activityDate {
+      width: 100%;
+      text-align: end;
+    }
+  }
 }

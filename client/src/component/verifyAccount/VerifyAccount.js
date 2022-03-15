@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { requestNewVerificationLinkAsync, verifyUserAccountAsync } from "../../redux/actions/user";
 import { isVerifiedUser } from "../../redux/Selectors/user";
-import Background from "../signIn/background";
+import Background from "../background";
 
 const VerifyAccount = (props) => {
   const { Token } = useParams();
