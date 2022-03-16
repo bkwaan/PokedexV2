@@ -16,7 +16,7 @@ const PokeModal = (props) => {
   const abil = props.pokemon[idz - 1].abilities;
   const loggedIn = useSelector(isLoggedIn);
   const user = useSelector(getUser);
-  var likedPoke = user.FavouritePokemon.includes(idz); 
+  var likedPoke = user.FavouritePokemon.includes(idz);
   var likePoke = likedPoke ? "unlike" : "like";
   var heart = likedPoke ? <BsFillHeartFill /> : <BsHeart />;
   useEffect(() => {
