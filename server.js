@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const connectDB = require('./config/db');
 const api = require('./api');
+const path = require('path')
 
 
      
@@ -12,6 +13,7 @@ connectDB();
 
 //MiddleWare
 app.use(express.json({ extended: false }));
+app.use(express.static(path.join(__dirname, 'profilePics')))
 
 
 // Using api folder

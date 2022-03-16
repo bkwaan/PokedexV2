@@ -6,7 +6,7 @@ import { addComment, sortComment } from "../../redux/actions/comment";
 import { useSelector } from "react-redux";
 import { isLoggedIn, getUser } from "../../redux/Selectors/user";
 
-const CommentHeader = ({ Id, addComment, sortComment }) => {
+const CommentHeader = ({ Id, addComment, sortComment, PokeName }) => {
   const [comment, setComment] = useState("");
 
   const loggedIn = useSelector(isLoggedIn);
@@ -14,7 +14,7 @@ const CommentHeader = ({ Id, addComment, sortComment }) => {
 
   const pushComment = (e) => {
     e.preventDefault();
-    addComment(Id, user.UserName, comment);
+    addComment(Id, user.UserName, comment,PokeName, user.ID );
     const textArea = document.getElementsByTagName("textarea")[0];
     textArea.value = "";
   };

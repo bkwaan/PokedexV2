@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { resetPasswordAsync } from "../../redux/actions/resetPassword";
 import { ResetPasswordStatus } from "../../redux/Selectors/resetPassword";
-import Background from "../signIn/background";
+import Background from "../background";
 
 const ResetPassword = (props) => {
     const [password, setPassword] = useState('');
@@ -19,7 +19,6 @@ const ResetPassword = (props) => {
     useEffect(() => {
         setWarning(resetPasswordStatus.Msg)
         if (resetPasswordStatus.Success) {
-            console.log(resetPasswordStatus)
             setTimeout(() => {
                 navigate('/', { replace: true })
             }, 3000)

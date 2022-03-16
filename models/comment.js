@@ -7,6 +7,9 @@ const CommentSchema = new Schema({
     required: true,
     unique: true,
   },
+  PokeName: {
+    type: String,
+  },
   Comment: [
     {
       UserName: {
@@ -17,10 +20,14 @@ const CommentSchema = new Schema({
       },
       CommentDate: {
         type: Date,
-        default: Date.now(),
+      },
+      UserId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Users",
+        required: true
       },
       Likes: [
-        { type: mongoose.Schema.Types.ObjectId, unique: true, ref: "Users" },
+        { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
       ],
     },
   ],

@@ -2,13 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/styles.scss';
 import App from './App';
-import Profile from './component/profile/profile';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from "react-router-dom";
-
-import {store} from './store';
-import SignIn from './component/signIn/signIn'
 
 
 ReactDOM.render(

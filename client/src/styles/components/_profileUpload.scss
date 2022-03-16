@@ -1,0 +1,39 @@
+.uploadSection {
+  max-height: 434px;
+  background-color: white;
+  outline: 4px dashed #92b0b3;
+  outline-offset: -8px;
+  padding: 8px;
+  border-radius: 10px;
+  padding: 100px;
+  .fileArea {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    .fileInput {
+      display: none;
+    }
+    .dropIconContainer {
+      text-align: center;
+      margin-bottom: 10px;
+      .uploadIcon {
+        width: 50%;
+        height: auto;
+      }
+    }
+    .uploadButtoncontainer {
+      text-align: center;
+      .fileReceivedText {
+        font-size: 40px;
+      }
+      .uploadButton {
+        width: 200px;
+        height: auto;
+      }
+    }
+  }
+}
+
+.dragOver {
+  background-color: #9dbfe1;
+}

@@ -1,11 +1,6 @@
 import axios from "axios";
-import {
-  LOGIN,
-  LOGOUT,
-  VALID_OTP,
-  UPDATE_PROFILE_DATA,
-  LIKE_POKE,
-} from "../actions/types";
+
+import { LOGIN, LOGOUT, VALID_OTP, UPDATE_PROFILE_DATA, VERIFY_ACCOUNT, REQUEST_NEW_VERIFICATION_LINK, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR, GET_USER_COMMENTS, UPLOAD_PIC, GET_USER_DATA } from '../actions/types'
 
 // Actions
 export const loginUser = (data) => {
@@ -41,6 +36,54 @@ export const updatePokeLike = (data) => {
   };
 };
 
+export const verifyUserAccount = () => {
+  return {
+    type: VERIFY_ACCOUNT,
+  }
+}
+
+export const requestNewVerificationLink = () => {
+  return {
+    type: REQUEST_NEW_VERIFICATION_LINK
+  }
+}
+
+
+export const profilePokeClicked = (FavouritePokemonClicked) => {
+  return {
+    type: FAVORITE_ITEM_CLICKED,
+    payload: FavouritePokemonClicked
+  }
+}
+
+export const profilePokeClickedClear = (id) => {
+  return {
+    type: FAVORITE_ITEM_CLICKED_CLEAR,
+  }
+}
+
+export const getUserComments = (data) => {
+  return {
+    type: GET_USER_COMMENTS,
+    payload: data
+  }
+}
+
+
+export const uploadProfilePic = (data) => {
+  return {
+    type: UPLOAD_PIC,
+    payload: data
+  }
+}
+
+export const getUserData = (data) => {
+  return {
+    type: GET_USER_DATA,
+    payload: data
+  }
+}
+
 // Thunks
 //Adds user to state after they login and validate their otp
 export const verifyOtpCode =
@@ -51,8 +94,8 @@ export const verifyOtpCode =
         Token: token,
       });
       dispatch(verifiedOtp());
-    } catch (e) {
-      throw e;
+    } catch (err) {
+      throw err;
     }
   };
 
@@ -64,8 +107,8 @@ export const loginUserAsync =
         Password: Password,
       });
       dispatch(loginUser(res.data.clientInfo));
-    } catch (e) {
-      throw e;
+    } catch (err) {
+      throw err;
     }
   };
 
@@ -73,8 +116,8 @@ export const updateUserAsync = (userData) => async (dispatch, getState) => {
   try {
     const res = await axios.post("api/User/UpdateUser", userData);
     dispatch(updateProfile(res.data.clientInfo));
-  } catch (e) {
-    throw e;
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -84,13 +127,13 @@ export const updatePokeLikeAsync =
       var res;
       pokeAction === "like"
         ? (res = await axios.put("api/User/FavouritePoke", {
-            userID,
-            PokeID,
-          }))
+          userID,
+          PokeID,
+        }))
         : (res = await axios.put("api/User/UnfavouritePoke", {
-            userID,
-            PokeID,
-          }));
+          userID,
+          PokeID,
+        }));
       let data = {
         data: res.data,
         pokeAction,
@@ -99,4 +142,53 @@ export const updatePokeLikeAsync =
     } catch (error) {
       throw error;
     }
-  };
+  }
+
+export const verifyUserAccountAsync = (userName, token) => async (dispatch, getState) => {
+  try {
+    const res = await axios.put('/api/User/VerifyAccount', { UserName: userName, VerifyToken: token });
+    dispatch((verifyUserAccount()));
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const requestNewVerificationLinkAsync = (userName) => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(`/api/User/NewVerificationLink/${userName}`);
+    dispatch((requestNewVerificationLink()));
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const getUserCommentsAsync = (UserName) => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(`/api/Comment/GetUserComments/${UserName}`)
+    dispatch(getUserComments(res.data.payload))
+  } catch (err) {
+    throw err
+  }
+}
+
+export const uploadUserProfilePicAsync = (file) => async (dispatch, getState) => {
+  try {
+    const { UserName } = getState().user
+    const formData = new FormData()
+    formData.append('UserName', UserName);
+    formData.append('profilePic', file);
+    const res = await axios.post('/api/User/UpdateProfilePic', formData, { headers: { "Content-Type": "multipart/form-data" } })
+    dispatch(uploadProfilePic(res.data.filepath))
+  } catch (err) {
+    throw err
+  }
+}
+
+export const getUserDataAsync = (ID) => async (dispatch, getState) => {
+  try {
+    const res = await axios.get(`/api/User/GetUserData/${ID}`)
+    dispatch(getUserData(res.data.clientInfo))
+  } catch (err) {
+    throw err
+  }
+}
