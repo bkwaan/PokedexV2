@@ -20,7 +20,7 @@ function SignIn() {
   useEffect(() => {
     if (authd) {
       if(!location.state){
-        navigate('/homepage', { replace: true })
+        navigate('/profile', { replace: true })
       }
       else{
         navigate(location.state.prev, { replace: true })

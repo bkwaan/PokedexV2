@@ -1,4 +1,5 @@
 import ProfilePic from "../images/BrockObama.jpg";
+import HeaderDropDown from "./headerDropDown";
 
 const Header = () => {
   const searchPoke = (poke) => {
@@ -26,9 +27,7 @@ const Header = () => {
         placeholder="Search"
         onChange={(e) => searchPoke(e.target.value)}
       ></input>
-      <div className="profile-pic">
-        <img src={ProfilePic} />
-      </div>
+      <HeaderDropDown/>
     </header>
   );
 };

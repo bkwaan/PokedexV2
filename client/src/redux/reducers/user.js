@@ -1,4 +1,4 @@
-import { LOGIN, UPDATE_PROFILE_DATA, VALID_OTP, VERIFY_ACCOUNT, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR, GET_USER_COMMENTS, UPLOAD_PIC, GET_USER_DATA } from '../actions/types'
+import { LOGIN, UPDATE_PROFILE_DATA, VALID_OTP, VERIFY_ACCOUNT, LIKE_POKE, FAVORITE_ITEM_CLICKED, FAVORITE_ITEM_CLICKED_CLEAR, GET_USER_COMMENTS, UPLOAD_PIC, GET_USER_DATA, LOGOUT } from '../actions/types'
 const initialState = {
   ID: '',
   UserName: '',
@@ -20,6 +20,8 @@ export default function (state = initialState, action) {
         ...state,
         ...action.payload
       }
+    case LOGOUT:
+      return initialState
     case VALID_OTP:
       return {
         ...state,
