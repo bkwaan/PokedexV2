@@ -3,13 +3,15 @@ import PokeModal from "./pokemodal/pokeModal";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getFavoritePokemonClickedId } from "../redux/Selectors/user";
 import { profilePokeClickedClear } from "../redux/actions/user";
+import { getComment } from "../../src/redux/actions/comment";
 
 const PokeCard = (props) => {
   const [id, setID] = useState("");
   const [type, setType] = useState([]);
   const [show, setShow] = useState(false);
-  const favPokeClickedId = useSelector(getFavoritePokemonClickedId)
-  const dispatch =  useDispatch()
+  const [firstClick, setFirstClick] = useState(true);
+  const favPokeClickedId = useSelector(getFavoritePokemonClickedId);
+  const dispatch = useDispatch();
   var idz = props.id;
 
   var name = props.pokemon[idz - 1].name;
@@ -37,17 +39,25 @@ const PokeCard = (props) => {
     setShow((show) => !show);
   };
 
-  const isClickedFromFavorites = () =>{
-    if(favPokeClickedId === idz){
-      openPoke()
-      dispatch(profilePokeClickedClear())
+  const firstOpen = () => {
+    if (firstClick) {
+      props.getComment(idz);
+      setFirstClick(false);
     }
-  }
+  };
+
+  const isClickedFromFavorites = () => {
+    if (favPokeClickedId === idz) {
+      openPoke();
+      firstOpen();
+      dispatch(profilePokeClickedClear());
+    }
+  };
 
   useEffect(() => {
     checkID(idz);
     getType();
-    isClickedFromFavorites()
+    isClickedFromFavorites();
   }, []);
 
   return (
@@ -63,7 +73,13 @@ const PokeCard = (props) => {
         }
         name={name}
       />
-      <div className="pokecard" onClick={openPoke}>
+      <div
+        className="pokecard"
+        onClick={() => {
+          openPoke();
+          firstOpen();
+        }}
+      >
         <div className="pokeheader">
           <img
             src={
@@ -76,7 +92,7 @@ const PokeCard = (props) => {
         </div>
         <p className="pokename">{name}</p>
         <div className="typetags">
-          {type.map((v,index) => {
+          {type.map((v, index) => {
             return (
               <div className={"tag " + v} key={index}>
                 <p>{v}</p>
@@ -93,4 +109,4 @@ const mapStateToProps = (state) => ({
   pokemon: state.pokemon,
 });
 
-export default connect(mapStateToProps)(PokeCard);
+export default connect(mapStateToProps, { getComment })(PokeCard);

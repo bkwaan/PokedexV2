@@ -28,6 +28,8 @@ const PokeComment = ({
 
   return (
     <div className={"pokeComment"} id={id}>
+      <span class="customBr"></span>
+
       <div class="commInfo">
         <p>{name}</p>
         <div className="iconsCont">
@@ -52,7 +54,7 @@ const PokeComment = ({
       </div>
       <p className="userComment">{comment}</p>
       <p className="commDate">{date}</p>
-      <span class="customBr"></span>
+      {/* <span class="customBr"></span> */}
     </div>
   );
 };

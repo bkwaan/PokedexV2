@@ -1,11 +1,17 @@
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { PropTypes } from "prop-types";
 
-const Abilities = (props) => {
+const Abilities = ({ name }) => {
   return (
     <div>
-        <p className="ability">{props.name}</p>
+      <p className="ability">{name}</p>
     </div>
   );
 };
 
+Abilities.propTypes = {
+  name: PropTypes.string,
+};
+
+
 export default Abilities;
+

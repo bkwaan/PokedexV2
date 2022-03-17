@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PropTypes } from "prop-types";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { addComment, sortComment } from "../../redux/actions/comment";
 import { useSelector } from "react-redux";
@@ -10,11 +11,15 @@ const CommentHeader = ({ Id, addComment, sortComment, PokeName }) => {
   const [comment, setComment] = useState("");
 
   const loggedIn = useSelector(isLoggedIn);
-  const user = useSelector(getUser)
+  const user = useSelector(getUser);
+  const navigate = useNavigate();
 
+  const homeRedirect = () => {
+    navigate("/", { replace: false });
+  };
   const pushComment = (e) => {
     e.preventDefault();
-    addComment(Id, user.UserName, comment,PokeName, user.ID );
+    addComment(Id, user.UserName, comment, PokeName, user.ID);
     const textArea = document.getElementsByTagName("textarea")[0];
     textArea.value = "";
   };
@@ -22,6 +27,20 @@ const CommentHeader = ({ Id, addComment, sortComment, PokeName }) => {
   const handleChange = (e) => {
     setComment(e.target.value);
   };
+
+  let pokeForm = loggedIn ? (
+    <Form onSubmit={(e) => pushComment(e)}>
+      <Form.Control as="textarea" rows={3} onChange={(e) => handleChange(e)} />
+      <div className="commSubmit">
+        <button>Submit</button>
+      </div>
+    </Form>
+  ) : (
+    <h4 className="loginText">
+      Please <span className="logText" onClick={() => homeRedirect()}>Login </span>to leave a
+      comment
+    </h4>
+  );
 
   return (
     <div className="commentSection">
@@ -33,26 +52,9 @@ const CommentHeader = ({ Id, addComment, sortComment, PokeName }) => {
             <option>Newest</option>
           </select>
         </div>
-        <p className="commTitle">Join The Discussion!</p>
+        {loggedIn ? <p className="commTitle">Join The Discussion!</p> : ""}
       </div>
-      <div className="commText">
-        {" "}
-        <Form onSubmit={(e) => pushComment(e)}>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            onChange={(e) => handleChange(e)}
-          />
-          <div className="commSubmit">
-            <button
-              title={"Please login to submit a comment"}
-              disabled={!loggedIn}
-            >
-              Submit
-            </button>
-          </div>
-        </Form>
-      </div>
+      <div className="commText"> {pokeForm} </div>
     </div>
   );
 };
