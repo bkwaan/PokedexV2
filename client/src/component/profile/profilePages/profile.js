@@ -6,7 +6,6 @@ import { getUserDataAsync, updateUserAsync } from '../../../redux/actions/user';
 import { getUser } from '../../../redux/Selectors/user';
 import ProfileUpload from './profileUpload';
 
-
 function Profile() {
   const { FirstName, LastName, UserName, Email, ID, profilePic } = useSelector(getUser);
 

@@ -17,7 +17,7 @@ const persistConfig = {
 const userConfig = {
     key: 'user',
     storage,
-    blacklist: ['UserComments', 'FavouritePokemon', 'profilePic'],
+    blacklist: ['UserComments', 'FavouritePokemon'],
     debug: true
  };
 

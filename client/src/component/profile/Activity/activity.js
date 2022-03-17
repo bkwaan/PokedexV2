@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserCommentsAsync } from '../../../redux/actions/user';
-import comment from '../../../redux/reducers/comment';
 import { getUser, getUserComments } from '../../../redux/Selectors/user';
 import ActivityTile from './activityTile';
 
@@ -13,7 +12,6 @@ function Activity() {
 
   useEffect(async () => {
     dispatch(getUserCommentsAsync(ID))
-    console.log(comments)
   }, [])
 
   const checkID = (id) => {
@@ -43,8 +41,6 @@ function Activity() {
     return newLikes
   }
 
-
-
   return (
     <Row className='activityContainer' >
       <Col>
@@ -52,10 +48,10 @@ function Activity() {
           <Col>ACTIVITY</Col>
         </Row>
         <Row>
-          <Col className={(comments && comments.length > 0) ? 'activityTileScrollContainer' : 'activityTileScrollContainer emptyActivityScrollContainer'}>
+          <Col className={'activityTileScrollContainer'}>
             {comments && comments.length > 0
-              ? comments.map((x) => {
-                return <ActivityTile key={x.pokeID} id={checkID(x.pokeID)} pokeName={x.pokeName} likes={checkLikes(x.Likes.length)} originalId={x.pokeID}
+              ? comments.map((x, index) => {
+                return <ActivityTile key={x.pokeID + index} id={checkID(x.pokeID)} pokeName={x.pokeName} likes={checkLikes(x.Likes.length)} originalId={x.pokeID}
                   commentBody={x.CommentBody} commentDate={x.CommentDate.substr(0, x.CommentDate.indexOf('T'))} />
               })
               :<div className='emptyCell'>
