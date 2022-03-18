@@ -16,7 +16,7 @@ function FavoriteTile({id, sprite, pokeName, colorName }) {
   
     const goToHomePage = () =>{
         dispatch(profilePokeClicked(id))
-      navigate('/homepage', { replace: false})
+      navigate('/', { replace: false})
     }
   
     return (

@@ -25,7 +25,7 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    FavouritePokemon: [{ type: Number, unique: true, sparse:true}],
+    FavouritePokemon: [{ type: Number, sparse:true}],
     ResetAuth: {
       type: String,
     },

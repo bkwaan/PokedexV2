@@ -10,7 +10,10 @@
 
 # production
 /build
-/profilePics
+/profilePics/*
+
+# exception
+!/profilePics/.gitkeep
 
 #env variables
 config/default.json
