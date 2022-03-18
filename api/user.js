@@ -76,7 +76,7 @@ router.post("/SignUp", async (req, res) => {
         firstname: user.FirstName,
         linkText: "Verify Account",
       });
-      mailer("PokedexV2Mailer@gmail.com", Email, "Verify Account", template);
+      mailer("pepeinccs@outlook.com", Email, "Verify Account", template);
       res
         .status(201)
         .json({ Msg: "User has successfully been saved", Success: true });
