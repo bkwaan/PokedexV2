@@ -140,7 +140,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
           linkText: "Verify Account",
         });
         mailer(
-          "PokedexV2Mailer@gmail.com",
+          "pepeinccs@outlook.com",
           user.Email,
           "Verify Account",
           template
@@ -185,7 +185,7 @@ router.post("/Login", async (req, res) => {
           profilePic: user.profilePic
         };
         mailer(
-          "PokedexV2Mailer@gmail.com",
+          "pepeinccs@outlook.com",
           user.Email,
           "OTP Code",
           "<p>Your OTP Code: " + token + "</p>"
@@ -254,7 +254,7 @@ router.post("/UpdatePassword", async (req, res) => {
           linkText: "Change Password",
         });
         mailer(
-          "PokedexV2Mailer@gmail.com",
+          "pepeinccs@outlook.com",
           user.Email,
           "Pasword Change",
           template
@@ -303,7 +303,7 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
         linkText: "Reset Password",
       });
       mailer(
-        "PokedexV2Mailer@gmail.com",
+        "pepeinccs@outlook.com",
         user.Email,
         "Password Reset",
         template
