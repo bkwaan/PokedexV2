@@ -9,7 +9,7 @@ function ActivityTile({ id, pokeName, commentBody, commentDate, likes, originalI
 
   const goToHomePage = () => {
     dispatch(profilePokeClicked(originalId))
-    navigate('/homepage', { replace: false })
+    navigate('/', { replace: false })
   }
   return (
     <Row className='activityCell'>
@@ -24,10 +24,10 @@ function ActivityTile({ id, pokeName, commentBody, commentDate, likes, originalI
           </Col>
         </Row>
         <Row className='activityCellInfoRow'>
-          <Col xs='12' sm='9'>
+          <Col xs='12'>
             <p className='activityCellDescription'>{commentBody}</p>
           </Col>
-          <Col xs='12' sm={{ span: 3 }} className='.ms-auto'>
+          <Col xs='12' className='.ms-auto'>
             <label className='activityDate'>{commentDate}</label>
           </Col>
         </Row>

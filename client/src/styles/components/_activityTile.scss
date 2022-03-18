@@ -25,10 +25,12 @@
     }
     .activityCellDescription {
       color: black;
+      margin: 0;
     }
     .activityDate {
       width: 100%;
       text-align: end;
+      margin-bottom: 5px;
     }
   }
 }
