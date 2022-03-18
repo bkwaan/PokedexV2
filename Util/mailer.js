@@ -5,8 +5,9 @@ const nodeEmailPassword = process.env.nodeEmailPassword;
 const transporter = nodemailer.createTransport({
   service: "smtp-mail.outlook.com",
   port: 587,
-  secure: false,
+  secureConnection: false,
   tls: {
+    ciphers: 'SSLv3',
     rejectUnauthorized: false,
   },
   auth: {
