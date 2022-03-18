@@ -3,10 +3,8 @@ const nodeEmail = process.env.nodeEmail;
 const nodeEmailPassword = process.env.nodeEmailPassword;
 
 const transporter = nodemailer.createTransport({
-  service: "hotmail",
-  tls: {
-    rejectUnauthorized: false,
-  },
+  service: "smtp-mail.outlook.com",
+  port: 587,
   auth: {
     user: nodeEmail,
     pass: nodeEmailPassword,
