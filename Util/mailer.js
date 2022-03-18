@@ -1,9 +1,11 @@
 const nodemailer = require("nodemailer");
 const nodeEmail = process.env.nodeEmail;
 const nodeEmailPassword = process.env.nodeEmailPassword;
+const smtpTransport = require("nodemailer-smtp-transport")
 
-const transporter = nodemailer.createTransport({
-  service: "smtp-mail.outlook.com",
+const transporter = nodemailer.createTransport(smtpTransport({
+  service: "Outlook365",
+  host: "smtp.office365.com",
   port: 587,
   secureConnection: false,
   tls: {
@@ -14,7 +16,7 @@ const transporter = nodemailer.createTransport({
     user: nodeEmail,
     pass: nodeEmailPassword,
   },
-});
+}));
 
 const sendMail = (Sender, Receiver, subject, html) => {
   const mailOptions = {
