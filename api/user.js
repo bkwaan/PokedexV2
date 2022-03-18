@@ -70,7 +70,7 @@ router.post("/SignUp", async (req, res) => {
       template = template({
         header: "Account Creation",
         title: "Please Verify Your Account",
-        token: `http://localhost:3000/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
+        token: `https://pokedex--v2.herokuapp.com//VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
         content:
           "Thank you for creating your account, please verify your account by clicking the link below.",
         firstname: user.FirstName,
