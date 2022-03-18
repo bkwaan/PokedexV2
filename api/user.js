@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const totp = require("otplib").totp;
 const multer = require('multer');
+const jwtPass = process.env.jwtPass;
 
 
 
@@ -53,7 +54,7 @@ router.post("/SignUp", async (req, res) => {
     } else {
       Password = await bcrypt.hash(Password, saltRounds);
       var VerifyToken = crypto.randomBytes(10).toString("hex");
-      VerifyToken = jwt.sign({ data: VerifyToken }, config.get("jwtPass"), {
+      VerifyToken = jwt.sign({ data: VerifyToken }, jwtPass, {
         expiresIn: "1h",
       });
       let user1 = new Users({
@@ -91,7 +92,7 @@ router.put("/VerifyAccount", async (req, res) => {
   try {
     let user = await Users.findOne({ UserName: UserName }).exec();
     if (user) {
-      if (!user.isVerified && jwt.verify(VerifyToken, config.get("jwtPass"))) {
+      if (!user.isVerified && jwt.verify(VerifyToken, jwtPass)) {
         user.isVerified = true;
         await user.save();
         res.status(200).json({
@@ -125,7 +126,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
         });
       } else {
         let VerifyToken = crypto.randomBytes(10).toString("hex");
-        VerifyToken = jwt.sign({ data: VerifyToken }, config.get("jwtPass"), {
+        VerifyToken = jwt.sign({ data: VerifyToken }, jwtPass, {
           expiresIn: "1h",
         });
         const html = await promiseFs("./Util/temp.html", "utf-8");
@@ -283,7 +284,7 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
     if (user != null) {
       const token = jwt.sign(
         {},
-        `${config.get("jwtPass")}${user.Password.substr(
+        `${jwtPass}${user.Password.substr(
           user.Password.length - 5
         )}`,
         {
@@ -328,7 +329,7 @@ router.post("/ResetPassword", async (req, res) => {
     }
     jwt.verify(
       Token,
-      `${config.get("jwtPass")}${user.Password.substr(
+      `${jwtPass}${user.Password.substr(
         user.Password.length - 5
       )}`
     );

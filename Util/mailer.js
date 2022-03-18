@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const config = require("config");
-const nodeEmail = config.get("nodeEmail");
-const nodeEmailPassword = config.get("nodeEmailPassword");
+const nodeEmail = process.env.nodeEmail
+const nodeEmailPassword = process.env.nodeEmailPassword
 const smtpTransport = require('nodemailer-smtp-transport');
 
 
@@ -12,9 +12,6 @@ const transporter = nodemailer.createTransport(smtpTransport({
       pass: nodeEmailPassword
     }
   }));
-
-  console.log(process.env.nodeEmail + "HI");
-
 
   const sendMail = (Sender, Receiver, subject, html)=>{
     const mailOptions = {
