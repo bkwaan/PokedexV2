@@ -24,7 +24,7 @@ const VerifyAccount = (props) => {
 
   const delayedNavigateToLogin = async ()=>{
     setTimeout(() => {
-      navigate('/', { replace: true })
+      navigate('/login', { replace: true })
     }, 3000)
   }
 

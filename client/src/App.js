@@ -26,8 +26,8 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
           <Routes>
-            <Route exact path='/' element={<SignIn />}></Route>
-            <Route exact path='/homepage' element={<HomePage />} />
+            <Route exact path='/login' element={<SignIn />}></Route>
+            <Route exact path='/' element={<HomePage />} />
             <Route exact path='/profile' element={<ProtectedRoute child={<ProfilePage />} />} />
             <Route exact path='/ResetPassword/:Token' element={<ResetPassword/>}/>
             <Route exact path='/VerifyAccount/:UserName/:Token' element={<VerifyAccount/>}/>
