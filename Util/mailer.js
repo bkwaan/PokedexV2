@@ -13,8 +13,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
   }));
 
-  console.log(nodeEmail);
-  console.log(nodeEmailPassword);
+  console.log(process.env.nodeEmail + "HI");
 
 
   const sendMail = (Sender, Receiver, subject, html)=>{
