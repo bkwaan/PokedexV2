@@ -22,6 +22,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
         html: html
     }
     transporter.sendMail(mailOptions, function (error, info) {
+      console.log(mailOptions)
         if (error) {
           console.log(error);
         } else {
