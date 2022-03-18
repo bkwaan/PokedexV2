@@ -1,11 +1,9 @@
 const nodemailer = require('nodemailer');
-const config = require("config");
 const nodeEmail = process.env.nodeEmail
 const nodeEmailPassword = process.env.nodeEmailPassword
-const smtpTransport = require('nodemailer-smtp-transport');
 
 
-const transporter = nodemailer.createTransport(smtpTransport({
+const transporter = nodemailer.createTransport(({
     service: 'hotmail',
     auth: {
       user: nodeEmail,
