@@ -4,7 +4,7 @@ const nodeEmailPassword = process.env.nodeEmailPassword
 
 
 const transporter = nodemailer.createTransport(({
-    service: 'hotmail',
+    service: 'hotmail' ,
     auth: {
       user: nodeEmail,
       pass: nodeEmailPassword
