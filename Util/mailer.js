@@ -6,6 +6,10 @@ const transporter = nodemailer.createTransport({
   service: "smtp-mail.outlook.com",
   port: 587,
   secure: false,
+  tls: {
+    ciphers: "SSLv3",
+    rejectUnauthorized: false,
+  },
   auth: {
     user: nodeEmail,
     pass: nodeEmailPassword,
