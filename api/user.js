@@ -134,7 +134,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
         template = template({
           header: "Account Verification",
           title: "Please Verify Your Account",
-          token: `http://localhost:3000/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
+          token: `https://pokedex--v2.herokuapp.com/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
           content: "Please verify your account by clicking the link below.",
           firstname: user.FirstName,
           linkText: "Verify Account",
@@ -297,7 +297,7 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
       template = template({
         header: "Password Reset",
         title: "Password reset has been requested for your account",
-        token: "http://localhost:3000/ResetPassword/" + token,
+        token: "https://pokedex--v2.herokuapp.com/ResetPassword/" + token,
         content: "A Password Reset link was requested for your account",
         firstname: user.FirstName,
         linkText: "Reset Password",
