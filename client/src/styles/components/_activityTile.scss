@@ -27,6 +27,21 @@
       color: black;
       margin: 0;
     }
+
+    .activityCellCollapsed {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .readMoreButton {
+      color: #abc1eb;
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
     .activityDate {
       width: 100%;
       text-align: end;
