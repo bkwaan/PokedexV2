@@ -2,14 +2,16 @@ const nodemailer = require('nodemailer');
 const config = require("config");
 const nodeEmail = config.get("nodeEmail");
 const nodeEmailPassword = config.get("nodeEmailPassword");
+const smtpTransport = require('nodemailer-smtp-transport');
 
-const transporter = nodemailer.createTransport({
+
+const transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     auth: {
       user: nodeEmail,
       pass: nodeEmailPassword
     }
-  });
+  }));
 
 
   const sendMail = (Sender, Receiver, subject, html)=>{
