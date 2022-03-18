@@ -1,3 +1,6 @@
 {
-  "mongoURI": "mongodb+srv://pokedex:pokemon123@cluster0.qagib.mongodb.net/Pokedex?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://pokedex:pokemon123@cluster0.qagib.mongodb.net/Pokedex?retryWrites=true&w=majority",
+  "nodeEmail": "pokedexv2mailer@gmail.com",
+  "nodeEmailPassword": "TsmLebronWestbrook33!",
+  "jwtPass": "tsmellen"
 }
