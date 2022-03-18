@@ -12,9 +12,9 @@ const HomePage = () => {
 
   useEffect(() => {
     if (user.ValidOtp) {
-      dispatch(getUserDataAsync())
+      dispatch(getUserDataAsync(user.ID))
     }
-  }, [user.id])
+  }, [])
 
   return (
     <div>

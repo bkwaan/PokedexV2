@@ -17,7 +17,7 @@ function TwoFactorModal(props) {
     try {
       const x = await dispatch(verifyOtpCode(props.username, token));
       if(!props.location.state){
-        navigate('/homepage', { replace: true })
+        navigate('/', { replace: true })
       }
       else{
         navigate(props.location.state.prev, { replace: true })

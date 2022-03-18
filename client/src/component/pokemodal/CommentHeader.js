@@ -15,7 +15,7 @@ const CommentHeader = ({ Id, addComment, sortComment, PokeName }) => {
   const navigate = useNavigate();
 
   const homeRedirect = () => {
-    navigate("/", { replace: false });
+    navigate("/login", { replace: false });
   };
   const pushComment = (e) => {
     e.preventDefault();
