@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const fs = require("fs");
 const util = require("util");
 const promiseFs = util.promisify(fs.readFile);
+const promiseFsUnlink = util.promisify(fs.unlink)
 const promiseCrypto = util.promisify(crypto.randomBytes);
 const handleBars = require("handlebars");
 const jwt = require("jsonwebtoken");
@@ -24,8 +25,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const { UserName } = req.body
-    const fileType = file.mimetype.split('/')[1]
-    const name = `${UserName}.${fileType}`
+    const name = `${UserName}-${file.originalname}`
     cb(null, name);
   }
 });
@@ -437,11 +437,12 @@ router.post("/UpdateProfilePic", upload.single('profilePic'), async (req, res) =
   try {
     const user = await Users.findOne({ UserName }).exec()
     if (user != null) {
+      await promiseFsUnlink(`profilePics/${user.profilePic}`)
       user.profilePic = req.file.filename
       await user.save()
       res.status(200).json({ Msg: 'Upload success', Success: true, filepath: req.file.filename })
-    } else{
-      res.status(404),json({Msg: 'User not found', Succcess: failed})
+    } else {
+      res.status(404), json({ Msg: 'User not found', Succcess: failed })
     }
   } catch (err) {
     console.log(err)
@@ -450,11 +451,11 @@ router.post("/UpdateProfilePic", upload.single('profilePic'), async (req, res) =
 })
 
 
-router.get("/GetUserData/:ID", async (req,res) => {
-  const {ID} = req.params
-  try{
-    const user = await Users.findOne({_id: ID}).exec()
-    if(user != null){
+router.get("/GetUserData/:ID", async (req, res) => {
+  const { ID } = req.params
+  try {
+    const user = await Users.findOne({ _id: ID }).exec()
+    if (user != null) {
       const clientInfo = {
         UserName: user.UserName,
         FirstName: user.FirstName,
@@ -464,12 +465,12 @@ router.get("/GetUserData/:ID", async (req,res) => {
         FavouritePokemon: user.FavouritePokemon,
         profilePic: user.profilePic
       };
-      res.status(200).json({Msg: 'user found', Success: true, clientInfo})
-    } else{
-      res.status(404).json({Msg: 'User Not found', Success: false})
+      res.status(200).json({ Msg: 'user found', Success: true, clientInfo })
+    } else {
+      res.status(404).json({ Msg: 'User Not found', Success: false })
     }
-  }catch(err){
-    res.status(409).json({Msg: err.message, Success: false})
+  } catch (err) {
+    res.status(409).json({ Msg: err.message, Success: false })
   }
 })
 
