@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const totp = require("otplib").totp;
 const multer = require('multer');
+const jwtPass = process.env.jwtPass;
 
 
 
@@ -53,7 +54,7 @@ router.post("/SignUp", async (req, res) => {
     } else {
       Password = await bcrypt.hash(Password, saltRounds);
       var VerifyToken = crypto.randomBytes(10).toString("hex");
-      VerifyToken = jwt.sign({ data: VerifyToken }, config.get("jwtPass"), {
+      VerifyToken = jwt.sign({ data: VerifyToken }, jwtPass, {
         expiresIn: "1h",
       });
       let user1 = new Users({
@@ -69,13 +70,13 @@ router.post("/SignUp", async (req, res) => {
       template = template({
         header: "Account Creation",
         title: "Please Verify Your Account",
-        token: `http://localhost:3000/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
+        token: `https://pokedex--v2.herokuapp.com/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
         content:
           "Thank you for creating your account, please verify your account by clicking the link below.",
         firstname: user.FirstName,
         linkText: "Verify Account",
       });
-      mailer("PokedexV2Mailer@gmail.com", Email, "Verify Account", template);
+      mailer("pepeinccs@outlook.com", Email, "Verify Account", template);
       res
         .status(201)
         .json({ Msg: "User has successfully been saved", Success: true });
@@ -91,7 +92,7 @@ router.put("/VerifyAccount", async (req, res) => {
   try {
     let user = await Users.findOne({ UserName: UserName }).exec();
     if (user) {
-      if (!user.isVerified && jwt.verify(VerifyToken, config.get("jwtPass"))) {
+      if (!user.isVerified && jwt.verify(VerifyToken, jwtPass)) {
         user.isVerified = true;
         await user.save();
         res.status(200).json({
@@ -125,7 +126,7 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
         });
       } else {
         let VerifyToken = crypto.randomBytes(10).toString("hex");
-        VerifyToken = jwt.sign({ data: VerifyToken }, config.get("jwtPass"), {
+        VerifyToken = jwt.sign({ data: VerifyToken }, jwtPass, {
           expiresIn: "1h",
         });
         const html = await promiseFs("./Util/temp.html", "utf-8");
@@ -133,13 +134,13 @@ router.get("/NewVerificationLink/:UserName", async (req, res) => {
         template = template({
           header: "Account Verification",
           title: "Please Verify Your Account",
-          token: `http://localhost:3000/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
+          token: `https://pokedex--v2.herokuapp.com/VerifyAccount/${UserName}/${VerifyToken}`, //need to update this later
           content: "Please verify your account by clicking the link below.",
           firstname: user.FirstName,
           linkText: "Verify Account",
         });
         mailer(
-          "PokedexV2Mailer@gmail.com",
+          "pepeinccs@outlook.com",
           user.Email,
           "Verify Account",
           template
@@ -184,7 +185,7 @@ router.post("/Login", async (req, res) => {
           profilePic: user.profilePic
         };
         mailer(
-          "PokedexV2Mailer@gmail.com",
+          "pepeinccs@outlook.com",
           user.Email,
           "OTP Code",
           "<p>Your OTP Code: " + token + "</p>"
@@ -253,7 +254,7 @@ router.post("/UpdatePassword", async (req, res) => {
           linkText: "Change Password",
         });
         mailer(
-          "PokedexV2Mailer@gmail.com",
+          "pepeinccs@outlook.com",
           user.Email,
           "Pasword Change",
           template
@@ -283,7 +284,7 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
     if (user != null) {
       const token = jwt.sign(
         {},
-        `${config.get("jwtPass")}${user.Password.substr(
+        `${jwtPass}${user.Password.substr(
           user.Password.length - 5
         )}`,
         {
@@ -296,13 +297,13 @@ router.get("/ForgotPassword/:Email", async (req, res) => {
       template = template({
         header: "Password Reset",
         title: "Password reset has been requested for your account",
-        token: "http://localhost:3000/ResetPassword/" + token,
+        token: "https://pokedex--v2.herokuapp.com/ResetPassword/" + token,
         content: "A Password Reset link was requested for your account",
         firstname: user.FirstName,
         linkText: "Reset Password",
       });
       mailer(
-        "PokedexV2Mailer@gmail.com",
+        "pepeinccs@outlook.com",
         user.Email,
         "Password Reset",
         template
@@ -328,7 +329,7 @@ router.post("/ResetPassword", async (req, res) => {
     }
     jwt.verify(
       Token,
-      `${config.get("jwtPass")}${user.Password.substr(
+      `${jwtPass}${user.Password.substr(
         user.Password.length - 5
       )}`
     );
