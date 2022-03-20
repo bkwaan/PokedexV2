@@ -1,10 +1,12 @@
 .profilePageContainer {
-  height: 100vh;
+  position: relative;
+  min-height: 100%;
   overflow-y: scroll;
   .mainContainer {
     max-width: 970px;
+    padding-top: 10%;
     .profileContainer {
-      margin: 10% 2% 0% 2%;
+      margin: 0% 2% 0% 2%;
       background-color: #abc1eb;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       .profileRow {
