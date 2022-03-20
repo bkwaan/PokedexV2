@@ -437,7 +437,9 @@ router.post("/UpdateProfilePic", upload.single('profilePic'), async (req, res) =
   try {
     const user = await Users.findOne({ UserName }).exec()
     if (user != null) {
-      await promiseFsUnlink(`profilePics/${user.profilePic}`)
+      if(user.profilePic){
+        await promiseFsUnlink(`profilePics/${user.profilePic}`)
+      }
       user.profilePic = req.file.filename
       await user.save()
       res.status(200).json({ Msg: 'Upload success', Success: true, filepath: req.file.filename })

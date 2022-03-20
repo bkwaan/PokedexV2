@@ -75,7 +75,7 @@ const ProfileUpload = (props) => {
         <Col>
           <Form className='fileArea'>
             <Row>
-              <Col className="dropIconContainer" xs={{ span: 4, offset: 4 }}>
+              <Col className="dropIconContainer" xs='12'>
                 <IconContext.Provider value={{ size: 100 }}>
                   {!uploadState
                     ? <BsDownload />
