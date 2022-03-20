@@ -1,9 +1,10 @@
 .pageContainer {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
   .signInContainer {
-    height: 98vh;
-    overflow-y: auto;
     .appTitle {
-      margin-top: 15vh;
+      margin-top: 60px;
       margin-bottom: 40px;
       font-size: 40px;
       font-weight: bold;
