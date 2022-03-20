@@ -1,10 +1,11 @@
 .profilePageContainer {
   position: relative;
   min-height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   .mainContainer {
     max-width: 970px;
-    padding-top: 10%;
+    padding-top: 5%;
     .profileContainer {
       margin: 0% 2% 0% 2%;
       background-color: #abc1eb;
