@@ -139,7 +139,7 @@ function SignIn() {
           <input name='UserName' value={InputState.UserName} className='signinTextField' placeholder='Username' type='text' onChange={handleInput}></input>
         </Col>
         <Col className='textCenter' xs={{ offset: 1, span: 10 }} sm={{ offset: 2, span: 8 }}>
-          <input name='Password' value={InputState.Password} id='passwordField' className='signinTextField' placeholder='Password' type='password' minlength="8" required onChange={handleInput}></input>
+          <input name='Password' value={InputState.Password} id='passwordField' className='signinTextField' placeholder='Password' type='password' required onChange={handleInput}></input>
         </Col>
       </>
     )

@@ -1,0 +1,63 @@
+.NavCanvas{
+    background-color:$light-blue;
+    width: 300px;
+    .NavPlaceHolder{
+        visibility: none;
+        width: 32px;
+    }
+    .NavContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        .NavLinkContainer{
+            padding-top:5%;
+            .NavLink {
+                padding: 10% 0;
+                margin: 0 -15px;
+                color: $dark-blue;
+                font-family: $poppins;
+                font-size: larger;
+                position: relative;
+                .LinkText{
+                    &:hover{
+                        cursor: pointer;
+                    }
+                }
+                &:hover {
+                    background-color:white;
+                    .PokeBall{
+                        transform: rotate(360deg);
+                    }
+                }
+
+                .PokeBall{
+                    transition: 0.5s linear;
+                    width: 42%;
+                }
+            }
+        }
+        .logout {
+            text-align: center;
+            font-family: $poppins;
+            font-size: larger;
+            padding: 10% 0;
+            color:$dark-blue;
+             margin: 0 -15px;
+            &:hover {
+                background-color:white;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.MenuButton{
+    &:hover {
+        transform: scale(1.1);
+      }
+}
+
+.bg-nav {
+    background-color: $light-blue;
+}

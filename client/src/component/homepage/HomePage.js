@@ -18,7 +18,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <Header />
+      <Header isSearchEnabled={true}/>
       <PokeList />
     </div>
   );

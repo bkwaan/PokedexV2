@@ -1,7 +1,7 @@
 import ProfilePic from "../images/BrockObama.jpg";
-import HeaderDropDown from "./headerDropDown";
+import NavbarSide from "./navbarSide";
 
-const Header = () => {
+const Header = ({ isSearchEnabled }) => {
   const searchPoke = (poke) => {
     var pokemon = document.getElementsByClassName("pokename");
     for (let i = 0; i < pokemon.length; i++) {
@@ -16,18 +16,15 @@ const Header = () => {
 
   return (
     <header className="Header">
-      <div class="menu-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      <NavbarSide />
       <h1>POKEDEX</h1>
-      <input
-        type="texxt"
-        placeholder="Search"
-        onChange={(e) => searchPoke(e.target.value)}
-      ></input>
-      <HeaderDropDown/>
+      {isSearchEnabled &&
+        <input
+          type="texxt"
+          placeholder="Search"
+          onChange={(e) => searchPoke(e.target.value)}
+        ></input>
+      }
     </header>
   );
 };

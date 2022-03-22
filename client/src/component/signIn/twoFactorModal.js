@@ -43,7 +43,7 @@ function TwoFactorModal(props) {
           <div className='modalTitle'>
             Verify OTP.
           </div>
-          <button type="button" class="btn-close" aria-label="Close" onClick={hideModal}></button>
+          <button type="button" className="btn-close" aria-label="Close" onClick={hideModal}></button>
         </div>
         <div className="modalBody">
           <h6>We have sent a one time password to your email.</h6>

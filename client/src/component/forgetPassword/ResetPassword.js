@@ -20,7 +20,7 @@ const ResetPassword = (props) => {
         setWarning(resetPasswordStatus.Msg)
         if (resetPasswordStatus.Success) {
             setTimeout(() => {
-                navigate('/', { replace: true })
+                navigate('/login', { replace: true })
             }, 3000)
         }
     }, [resetPasswordStatus])
